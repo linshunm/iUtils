@@ -6,4 +6,8 @@ package com.iutils.login.model;
 public class LoginModelImpl implements ILoginModel{
 
 
+    @Override
+    public void login(String userid, String pwd, OnLoginCallback onLoginCallback) {
+
+    }
 }

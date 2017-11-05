@@ -5,7 +5,7 @@ android {
         iutils_signing {
             keyAlias 'iutilsAlias'
             keyPassword 'iutils2'
-            storeFile file('C:/Users/Administrator/AndroidStudioProjects/iUtils/iutils.jks')
+            storeFile file('D:\\workspace_as\\iUtils/iutils.jks')
             storePassword 'iutils1'
         }
     }
