@@ -5,12 +5,12 @@ android {
         iutils_signing {
             keyAlias 'iutilsAlias'
             keyPassword 'iutils2'
-            storeFile file('D:\\workspace_as\\iUtils/iutils.jks')
+            storeFile file('../iutils.jks')
             storePassword 'iutils1'
         }
     }
     compileSdkVersion 23
-    buildToolsVersion '25.0.2'
+    buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.iutils"
         minSdkVersion 19
