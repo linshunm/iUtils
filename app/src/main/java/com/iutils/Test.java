@@ -31,7 +31,6 @@ public class Test {
             b[1] = 0x0D;
             System.out.println(AES128.Bytes2HexString(b));
             System.out.println(Integer.toHexString(63));
-            ILog.s("Integer.toBinaryString(7)"+ Integer.toBinaryString(0x0a));
         } catch (NoSuchAlgorithmException e) {
             System.out.println("exception");
             e.printStackTrace();
