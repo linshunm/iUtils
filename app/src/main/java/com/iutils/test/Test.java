@@ -1,9 +1,12 @@
-package com.iutils;
+package com.iutils.test;
 
 import com.iutils.utils.AES128;
 import com.iutils.utils.ILog;
+import com.iutils.utils.StringUtil;
 import com.iutils.utils.SystemUtil;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -21,7 +24,24 @@ public class Test {
     {
         System.out.println("hello world !");
         temp = 3;
-        System.out.println("temp:"+temp);
+        System.out.println("temp:" + temp);
+
+        try {
+            Class stClass = Class.forName("com.iutils.utils.StringUtil");
+
+            Method method = stClass.getMethod("replaceBlank", String.class);
+            String ret = (String)method.invoke(null, "lin shunming");
+            System.out.println("ret="+ret);
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
         try {
             byte[] bytes = AES128.getMd5Bytes("123456");
@@ -35,5 +55,10 @@ public class Test {
             System.out.println("exception");
             e.printStackTrace();
         }
+    }
+
+    public int add(int a, int b)
+    {
+        return a+b;
     }
 }
