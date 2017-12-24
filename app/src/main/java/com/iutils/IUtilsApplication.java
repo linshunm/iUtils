@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Environment;
 
 import com.iutils.service.CoreService;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import cn.jesse.nativelogger.NLogger;
 import cn.jesse.nativelogger.formatter.SimpleFormatter;
@@ -18,6 +20,11 @@ import cn.jesse.nativelogger.util.CrashWatcher;
 public class IUtilsApplication extends Application {
     private final static String TAG = "IUtilsApplication";
     private static Context mContext;
+    private static RefWatcher refWatcher;
+
+    public static Context getIUtilsApplicationContext() {
+        return mContext;
+    }
 
     @Override
     public void onCreate() {
@@ -26,9 +33,7 @@ public class IUtilsApplication extends Application {
         mContext = this.getApplicationContext();
 
 
-
-
-            NLogger.init(this);
+        NLogger.init(this);
 
 
         NLogger.getInstance()
@@ -49,16 +54,16 @@ public class IUtilsApplication extends Application {
                 })
                 .build();
 
-        Intent mIntent = new Intent(this, CoreService.class);
-        startService(mIntent);
+        refWatcher = LeakCanary.install(this);
+
+//        Intent mIntent = new Intent(this, CoreService.class);
+//        startService(mIntent);
 
 
     }
 
-
-
-    public static Context getIUtilsApplicationContext()
-    {
-        return mContext;
+    public static RefWatcher getRefWatcher(Context context) {
+        IUtilsApplication application = (IUtilsApplication) context.getApplicationContext();
+        return application.refWatcher;
     }
 }
