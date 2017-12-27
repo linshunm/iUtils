@@ -50,6 +50,21 @@ public class ImageUtil {
     }
 
     /**
+     * 采样率压缩
+     *
+     * @param filePath
+     * @param file
+     */
+    public static void compressSample(String filePath, int inSampleSize, File file) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = inSampleSize;
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+
+        compressQuality(bitmap, 100, file);
+    }
+
+    /**
      * 通过图片路径获取Bitmap
      * @param filepath
      * @return

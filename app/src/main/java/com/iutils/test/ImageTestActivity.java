@@ -19,10 +19,12 @@ public class ImageTestActivity extends AppCompatActivity implements View.OnClick
     private Button btnLoadOriginal;
     private Button btnLoadQuality;
     private Button btnLoadSize;
+    private Button btnLoadSample;
     private ImageView ivShow;
     private Bitmap originalBitmap;
     private Bitmap qualityBitmap;
     private Bitmap sizeBitmap;
+    private Bitmap sampleBitmap;
 
 
     @Override
@@ -53,6 +55,11 @@ public class ImageTestActivity extends AppCompatActivity implements View.OnClick
                 showSize();
                 break;
             }
+            case R.id.btn_load_sample:
+            {
+                showSample();
+                break;
+            }
             case R.id.iv_show:
             {
                 ivShow.setVisibility(View.GONE);
@@ -74,6 +81,8 @@ public class ImageTestActivity extends AppCompatActivity implements View.OnClick
         btnLoadQuality.setOnClickListener(this);
         btnLoadSize = (Button)findViewById(R.id.btn_load_size);
         btnLoadSize.setOnClickListener(this);
+        btnLoadSample = (Button)findViewById(R.id.btn_load_sample);
+        btnLoadSample.setOnClickListener(this);
 
         ivShow = (ImageView)findViewById(R.id.iv_show);
         ivShow.setOnClickListener(this);
@@ -117,6 +126,23 @@ public class ImageTestActivity extends AppCompatActivity implements View.OnClick
         }
 
         ivShow.setImageBitmap(sizeBitmap);
+        ivShow.setVisibility(View.VISIBLE);
+    }
+
+    private void showSample()
+    {
+        if(sampleBitmap == null)
+        {
+            String originFilepath = FileUtil.getSDCardPath()+File.separator+"img1.jpg";
+            String outFilepath = FileUtil.getSDCardPath()+File.separator+"img1_sample.jpg";
+            File outFile = new File(outFilepath);
+
+            int inSampleSize = 8;//采样率设置
+            ImageUtil.compressSample(originFilepath, inSampleSize, outFile);
+            sampleBitmap = ImageUtil.getBitmap(outFilepath);
+        }
+
+        ivShow.setImageBitmap(sampleBitmap);
         ivShow.setVisibility(View.VISIBLE);
     }
 }
