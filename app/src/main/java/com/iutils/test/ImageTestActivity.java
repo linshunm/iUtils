@@ -18,9 +18,11 @@ public class ImageTestActivity extends AppCompatActivity implements View.OnClick
 
     private Button btnLoadOriginal;
     private Button btnLoadQuality;
+    private Button btnLoadSize;
     private ImageView ivShow;
     private Bitmap originalBitmap;
     private Bitmap qualityBitmap;
+    private Bitmap sizeBitmap;
 
 
     @Override
@@ -46,6 +48,11 @@ public class ImageTestActivity extends AppCompatActivity implements View.OnClick
                 showQuality();
                 break;
             }
+            case R.id.btn_load_size:
+            {
+                showSize();
+                break;
+            }
             case R.id.iv_show:
             {
                 ivShow.setVisibility(View.GONE);
@@ -65,6 +72,8 @@ public class ImageTestActivity extends AppCompatActivity implements View.OnClick
         btnLoadOriginal.setOnClickListener(this);
         btnLoadQuality = (Button)findViewById(R.id.btn_load_quality);
         btnLoadQuality.setOnClickListener(this);
+        btnLoadSize = (Button)findViewById(R.id.btn_load_size);
+        btnLoadSize.setOnClickListener(this);
 
         ivShow = (ImageView)findViewById(R.id.iv_show);
         ivShow.setOnClickListener(this);
@@ -93,6 +102,21 @@ public class ImageTestActivity extends AppCompatActivity implements View.OnClick
         }
 
         ivShow.setImageBitmap(qualityBitmap);
+        ivShow.setVisibility(View.VISIBLE);
+    }
+
+    private void showSize()
+    {
+        if(sizeBitmap == null)
+        {
+            String filepath = FileUtil.getSDCardPath()+File.separator+"img1_size.jpg";
+            File outFile = new File(filepath);
+            int ratio = 8;//尺寸压缩比例
+            ImageUtil.compressSize(originalBitmap, ratio, outFile);
+            sizeBitmap = ImageUtil.getBitmap(filepath);
+        }
+
+        ivShow.setImageBitmap(sizeBitmap);
         ivShow.setVisibility(View.VISIBLE);
     }
 }

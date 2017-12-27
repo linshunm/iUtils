@@ -2,6 +2,8 @@ package com.iutils.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,6 +31,22 @@ public class ImageUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 尺寸压缩
+     *
+     * @param bitmap
+     * @param ratio 尺寸压缩比例
+     * @param file
+     */
+    public static void compressSize(Bitmap bitmap, int ratio, File file) {
+        Bitmap result = Bitmap.createBitmap(bitmap.getWidth() / ratio, bitmap.getHeight() / ratio, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(result);
+        Rect rect = new Rect(0, 0, bitmap.getWidth() / ratio, bitmap.getHeight() / ratio);
+        canvas.drawBitmap(bitmap, null, rect, null);
+
+        compressQuality(result, 100, file);
     }
 
     /**
