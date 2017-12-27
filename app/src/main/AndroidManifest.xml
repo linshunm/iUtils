@@ -47,6 +47,8 @@
 
         <activity android:name=".leak.StaticInnerClassActivity">
         </activity>
+        <activity android:name=".test.ImageTestActivity">
+        </activity>
     </application>
 
 </manifest>

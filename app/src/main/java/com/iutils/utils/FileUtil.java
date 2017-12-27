@@ -1,5 +1,7 @@
 package com.iutils.utils;
 
+import android.os.Environment;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -19,5 +21,10 @@ public class FileUtil {
         fileChannel.read(byteBuffer);
 
         return byteBuffer.array();
+    }
+
+    public static String getSDCardPath()
+    {
+        return Environment.getExternalStorageDirectory().getPath();
     }
 }
