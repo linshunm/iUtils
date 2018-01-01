@@ -2,7 +2,7 @@ package com.iutils.utils;
 
 import android.os.Environment;
 
-<<<<<<< Updated upstream
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -26,16 +26,6 @@ public class FileUtil {
 
     public static String getSDCardPath()
     {
-        return Environment.getExternalStorageDirectory().getPath();
-    }
-=======
-import java.io.File;
-
-/**
- * Created by linshunming on 2017/12/25.
- */
-public class FileUtil {
-    public static String getSystemPath() {
         return Environment.getExternalStorageDirectory().getPath();
     }
 
@@ -134,5 +124,4 @@ public class FileUtil {
             {".zip", "application/x-zip-compressed"},
             {"", "*/*"}
     };
->>>>>>> Stashed changes
 }

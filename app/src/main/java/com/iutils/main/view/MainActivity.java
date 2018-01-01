@@ -11,6 +11,7 @@ import com.iutils.R;
 import com.iutils.common.BaseActivity;
 import com.iutils.leak.StaticInnerClassActivity;
 import com.iutils.main.presenter.MainPresenter;
+import com.iutils.okhttp.OkHttpTestActivity;
 import com.iutils.test.ImageTestActivity;
 import com.iutils.utils.ILog;
 
@@ -68,8 +69,7 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test: {
-                ILog.i(TAG, "goto StaticInnerClassActivity");
-                Intent intent = new Intent(this, ImageTestActivity.class);
+                Intent intent = new Intent(this, OkHttpTestActivity.class);
                 startActivity(intent);
                 break;
             }

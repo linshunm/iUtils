@@ -86,7 +86,7 @@ public class StaticInnerClassActivity extends AppCompatActivity implements View.
 
     private void openFile()
     {
-        File file = new File(FileUtil.getSystemPath()+File.separator+"v.txt");
+        File file = new File(FileUtil.getSDCardPath()+File.separator+"v.txt");
         if(file.exists())
         {
             Intent intent = new Intent();

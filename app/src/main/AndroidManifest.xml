@@ -49,6 +49,8 @@
         </activity>
         <activity android:name=".test.ImageTestActivity">
         </activity>
+        <activity android:name=".okhttp.OkHttpTestActivity">
+        </activity>
     </application>
 
 </manifest>
