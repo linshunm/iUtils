@@ -23,11 +23,11 @@ public class ZipUtil {
      *
      * @param zipFile 指定的ZIP压缩文件
      * @param dest    解压目录
-     * @param passwd  ZIP文件的密码
+     * @param password  ZIP文件的密码
      * @return 解压后文件数组
      * @throws ZipException 压缩文件有损坏或者解压缩失败抛出
      */
-    public static File[] unzip(File zipFile, String dest, String passwd) throws ZipException {
+    public static File[] unzip(File zipFile, String dest, String password) throws ZipException {
         ZipFile zFile = new ZipFile(zipFile);
         zFile.setFileNameCharset("GBK");
         if (!zFile.isValidZipFile()) {
@@ -38,7 +38,7 @@ public class ZipUtil {
             destDir.mkdir();
         }
         if (zFile.isEncrypted()) {
-            zFile.setPassword(passwd.toCharArray());
+            zFile.setPassword(password.toCharArray());
         }
         zFile.extractAll(dest);
 
@@ -65,19 +65,19 @@ public class ZipUtil {
      * @param dest        压缩文件存放路径
      * @param isCreateDir 是否在压缩文件里创建目录,仅在压缩文件为目录时有效.<br />
      *                    如果为false,将直接压缩目录下文件到压缩文件.
-     * @param passwd      压缩使用的密码
+     * @param password      压缩使用的密码
      * @return 最终的压缩文件存放的绝对路径, 如果为null则说明压缩失败.
      */
-    public static String zip(String src, String dest, boolean isCreateDir, String passwd) {
+    public static String zip(String src, String dest, boolean isCreateDir, String password) {
         File srcFile = new File(src);
         dest = buildDestinationZipFilePath(srcFile, dest);
         ZipParameters parameters = new ZipParameters();
         parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);           // 压缩方式
         parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);    // 压缩级别
-        if (!StringUtil.isEmpty(passwd)) {
+        if (!StringUtil.isEmpty(password)) {
             parameters.setEncryptFiles(true);
             parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD); // 加密方式
-            parameters.setPassword(passwd.toCharArray());
+            parameters.setPassword(password.toCharArray());
         }
         try {
             ZipFile zipFile = new ZipFile(dest);
@@ -92,11 +92,6 @@ public class ZipUtil {
                 }
                 zipFile.addFolder(srcFile, parameters);
             } else {
-                if(srcFile.exists())
-                {
-                    //zip文件存在则删除
-                    srcFile.delete();
-                }
                 zipFile.addFile(srcFile, parameters);
             }
             return dest;
