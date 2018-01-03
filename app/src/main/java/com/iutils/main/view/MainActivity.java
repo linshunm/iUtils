@@ -14,6 +14,7 @@ import com.iutils.main.presenter.MainPresenter;
 import com.iutils.okhttp.OkHttpTestActivity;
 import com.iutils.test.ImageTestActivity;
 import com.iutils.utils.ILog;
+import com.iutils.zip.ZipTestActivity;
 
 public class MainActivity extends BaseActivity implements IMainView, View.OnClickListener {
 
@@ -69,7 +70,7 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test: {
-                Intent intent = new Intent(this, OkHttpTestActivity.class);
+                Intent intent = new Intent(this, ZipTestActivity.class);
                 startActivity(intent);
                 break;
             }
