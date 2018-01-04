@@ -60,6 +60,43 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    private void download()
+    {
+        String url = "http://moatest.zte.com.cn/m/zte/MOA-zte-3.10.1-beta-20171225-1.apk";
+        DownloadUtil.get().download(url, "download", new DownloadUtil.OnDownloadListener() {
+            @Override
+            public void onDownloadSuccess() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvResult.setText("下载完成");
+                    }
+                });
+
+            }
+            @Override
+            public void onDownloading(final int progress) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvResult.setText("下载进展："+progress+"%");
+                    }
+                });
+            }
+            @Override
+            public void onDownloadFailed() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvResult.setText("下载失败");
+                    }
+                });
+
+            }
+        });
+
+    }
+
     private void async()
     {
         ThreadUtil.execute(new Runnable() {
@@ -81,7 +118,8 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
             case R.id.btn_request:
             {
                 //request();
-                async();
+                //async();
+                download();
                 break;
             }
         }
