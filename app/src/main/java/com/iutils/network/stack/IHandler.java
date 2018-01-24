@@ -1,5 +1,6 @@
 package com.iutils.network.stack;
 
+import java.io.File;
 import java.nio.channels.SelectionKey;
 
 /**
@@ -11,5 +12,6 @@ public interface IHandler {
     void write(SelectionKey key);
     void read(SelectionKey key);
     void setOnRsp(OnRsp onRsp);
-    void setData(String str);
+    void sendTxtMsg(String str);
+    void sendFileMsg(File file);
 }

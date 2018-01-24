@@ -5,6 +5,8 @@ import com.iutils.utils.ILog;
 import com.iutils.utils.StringUtil;
 import com.iutils.utils.SystemUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
@@ -22,6 +24,18 @@ public class Test {
 
     public static void main(String[] agrs)
     {
+        String s = "hello world !";
+        try {
+            byte[] md5Bytes = AES128.getMd5Bytes(s);
+            String md5Str = AES128.Bytes2HexString(md5Bytes);
+            ILog.c("md5Str["+md5Str+"] md5Bytes["+md5Bytes.length+"]");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        File inFile = new File("/Users/linshunming/log.txt");
+        String fileMd5Str = AES128.getFileMd5Str(inFile);
+        ILog.c("fileMd5Str["+fileMd5Str+"]");
         System.out.println("hello world !");
         temp = 3;
         System.out.println("temp:" + temp);

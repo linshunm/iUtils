@@ -1,7 +1,5 @@
 package com.iutils.network.stack;
 
-import com.iutils.network.bean.IupMsg;
-import com.iutils.network.utils.IupUtil;
 import com.iutils.utils.ILog;
 
 import java.io.IOException;
@@ -33,6 +31,8 @@ public class IupClient {
     private IHandler handler = null;
     private OnRsp onRsp;
 
+    private boolean isRunning = true;
+
     public IupClient(String host, int port){
         isa = new InetSocketAddress(host, port);
         handler = new Handler();
@@ -59,6 +59,7 @@ public class IupClient {
         ILog.i(TAG, "disconnect");
         if(socketChannel != null && socketChannel.isConnected())
         {
+            isRunning = false;
             socketChannel.close();
             socketChannel = null;
             selector.close();
@@ -74,7 +75,7 @@ public class IupClient {
         ILog.i(TAG, "sendMsg str["+str+"]");
         if(handler != null)
         {
-            handler.setData(str);
+            handler.sendTxtMsg(str);
         }
         ILog.i(TAG, "sendMsg success");
     }
@@ -89,31 +90,40 @@ public class IupClient {
         {
             return;
         }
-        while(selector.select()>0)
+        while(isRunning)
         {
-            Set<SelectionKey> readyKeys = selector.selectedKeys();
-            Iterator<SelectionKey> it = readyKeys.iterator();
-            while (it.hasNext())
+            int n = selector.select();
+            if(n == 0)continue;
+            try
             {
-                SelectionKey key = it.next();
-
-                if(key.isConnectable())
+                Set<SelectionKey> readyKeys = selector.selectedKeys();
+                Iterator<SelectionKey> it = readyKeys.iterator();
+                while (it.hasNext())
                 {
-                    handler.connect(key);
-                }
+                    SelectionKey key = it.next();
 
-                if(key.isReadable())
-                {
-                    handler.read(key);
-                }
+                    if(key.isConnectable())
+                    {
+                        handler.connect(key);
+                    }
 
-                if(key.isWritable())
-                {
-                    handler.write(key);
-                }
-                it.remove();
+                    if(key.isReadable())
+                    {
+                        handler.read(key);
+                    }
 
+                    if(key.isWritable())
+                    {
+                        handler.write(key);
+                    }
+                    it.remove();
+                }
             }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -124,5 +134,10 @@ public class IupClient {
             handler.setOnRsp(onRsp);
         }
         this.onRsp = onRsp;
+    }
+
+    public IHandler getHandler()
+    {
+        return handler;
     }
 }

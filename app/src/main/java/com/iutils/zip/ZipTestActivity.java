@@ -57,10 +57,10 @@ public class ZipTestActivity extends AppCompatActivity implements View.OnClickLi
                     public void run() {
                         File srcFile = new File(src);
                         File destFile = new File(dest);
-                        
-                        String tips = "before zip file size:"+srcFile.length()/1024+"KB\n";
+
+                        String tips = "before zip file["+srcFile.exists()+"] size:"+srcFile.length()/1024+"KB\n";
                         tips += "before zip file path:"+src+"\n";
-                        tips += "after zip file size:"+destFile.length()/1024+"KB\n";
+                        tips += "after zip file["+destFile.exists()+"] size:"+destFile.length()/1024+"KB\n";
                         tips += "after zip file path:"+dest+"\n";
                         tips += "total time:"+time+"ms\n";
                         tvInfo.setText(tips);
@@ -72,9 +72,9 @@ public class ZipTestActivity extends AppCompatActivity implements View.OnClickLi
 
     private void unzip()
     {
-        final String src = FileUtil.getSDCardPath()+ File.separator+"MOA/.log/Logcat_zip4j/";
-        final String dest = FileUtil.getSDCardPath()+ File.separator+"MOA/.log/Logcat_zip4j.zip";
-
+        final String src = FileUtil.getSDCardPath()+ File.separator+"Download/";
+//        final String dest = FileUtil.getSDCardPath()+ File.separator+"MOA/.log/Logcat_zip4j.zip";
+        final String dest = FileUtil.getSDCardPath()+ File.separator+"whczip.zip";
         final File destFile = new File(dest);
 
 
@@ -83,7 +83,7 @@ public class ZipTestActivity extends AppCompatActivity implements View.OnClickLi
             public void run() {
                 long start = SystemClock.elapsedRealtime();
                 try {
-                    ZipUtil.unzip(destFile, src, "12345678");
+                    ZipUtil.unzip(destFile, src, "1234");
                 } catch (ZipException e) {
                     e.printStackTrace();
                 }

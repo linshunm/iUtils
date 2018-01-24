@@ -2,12 +2,15 @@ package com.iutils.main.model;
 
 
 import com.iutils.main.presenter.MainPresenter;
+import com.iutils.network.stack.IHandler;
 import com.iutils.network.stack.IupClient;
 import com.iutils.network.stack.OnRsp;
 import com.iutils.network.stack.IupServer;
+import com.iutils.utils.FileUtil;
 import com.iutils.utils.ILog;
 import com.iutils.utils.ThreadUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -183,6 +186,7 @@ public class MainModelImpl implements IMainModel {
 
     }
 
+
     @Override
     public void sendMsgToClient(String msg) {
         if(client != null)
@@ -196,6 +200,24 @@ public class MainModelImpl implements IMainModel {
         if(server != null)
         {
             server.send(msg);
+        }
+    }
+
+    @Override
+    public void sendFileMsg(File file) {
+        IHandler handler = null;
+        if(client != null)
+        {
+            handler = client.getHandler();
+        }
+        else if(server != null)
+        {
+            handler = server.getHandler();
+        }
+
+        if(handler != null)
+        {
+            handler.sendFileMsg(file);
         }
     }
 

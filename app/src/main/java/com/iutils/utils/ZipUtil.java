@@ -31,7 +31,8 @@ public class ZipUtil {
         ZipFile zFile = new ZipFile(zipFile);
         zFile.setFileNameCharset("GBK");
         if (!zFile.isValidZipFile()) {
-            throw new ZipException("压缩文件不合法,可能被损坏.");
+            //throw new ZipException("压缩文件不合法,可能被损坏.");
+            throw new ZipException("zip file may be corrupted");
         }
         File destDir = new File(dest);
         if (destDir.isDirectory() && !destDir.exists()) {

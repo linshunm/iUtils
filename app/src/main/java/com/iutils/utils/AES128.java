@@ -1,7 +1,16 @@
 package com.iutils.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -92,6 +101,60 @@ public class AES128
         byte[] md5 = md.digest(key.getBytes());
 
         return md5;
+    }
+
+    /**
+     * 字符串对应的32位md5字符串
+     * @param key
+     * @param isLowCase md5字符串是否小写
+     * @return
+     */
+    public static String getMd5Str32(String key, boolean isLowCase)
+    {
+        String md5Str32 = null;
+        try {
+            byte[] md5Bytes = AES128.getMd5Bytes(key);
+            md5Str32 = AES128.Bytes2HexString(md5Bytes);
+            if(isLowCase)
+            {
+                md5Str32 = md5Str32.toLowerCase();
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return md5Str32;
+    }
+
+    public static String getFileMd5Str(File file){
+        String md5Str = null;
+        FileInputStream fileInputStream = null;
+
+        try {
+            fileInputStream = new FileInputStream(file);
+            MappedByteBuffer mappedByteBuffer = fileInputStream.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(mappedByteBuffer);
+            BigInteger bigInteger = new BigInteger(1, md5.digest());
+            md5Str = bigInteger.toString(16);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if(fileInputStream != null)
+            {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return md5Str;
     }
 
     /**

@@ -29,4 +29,15 @@ public class StringUtil {
         }
     }
 
+    public static  String byteArrayToString(byte[] bytes)
+    {
+        String str = null;
+
+        if(bytes != null)
+        {
+            str = new String(bytes);
+        }
+        return str;
+    }
+
 }

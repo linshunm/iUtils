@@ -109,8 +109,13 @@ public class IupServer {
     {
         if(handler != null)
         {
-            handler.setData(str);
+            handler.sendTxtMsg(str);
         }
+    }
+
+    public IHandler getHandler()
+    {
+        return handler;
     }
 
 

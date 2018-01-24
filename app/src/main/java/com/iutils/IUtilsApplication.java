@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.os.Environment;
 
 import com.iutils.service.CoreService;
+import com.iutils.utils.FileUtil;
+import com.iutils.utils.ThreadUtil;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+
+import java.io.File;
 
 import cn.jesse.nativelogger.NLogger;
 import cn.jesse.nativelogger.formatter.SimpleFormatter;
@@ -31,6 +35,8 @@ public class IUtilsApplication extends Application {
         super.onCreate();
 
         mContext = this.getApplicationContext();
+
+        init();
 
 
         NLogger.init(this);
@@ -65,5 +71,20 @@ public class IUtilsApplication extends Application {
     public static RefWatcher getRefWatcher(Context context) {
         IUtilsApplication application = (IUtilsApplication) context.getApplicationContext();
         return application.refWatcher;
+    }
+
+    private void init()
+    {
+        ThreadUtil.execute(new Runnable() {
+            @Override
+            public void run() {
+                String workpath = FileUtil.getWorkDir();
+                File file = new File(workpath);
+                if(!file.exists())
+                {
+                    file.mkdirs();
+                }
+            }
+        });
     }
 }

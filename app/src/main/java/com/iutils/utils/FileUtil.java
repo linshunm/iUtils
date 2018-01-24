@@ -30,6 +30,12 @@ public class FileUtil {
     }
 
 
+    public static String getWorkDir()
+    {
+        return Environment.getExternalStorageDirectory().getPath()+File.separator+"iUtils"+File.separator;
+    }
+
+
     /**
      * 根据文件后缀名获得对应的MIME类型。
      *

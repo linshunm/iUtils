@@ -2,11 +2,15 @@ package com.iutils.network.stack;
 
 import com.iutils.network.bean.IupMsg;
 import com.iutils.network.utils.IupUtil;
-import com.iutils.network.utils.SocketUtil;
+import com.iutils.utils.AES128;
 import com.iutils.utils.ILog;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
@@ -34,12 +38,20 @@ public class Handler implements IHandler {
 
     @Override
     public void write(SelectionKey key) {
-        //ILog.i(TAG,"write");
         SocketChannel socketChannel = (SocketChannel) key.channel();
 
         synchronized (sendBuf)
         {
+            ILog.i(TAG,"write sendBuf["+sendBuf+"]");
+            if(sendBuf.position() == 0)
+            {
+                //buffer没有数据不需要发送
+                sendBuf.limit(sendBuf.capacity());
+                sendBuf.notifyAll();
+                return;
+            }
             sendBuf.flip();
+
             while (sendBuf.hasRemaining())
             {
                 ILog.i(TAG,"send");
@@ -64,6 +76,7 @@ public class Handler implements IHandler {
                 }
             }
             sendBuf.compact();
+            sendBuf.notifyAll();
         }
 
     }
@@ -109,14 +122,89 @@ public class Handler implements IHandler {
         this.onRsp = onRsp;
     }
 
-    public void setData(String str)
+    public void sendTxtMsg(String str)
     {
-        ILog.i(TAG, "str["+str.getBytes().length+"] sendBuf["+sendBuf+"]");
+        ILog.i(TAG, "sendTxtMsg str["+str.getBytes().length+"] sendBuf["+sendBuf+"]");
         synchronized (sendBuf)
         {
-            sendBuf.limit(sendBuf.capacity());
+            //sendBuf.limit(sendBuf.capacity());
             IupMsg iupMsg = new IupMsg(str);
-            IupUtil.encode(sendBuf, iupMsg);
+            String head = IupUtil.head(iupMsg);
+            byte[] headBytes = head.getBytes();
+            int msgLength = headBytes.length +(int)iupMsg.contentLength;
+            byte[] msgBytes = new byte[msgLength];
+            System.arraycopy(headBytes,0, msgBytes, 0, headBytes.length);
+            System.arraycopy(iupMsg.bytesContent, 0, msgBytes, headBytes.length, (int)iupMsg.contentLength);
+
+            if(sendBuf.remaining()>msgLength)
+            {
+                sendBuf.put(msgBytes);
+            }
+            else
+            {
+                sendBuf.put(msgBytes,0,sendBuf.remaining());
+            }
+
+
         }
     }
+
+    @Override
+    public void sendFileMsg(File file) {
+        ILog.i(TAG, "sendFileMsg file["+file.getAbsolutePath()+"] filesize["+file.length()+"]bytes md5["+ AES128.getFileMd5Str(file)+"]");
+        synchronized (sendBuf)
+        {
+            //sendBuf.limit(sendBuf.capacity());
+            IupMsg iupMsg = new IupMsg(file);
+            String head = IupUtil.head(iupMsg);
+            ILog.i(TAG,"iupMsg["+iupMsg+"]");
+            byte[] headBytes = head.getBytes();
+
+            sendBuf.put(headBytes);
+            FileInputStream fileInputStream = null;
+            FileChannel fileChannel = null;
+
+            try {
+                fileInputStream = new FileInputStream(file);
+                fileChannel = fileInputStream.getChannel();
+                int len = 0;
+                while((len=fileChannel.read(sendBuf))!=-1)
+                {
+                    ILog.i(TAG,"len["+len+"] sendBuf["+sendBuf+"]");
+                    if(!sendBuf.hasRemaining())
+                    {
+                        sendBuf.wait();
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+
+                if(fileChannel!= null)
+                {
+                    try {
+                        fileChannel.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(fileInputStream!= null)
+                {
+                    try {
+                        fileInputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
+        }
+    }
+
+
 }

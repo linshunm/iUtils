@@ -28,4 +28,10 @@ public class ILog {
     }
 
 
+    public static void c(String out)
+    {
+        System.out.println(out);
+    }
+
+
 }

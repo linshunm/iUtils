@@ -26,6 +26,7 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
     private Button btnStart;
     private Button btnStop;
     private Button btnSend;
+    private Button btnSendFile;
     private TextView tvInfo;
     private EditText etIp;
     private EditText etPort;
@@ -59,6 +60,8 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
         btnStop.setOnClickListener(this);
         btnSend = (Button) findViewById(R.id.btn_send);
         btnSend.setOnClickListener(this);
+        btnSendFile = (Button) findViewById(R.id.btn_send_file);
+        btnSendFile.setOnClickListener(this);
 
         tvInfo = (TextView) findViewById(R.id.tv_info);
         etIp = (EditText) findViewById(R.id.et_ip);
@@ -88,6 +91,10 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
             }
             case R.id.btn_send: {
                 mainPresenter.send();
+                break;
+            }
+            case R.id.btn_send_file: {
+                mainPresenter.sendFile();
                 break;
             }
             case R.id.btn_server: {

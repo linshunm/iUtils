@@ -5,8 +5,11 @@ import com.iutils.main.model.MainModelImpl;
 import com.iutils.main.view.IMainView;
 import com.iutils.network.bean.IupMsg;
 import com.iutils.network.stack.OnRsp;
+import com.iutils.utils.FileUtil;
 import com.iutils.utils.ThreadUtil;
 import com.iutils.utils.ToastUtil;
+
+import java.io.File;
 
 import cn.jesse.nativelogger.NLogger;
 import cn.jesse.nativelogger.logger.base.IFileLogger;
@@ -90,24 +93,24 @@ public class MainPresenter implements OnRsp{
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Integer>() {
-            @Override
-            public void onCompleted() {
-                sb.append("step 4 \n");
-                iView.showInfo(sb.toString());
-                iView.toast("onCompleted");
+                    @Override
+                    public void onCompleted() {
+                        sb.append("step 4 \n");
+                        iView.showInfo(sb.toString());
+                        iView.toast("onCompleted");
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable throwable) {
+                    @Override
+                    public void onError(Throwable throwable) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(Integer integer) {
-                sb.append("step 3 \n");
-            }
-        });
+                    @Override
+                    public void onNext(Integer integer) {
+                        sb.append("step 3 \n");
+                    }
+                });
     }
 
     public void zipLog()
@@ -193,6 +196,23 @@ public class MainPresenter implements OnRsp{
                 else if(mode == 2)
                 {
                     iModel.sendMsgToClient(iView.getMsg());
+                }
+            }
+        });
+    }
+
+    public void sendFile()
+    {
+        ThreadUtil.execute(new Runnable() {
+            @Override
+            public void run() {
+                if(mode == 0)
+                {
+                    showInfo("mode selected first!");
+                }
+                else if(mode == 1 || mode == 2)
+                {
+                    iModel.sendFileMsg(new File(FileUtil.getSDCardPath()+File.separator+"init.lua"));
                 }
             }
         });

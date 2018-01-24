@@ -11,6 +11,13 @@ import com.iutils.utils.ThreadUtil;
 
 import java.io.IOException;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func0;
+import rx.schedulers.Schedulers;
+
 public class OkHttpTestActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "OkHttpTestActivity";
@@ -40,6 +47,7 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
 
     private void request()
     {
+        /*
         ThreadUtil.execute(new Runnable() {
             @Override
             public void run() {
@@ -56,6 +64,31 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
                     }
                 });
 
+            }
+        });
+        */
+
+
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                String result = null;
+                try {
+                    result = okHttpTest.run("http://www.wooyun.org/");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    subscriber.onError(e.getCause());
+                }
+                subscriber.onNext(result);
+                subscriber.onCompleted();
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                tvResult.setText(s);
             }
         });
     }
@@ -117,9 +150,9 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
         {
             case R.id.btn_request:
             {
-                //request();
+                request();
                 //async();
-                download();
+                //download();
                 break;
             }
         }
