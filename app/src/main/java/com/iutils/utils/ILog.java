@@ -10,6 +10,7 @@ import cn.jesse.nativelogger.NLogger;
 public class ILog {
     public static void d(String tag, String msg)
     {
+        Log.d(tag, msg);
         NLogger.d(tag, msg);
     }
 
@@ -28,7 +29,7 @@ public class ILog {
     }
 
 
-    public static void c(String out)
+    public static void c(Object out)
     {
         System.out.println(out);
     }

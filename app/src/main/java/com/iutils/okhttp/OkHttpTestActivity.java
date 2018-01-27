@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.iutils.R;
+import com.iutils.utils.ILog;
 import com.iutils.utils.ThreadUtil;
 
 import java.io.IOException;
@@ -144,13 +145,25 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    private void bolck()
+    {
+        try {
+            ILog.i(TAG, "sleep 2 seconds");
+            Thread.sleep(2000);
+            ILog.i(TAG, "I'm wakeup");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.btn_request:
             {
-                request();
+                bolck();
+                //request();
                 //async();
                 //download();
                 break;

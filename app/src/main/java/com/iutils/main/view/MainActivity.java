@@ -1,5 +1,6 @@
 package com.iutils.main.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.iutils.R;
 import com.iutils.common.BaseActivity;
+import com.iutils.hook.HookHelper;
 import com.iutils.leak.StaticInnerClassActivity;
 import com.iutils.main.presenter.MainPresenter;
 import com.iutils.okhttp.OkHttpTestActivity;
@@ -39,6 +41,14 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainPresenter = new MainPresenter(this);
+        try {
+            ILog.d("hook","hook point");
+            ClassLoader classLoader = getClassLoader();
+            // 在这里进行Hook
+            HookHelper.attachContext(classLoader);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         initWidget();
     }
 
@@ -70,11 +80,23 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
     }
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(newBase);
+        try {
+            ClassLoader classLoader = getClassLoader();
+            // 在这里进行Hook
+            HookHelper.attachContext(classLoader);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test: {
                 Intent intent = new Intent(this, OkHttpTestActivity.class);
-                startActivity(intent);
+                getApplicationContext().startActivity(intent);
                 break;
             }
             case R.id.btn_ziplog: {

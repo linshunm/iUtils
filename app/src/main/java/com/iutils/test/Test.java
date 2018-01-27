@@ -24,6 +24,15 @@ public class Test {
 
     public static void main(String[] agrs)
     {
+        for(int i=0;i<10;i++)
+        {
+            String djdl = "dkjlgjl";
+            ILog.c(djdl.hashCode());
+        }
+    }
+
+    public void test()
+    {
         String s = "hello world !";
         try {
             byte[] md5Bytes = AES128.getMd5Bytes(s);
@@ -70,7 +79,6 @@ public class Test {
             e.printStackTrace();
         }
     }
-
     public int add(int a, int b)
     {
         return a+b;

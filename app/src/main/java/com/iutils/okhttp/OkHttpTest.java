@@ -1,5 +1,8 @@
 package com.iutils.okhttp;
 
+import com.iutils.utils.FileUtil;
+
+import java.io.File;
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -7,6 +10,7 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -16,6 +20,18 @@ import okhttp3.Response;
  * Created by kevin on 2017/12/31.
  */
 public class OkHttpTest {
+
+    public static void main(String[] args) throws IOException {
+        OkHttpTest okHttpTest = new OkHttpTest();
+        String filepath = "C:\\Users\\kevin\\Pictures\\Screenshots\\test.png";
+        //okHttpTest.multipartReq(filepath);
+        try {
+            okHttpTest.async();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     OkHttpClient client = new OkHttpClient();
     String run(String url) throws IOException {
         Request request = new Request.Builder().url(url).build();
@@ -88,6 +104,29 @@ public class OkHttpTest {
         } else {
             throw new IOException("Unexpected code " + response);
         }
+    }
+
+    private static final String IMGUR_CLIENT_ID = "...";
+    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+    public void multipartReq(String filepath) throws IOException
+    {
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("title", "Square Logo")
+                .addFormDataPart("image", "logo-square.png",
+                        RequestBody.create(MEDIA_TYPE_PNG, new File(filepath)))
+                .build();
+
+        Request request = new Request.Builder()
+                .header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
+                .url("https://api.imgur.com/3/image")
+                .post(requestBody)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+        System.out.println(response.body().string());
     }
 
 
