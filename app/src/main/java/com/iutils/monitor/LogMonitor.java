@@ -37,16 +37,16 @@ public class LogMonitor {
         @Override
         public void run() {
             ILog.e(TAG, "mHits["+mHits+"]  mStackInfo:"+mStackInfo);
-            synchronized (hitMap)
-            {
-                Set<Map.Entry<Integer, Integer>> hitSet = hitMap.entrySet();
-                Iterator<Map.Entry<Integer,Integer>> iterator =hitSet.iterator();
-                while(iterator.hasNext())
-                {
-                    Map.Entry<Integer, Integer> i =  iterator.next();
-                    ILog.e(TAG, "key["+i.getKey()+"] value["+i.getValue()+"]");
-                }
-            }
+//            synchronized (hitMap)
+//            {
+//                Set<Map.Entry<Integer, Integer>> hitSet = hitMap.entrySet();
+//                Iterator<Map.Entry<Integer,Integer>> iterator =hitSet.iterator();
+//                while(iterator.hasNext())
+//                {
+//                    Map.Entry<Integer, Integer> i =  iterator.next();
+//                    ILog.e(TAG, "key["+i.getKey()+"] value["+i.getValue()+"]");
+//                }
+//            }
 //            isMonitor = false;
             clearStack();
         }

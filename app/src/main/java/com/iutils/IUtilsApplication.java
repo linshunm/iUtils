@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
 
+import com.iutils.hook.BinderHookHelper;
 import com.iutils.hook.HookHelper;
 import com.iutils.monitor.BlockDetectByChoreographer;
 import com.iutils.monitor.BlockDetectByPrinter;
@@ -73,6 +74,8 @@ public class IUtilsApplication extends Application {
         try {
             // 在这里进行Hook
             HookHelper.attachContext();
+
+            BinderHookHelper.hookClipboardService();
         } catch (Exception e) {
             e.printStackTrace();
         }
