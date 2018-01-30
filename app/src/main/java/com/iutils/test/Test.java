@@ -24,11 +24,8 @@ public class Test {
 
     public static void main(String[] agrs)
     {
-        for(int i=0;i<10;i++)
-        {
-            String djdl = "dkjlgjl";
-            ILog.c(djdl.hashCode());
-        }
+        Test test = new Test();
+        test.test();
     }
 
     public void test()
@@ -42,7 +39,7 @@ public class Test {
             e.printStackTrace();
         }
 
-        File inFile = new File("/Users/linshunming/log.txt");
+        File inFile = new File("d:\\test.keys");
         String fileMd5Str = AES128.getFileMd5Str(inFile);
         ILog.c("fileMd5Str["+fileMd5Str+"]");
         System.out.println("hello world !");

@@ -32,7 +32,7 @@ public class EvilInstrumentation extends Instrumentation {
             Intent intent, int requestCode, Bundle options) {
 
         // Hook之前, XXX到此一游!
-        ILog.d("hook", "\n执行了startActivity, 参数如下: \n" + "who = [" + who + "], " +
+        ILog.i(TAG, "\n执行了startActivity, 参数如下: \n" + "who = [" + who + "], " +
                 "\ncontextThread = [" + contextThread + "], \ntoken = [" + token + "], " +
                 "\ntarget = [" + target + "], \nintent = [" + intent +
                 "], \nrequestCode = [" + requestCode + "], \noptions = [" + options + "]");

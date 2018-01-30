@@ -39,16 +39,16 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ILog.i(TAG,"onCreate");
         setContentView(R.layout.activity_main);
         mainPresenter = new MainPresenter(this);
-        try {
-            ILog.d("hook","hook point");
-            ClassLoader classLoader = getClassLoader();
-            // 在这里进行Hook
-            HookHelper.attachContext(classLoader);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ILog.i("hook","hook point");
+//            // 在这里进行Hook
+//            HookHelper.attachContext();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         initWidget();
     }
 
@@ -79,17 +79,9 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
         etMsg = (EditText) findViewById(R.id.et_msg);
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
-        try {
-            ClassLoader classLoader = getClassLoader();
-            // 在这里进行Hook
-            HookHelper.attachContext(classLoader);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
+
+
 
     @Override
     public void onClick(View v) {

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
 
+import com.iutils.hook.HookHelper;
 import com.iutils.monitor.BlockDetectByChoreographer;
 import com.iutils.monitor.BlockDetectByPrinter;
 import com.squareup.leakcanary.LeakCanary;
@@ -64,6 +65,17 @@ public class IUtilsApplication extends Application {
 //        startService(mIntent);
 
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(newBase);
+        try {
+            // 在这里进行Hook
+            HookHelper.attachContext();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static RefWatcher getRefWatcher(Context context) {

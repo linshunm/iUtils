@@ -13,10 +13,10 @@ import java.lang.reflect.Method;
  */
 public class HookHelper {
 
-    public static void attachContext(ClassLoader classLoader) throws Exception{
-        ILog.d("hook","attachContext");
+    public static void attachContext() throws Exception{
+        ILog.i("hook","attachContext");
         // 先获取到当前的ActivityThread对象
-        Class<?> activityThreadClass = Class.forName("android.app.ActivityThread", false, classLoader);
+        Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
         Method currentActivityThreadMethod = activityThreadClass.getDeclaredMethod("currentActivityThread");
         currentActivityThreadMethod.setAccessible(true);
         //currentActivityThread是一个static函数所以可以直接invoke，不需要带实例参数

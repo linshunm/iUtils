@@ -1,5 +1,6 @@
 package com.iutils.okhttp;
 
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -145,11 +146,32 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    private void bolck()
+    private void block1()
     {
         try {
-            ILog.i(TAG, "sleep 2 seconds");
-            Thread.sleep(2000);
+            ILog.i(TAG, "block1 sleep");
+            Thread.sleep(200);
+            ILog.i(TAG, "I'm wakeup");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void block2()
+    {
+        try {
+            ILog.i(TAG, "sleep block2");
+            Thread.sleep(500);
+            ILog.i(TAG, "I'm wakeup");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    private void block3()
+    {
+        try {
+            ILog.i(TAG, "block3 sleep");
+            Thread.sleep(350);
             ILog.i(TAG, "I'm wakeup");
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -162,7 +184,9 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
         {
             case R.id.btn_request:
             {
-                bolck();
+                block1();
+                block2();
+                block3();
                 //request();
                 //async();
                 //download();

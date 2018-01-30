@@ -159,8 +159,7 @@ public class LoginActivity extends BaseActivity implements ILoginView,
         ILog.i(TAG, "gotoMainActivity()");
         Intent intent = new Intent(this, MainActivity.class);
 
-        Context context = this;
-        context.startActivity(intent);
+        startActivity(intent);
         finish();
     }
 
