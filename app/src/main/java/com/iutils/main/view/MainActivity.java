@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.iutils.R;
 import com.iutils.common.BaseActivity;
+import com.iutils.framework.JniTest;
 import com.iutils.hook.HookHelper;
 import com.iutils.leak.StaticInnerClassActivity;
 import com.iutils.main.presenter.MainPresenter;
@@ -50,6 +51,8 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
 //            e.printStackTrace();
 //        }
         initWidget();
+
+        initData();
     }
 
     private void initWidget() {
@@ -77,6 +80,12 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
         etIp = (EditText) findViewById(R.id.et_ip);
         etPort = (EditText) findViewById(R.id.et_port);
         etMsg = (EditText) findViewById(R.id.et_msg);
+
+    }
+
+    private void initData()
+    {
+        tvInfo.setText("packageName: " + JniTest.getPackageName(MainActivity.this));
     }
 
 
