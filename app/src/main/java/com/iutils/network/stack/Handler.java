@@ -42,7 +42,7 @@ public class Handler implements IHandler {
 
         synchronized (sendBuf)
         {
-            ILog.i(TAG,"write sendBuf["+sendBuf+"]");
+            //ILog.i(TAG,"write sendBuf["+sendBuf+"]");
             if(sendBuf.position() == 0)
             {
                 //buffer没有数据不需要发送
