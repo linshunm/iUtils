@@ -128,12 +128,17 @@ public class LogMonitor {
 
     private static String getStackInfo()
     {
+        String stackInfo = null;
         StringBuilder sb = new StringBuilder();
         StackTraceElement[] stackTrace = Looper.getMainLooper().getThread().getStackTrace();
         for (StackTraceElement s : stackTrace) {
             sb.append(s.toString() + "\n");
         }
-        return sb.toString();
+        stackInfo = sb.toString();
+//        //把结尾->符号去掉
+//        stackInfo = stackInfo.substring(0, stackInfo.length()-2);
+
+        return stackInfo;
     }
 
     private static void clearStack()

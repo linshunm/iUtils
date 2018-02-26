@@ -10,11 +10,14 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
 
 /**
  * Created by linshunming on 2017/9/20.
  */
 public class Test {
+
+    static String TAG = "Test";
 
     static {
         temp = 2;
@@ -25,7 +28,65 @@ public class Test {
     public static void main(String[] agrs)
     {
         Test test = new Test();
-        test.test();
+        LinkedList<Task> rq = new LinkedList<>();
+        for(int i =110; i<10; i++)
+        {
+            Task task = new Task();
+            if(i==0)
+            {
+                task.setDoing(true);
+            }
+            task.setTaskId(String.valueOf(i));
+            task.setPriority(2);
+            rq.addLast(task);
+        }
+        ILog.c(rq);
+        Task newTask = new Task();
+        newTask.setTaskId("001");
+        newTask.setPriority(2);
+
+        test.insertTask(rq, newTask);
+
+        ILog.c(rq);
+    }
+
+    private void insertTask(LinkedList<Task> rq, Task task) {
+        if (rq == null)
+        {
+            ILog.e(TAG, "rq is null");
+            return;
+        }
+
+        if(task == null)
+        {
+            ILog.e(TAG, "task is null");
+        }
+
+
+        int rqLength = rq.size();
+        if(rqLength == 0)
+        {
+            //队列为空，直接加入到队列后面则可
+            rq.addLast(task);
+            return;
+        }
+
+        int index = 0;
+        for(int i= rqLength-1; i>=0; i--)
+        {
+            Task tmp = rq.get(i);
+            if(!tmp.isDoing() && tmp.getPriority()<task.getPriority())
+            {
+                continue;
+            }
+            else
+            {
+                index = i+1;//找到了要插入的位置了
+                break;
+            }
+        }
+
+        rq.add(index, task);
     }
 
     public void test()

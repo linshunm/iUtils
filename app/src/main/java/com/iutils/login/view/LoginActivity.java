@@ -37,7 +37,8 @@ import com.iutils.widgets.ScrollViewListener;
  */
 public class LoginActivity extends BaseActivity implements ILoginView,
         View.OnClickListener, View.OnFocusChangeListener,
-        ScrollViewListener, CompoundButton.OnCheckedChangeListener {
+        ScrollViewListener, CompoundButton.OnCheckedChangeListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final static String TAG = "LoginActivity";
     private LoginPresenter presenter;
@@ -66,6 +67,10 @@ public class LoginActivity extends BaseActivity implements ILoginView,
         {
             //申请WRITE_EXTERNAL_STORAGE权限
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Const.WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, Const.READ_PHONE_STATE_REQUEST_CODE);
         }
 
     }
@@ -272,13 +277,29 @@ public class LoginActivity extends BaseActivity implements ILoginView,
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Const.WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission Granted
-                ToastUtil.showToast("Permission Granted");
-            } else {
-                // Permission Denied
-                ToastUtil.showToast("Permission Denied");
+        switch (requestCode)
+        {
+            case Const.WRITE_EXTERNAL_STORAGE_REQUEST_CODE:
+            {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    ToastUtil.showToast("Permission Granted");
+                } else {
+                    // Permission Denied
+                    ToastUtil.showToast("Permission Denied");
+                }
+                break;
+            }
+            case Const.READ_PHONE_STATE_REQUEST_CODE:
+            {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    ToastUtil.showToast("Permission Granted");
+                } else {
+                    // Permission Denied
+                    ToastUtil.showToast("Permission Denied");
+                }
+                break;
             }
         }
     }

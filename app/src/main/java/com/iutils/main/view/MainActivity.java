@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test: {
-                Intent intent = new Intent(this, OkHttpTestActivity.class);
+                Intent intent = new Intent(this, StaticInnerClassActivity.class);
                 getApplicationContext().startActivity(intent);
                 break;
             }
