@@ -31,7 +31,7 @@ public class ILog {
 
     public static void c(Object out)
     {
-        System.out.println(out);
+        System.out.println(DateFormatUtil.getRecordDateStr()+":"+out);
     }
 
 
