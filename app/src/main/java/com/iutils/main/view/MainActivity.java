@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.iutils.R;
 import com.iutils.common.BaseActivity;
 import com.iutils.framework.JniTest;
+import com.iutils.framework.JniTestActivity;
 import com.iutils.hook.HookHelper;
 import com.iutils.leak.StaticInnerClassActivity;
 import com.iutils.main.presenter.MainPresenter;
@@ -96,7 +97,7 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test: {
-                Intent intent = new Intent(this, StaticInnerClassActivity.class);
+                Intent intent = new Intent(this, JniTestActivity.class);
                 getApplicationContext().startActivity(intent);
                 break;
             }

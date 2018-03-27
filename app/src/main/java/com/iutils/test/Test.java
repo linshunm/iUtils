@@ -2,11 +2,8 @@ package com.iutils.test;
 
 import com.iutils.utils.AES128;
 import com.iutils.utils.ILog;
-import com.iutils.utils.StringUtil;
-import com.iutils.utils.SystemUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
@@ -28,8 +25,18 @@ public class Test {
     public static void main(String[] agrs)
     {
         Test test = new Test();
+
+    }
+
+    public void dbTest()
+    {
+
+    }
+
+    public void rqTest()
+    {
         LinkedList<Task> rq = new LinkedList<>();
-        for(int i =110; i<10; i++)
+        for(int i =0; i<5; i++)
         {
             Task task = new Task();
             if(i==0)
@@ -43,9 +50,9 @@ public class Test {
         ILog.c(rq);
         Task newTask = new Task();
         newTask.setTaskId("001");
-        newTask.setPriority(2);
+        newTask.setPriority(1);
 
-        test.insertTask(rq, newTask);
+        //test.insertTask(rq, newTask);
 
         ILog.c(rq);
     }

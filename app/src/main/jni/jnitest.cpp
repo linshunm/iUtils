@@ -78,8 +78,9 @@ JNIEXPORT jstring JNICALL Java_com_iutils_framework_JniTest_getPackageName(JNIEn
             LOGE("deviceId is null");
             return NULL;
         }
-        char* cid = jstringToChar(env, deviceId);
-        LOGI("get getDeviceIdMethodId %s", cid);
+        //char* cid = jstringToChar(env, deviceId);
+        const char *cid = env->GetStringUTFChars(deviceId, NULL);
+        LOGI("get new getDeviceIdMethodId %s", cid);
     }
     //(*env)->CallVoidMethod(env,obj,mid); //执行java方法
 
@@ -94,4 +95,44 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved) {
 
     return JNI_VERSION_1_4;
 }
+
+/*
+ * Class: com_iutils_framework
+ * Method: get2Array
+ * Signature:(I)[[I
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_iutils_framework_JniTest_get2Array
+        (JNIEnv *env, jobject obj, jint dimon)
+{
+    //获得一维数组的类型.
+    jclass intArrayClass = env->FindClass("[I");
+
+    //构造一个指向intArray类型的数组
+    jobjectArray objIntArray = env->NewObjectArray(dimon, intArrayClass, NULL);
+
+    //创建dimon个jintArray数组对象，并放入到对象数组objIntArray里面
+    for(int i = 0; i<dimon; i++)
+    {
+        jintArray intArray = env->NewIntArray(dimon);
+
+        //初始化一个容器，假设dimon不会超过10
+        jint temp[10];
+        for(int j = 0; j<dimon; j++)
+        {
+            temp[j] = i+j;
+        }
+
+        //对intArray数组进行赋值
+        env->SetIntArrayRegion(intArray, 0, dimon, temp);
+
+        //对对象数组进行赋值
+        env->SetObjectArrayElement(objIntArray, i, intArray);
+
+        //释放局部变量
+        env->DeleteLocalRef(intArray);
+    }
+
+    return objIntArray;
+}
+
 

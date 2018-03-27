@@ -15,6 +15,12 @@ extern "C" {
 JNIEXPORT jstring JNICALL Java_com_iutils_framework_JniTest_getPackageName
   (JNIEnv *, jclass, jobject);
 
+/**
+ * public native int[][] get2Array(int dimon);
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_iutils_framework_JniTest_get2Array
+        (JNIEnv *, jobject, jint);
+
 #ifdef __cplusplus
 }
 #endif

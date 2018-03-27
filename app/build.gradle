@@ -57,9 +57,15 @@ android {
 //            jniLibs.srcDirs = ['src/main/libs']
 //        }
 //    }
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
 }
 
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.+'
     compile 'com.android.support:design:23.+'
@@ -78,4 +84,6 @@ dependencies {
     //    compile 'com.jakewharton.rxbinding2:rxbinding-design:2.0.0'
     //    compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
     //    compile 'com.jakewharton.rxbinding2:rxbinding-leanback-v17:2.0.0'
+    compile 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
+
 }
