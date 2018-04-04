@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 
 import com.iutils.common.BaseActivity;
 import com.iutils.R;
-import com.iutils.leak.StaticInnerClassActivity;
+import com.iutils.leak.InputManagerMemoryLeak;
 import com.iutils.login.presenter.LoginPresenter;
 import com.iutils.main.view.MainActivity;
 import com.iutils.utils.Const;
@@ -302,6 +302,8 @@ public class LoginActivity extends BaseActivity implements ILoginView,
                 break;
             }
         }
+
+        InputManagerMemoryLeak.fixInputMethodManagerLeak(this);
     }
 }
 

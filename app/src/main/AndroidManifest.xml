@@ -46,7 +46,7 @@
             android:enabled="true"
             android:exported="false"/>
 
-        <activity android:name=".leak.StaticInnerClassActivity">
+        <activity android:name=".leak.MemoryLeakActivity">
         </activity>
         <activity android:name=".test.ImageTestActivity">
         </activity>
