@@ -21,6 +21,20 @@ JNIEXPORT jstring JNICALL Java_com_iutils_framework_JniTest_getPackageName
 JNIEXPORT jobjectArray JNICALL Java_com_iutils_framework_JniTest_get2Array
         (JNIEnv *, jobject, jint);
 
+/**
+ * Class:     com_iutils_framework_JniTest
+ * public native Task getTask();
+ */
+JNIEXPORT jobject JNICALL Java_com_iutils_framework_JniTest_getTask
+        (JNIEnv *, jobject);
+
+/**
+ * Class:     com_iutils_framework_JniTest
+ * public native ArrayList<Task> getTaskList();
+ */
+JNIEXPORT jobject JNICALL Java_com_iutils_framework_JniTest_getTaskList
+        (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

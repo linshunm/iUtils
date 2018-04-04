@@ -1,5 +1,9 @@
 package com.iutils.framework;
 
+import com.iutils.test.Task;
+
+import java.util.ArrayList;
+
 /**
  * Created by kevin on 2018/2/1.
  */
@@ -12,6 +16,10 @@ public class JniTest {
     public static native String getPackageName(Object o);
 
     public native int[][] get2Array(int dimon);
+
+    public native Task getTask();
+
+    public native ArrayList<Task> getTaskList();
 
     /**
      * 加载so库或jni库，在使用到该库之前加载就行，不一定非要写在这个类内

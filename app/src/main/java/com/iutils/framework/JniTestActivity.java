@@ -7,9 +7,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.iutils.R;
+import com.iutils.test.Task;
+import com.iutils.utils.ILog;
+
+import java.util.List;
 
 public class JniTestActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "JniTestActivity";
     Button btnTest;
     TextView tvInfo;
     @Override
@@ -44,13 +49,48 @@ public class JniTestActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    void getTaskByNative()
+    {
+        try{
+            JniTest jniTest = new JniTest();
+            Task task = jniTest.getTask();
+            if(task != null){
+                tvInfo.setText(task.toString());
+            }else{
+                tvInfo.setText("task is null");
+            }
+
+        }catch (Exception e){
+
+        }
+    }
+
+    void getTaskListByNative()
+    {
+        try{
+            JniTest jniTest = new JniTest();
+            List<Task> list = jniTest.getTaskList();
+            ILog.i(TAG, "get list finished");
+
+            StringBuffer sb = new StringBuffer();
+            for(Task task :list){
+                sb.append(task.toString()+"\r\n");
+            }
+            tvInfo.setText(sb.toString());
+        }catch (Exception e){
+            tvInfo.setText(e.toString());
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.btn_test:
             {
-                get2Array();
+                getTaskListByNative();
+                //getTaskByNative();
+                //get2Array();
                 break;
             }
         }

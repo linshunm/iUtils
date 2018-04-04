@@ -26,6 +26,7 @@ android {
         }
     }
     buildTypes {
+        /*
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -33,14 +34,14 @@ android {
             jniDebuggable true
             signingConfig signingConfigs.iutils_signing
             zipAlignEnabled true
+        }*/
+        debug {
+            debuggable true
+            jniDebuggable true
+            signingConfig signingConfigs.iutils_signing
+            minifyEnabled false
+            zipAlignEnabled true
         }
-//        debug {
-//            debuggable true
-//            jniDebuggable true
-//            signingConfig signingConfigs.iutils_signing
-//            minifyEnabled false
-//            zipAlignEnabled true
-//        }
     }
     productFlavors {
     }
