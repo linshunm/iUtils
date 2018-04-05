@@ -1,0 +1,41 @@
+{
+  "buildFiles": [
+    "/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/Android.mk",
+    "/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/Application.mk"
+  ],
+  "cleanCommands": [
+    "/Users/linshunming/android-sdk-macosx/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-23 NDK_OUT\u003d/Users/linshunming/Desktop/workspace_git/iUtils/app/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/Users/linshunming/Desktop/workspace_git/iUtils/app/build/intermediates/ndkBuild/release/lib clean"
+  ],
+  "libraries": {
+    "JNI_ANDROID_TEST-release-armeabi-v7a": {
+      "buildCommand": "/Users/linshunming/android-sdk-macosx/ndk-bundle/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-23 NDK_OUT\u003d/Users/linshunming/Desktop/workspace_git/iUtils/app/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003d/Users/linshunming/Desktop/workspace_git/iUtils/app/build/intermediates/ndkBuild/release/lib /Users/linshunming/Desktop/workspace_git/iUtils/app/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libJNI_ANDROID_TEST.so",
+      "toolchain": "toolchain-armeabi-v7a",
+      "abi": "armeabi-v7a",
+      "artifactName": "JNI_ANDROID_TEST",
+      "files": [
+        {
+          "src": "/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/jnitest.cpp",
+          "flags": "-gcc-toolchain /Users/linshunming/android-sdk-macosx/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64 -fpic -ffunction-sections -funwind-tables -fstack-protector-strong -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -no-canonical-prefixes -fno-integrated-as -g -target armv7-none-linux-androideabi23 -march\u003darmv7-a -mfloat-abi\u003dsoftfp -mfpu\u003dvfpv3-d16 -fno-exceptions -fno-rtti -mthumb -Os -DNDEBUG -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward -I/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni -DANDROID -D__ANDROID_API__\u003d23 -Wa,--noexecstack -Wformat -Werror\u003dformat-security --sysroot /Users/linshunming/android-sdk-macosx/ndk-bundle/sysroot -isystem /Users/linshunming/android-sdk-macosx/ndk-bundle/sysroot/usr/include/arm-linux-androideabi"
+        },
+        {
+          "src": "/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/tq/Task.cpp",
+          "flags": "-gcc-toolchain /Users/linshunming/android-sdk-macosx/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64 -fpic -ffunction-sections -funwind-tables -fstack-protector-strong -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -no-canonical-prefixes -fno-integrated-as -g -target armv7-none-linux-androideabi23 -march\u003darmv7-a -mfloat-abi\u003dsoftfp -mfpu\u003dvfpv3-d16 -fno-exceptions -fno-rtti -mthumb -Os -DNDEBUG -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward -I/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni -DANDROID -D__ANDROID_API__\u003d23 -Wa,--noexecstack -Wformat -Werror\u003dformat-security --sysroot /Users/linshunming/android-sdk-macosx/ndk-bundle/sysroot -isystem /Users/linshunming/android-sdk-macosx/ndk-bundle/sysroot/usr/include/arm-linux-androideabi"
+        },
+        {
+          "src": "/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni/util/StringUtils.cpp",
+          "flags": "-gcc-toolchain /Users/linshunming/android-sdk-macosx/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64 -fpic -ffunction-sections -funwind-tables -fstack-protector-strong -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -no-canonical-prefixes -fno-integrated-as -g -target armv7-none-linux-androideabi23 -march\u003darmv7-a -mfloat-abi\u003dsoftfp -mfpu\u003dvfpv3-d16 -fno-exceptions -fno-rtti -mthumb -Os -DNDEBUG -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -I/Users/linshunming/android-sdk-macosx/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward -I/Users/linshunming/Desktop/workspace_git/iUtils/app/src/main/jni -DANDROID -D__ANDROID_API__\u003d23 -Wa,--noexecstack -Wformat -Werror\u003dformat-security --sysroot /Users/linshunming/android-sdk-macosx/ndk-bundle/sysroot -isystem /Users/linshunming/android-sdk-macosx/ndk-bundle/sysroot/usr/include/arm-linux-androideabi"
+        }
+      ],
+      "output": "/Users/linshunming/Desktop/workspace_git/iUtils/app/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libJNI_ANDROID_TEST.so"
+    }
+  },
+  "toolchains": {
+    "toolchain-armeabi-v7a": {
+      "cppCompilerExecutable": "/Users/linshunming/android-sdk-macosx/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

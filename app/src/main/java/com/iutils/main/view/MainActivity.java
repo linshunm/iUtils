@@ -1,6 +1,5 @@
 package com.iutils.main.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,13 +10,9 @@ import android.widget.TextView;
 import com.iutils.R;
 import com.iutils.common.BaseActivity;
 import com.iutils.framework.JniTest;
-import com.iutils.hook.HookHelper;
-import com.iutils.leak.StaticInnerClassActivity;
+import com.iutils.leak.MemoryLeakActivity;
 import com.iutils.main.presenter.MainPresenter;
-import com.iutils.okhttp.OkHttpTestActivity;
-import com.iutils.test.ImageTestActivity;
 import com.iutils.utils.ILog;
-import com.iutils.zip.ZipTestActivity;
 
 public class MainActivity extends BaseActivity implements IMainView, View.OnClickListener {
 
@@ -96,8 +91,8 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test: {
-                Intent intent = new Intent(this, StaticInnerClassActivity.class);
-                getApplicationContext().startActivity(intent);
+                Intent intent = new Intent(this, MemoryLeakActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.btn_ziplog: {

@@ -2,21 +2,12 @@ package com.iutils.test;
 
 import com.iutils.utils.AES128;
 import com.iutils.utils.ILog;
-import com.iutils.utils.StringUtil;
-import com.iutils.utils.SystemUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by linshunming on 2017/9/20.
@@ -35,52 +26,17 @@ public class Test {
     {
         Test test = new Test();
 
-        test.mapTest();
+    }
+
+    public void dbTest()
+    {
 
     }
 
-    private void mapTest(){
-        final int capacity = 1024000;
-        Map<String, Integer> map = new HashMap<>(capacity);
-        for(int i = 0; i < capacity; i++){
-            map.put(String.valueOf(i), Integer.valueOf(i));
-        }
-
-
-        ILog.c("keySet begin...");
-        Set<String> keySet = map.keySet();
-        Iterator<String> keyIt = keySet.iterator();
-        while(keyIt.hasNext())
-        {
-            String key = keyIt.next();
-            Integer value = map.get(key);
-        }
-        ILog.c("keySet end;");
-
-        ILog.c("entrySet begin...");
-        Set<Map.Entry<String, Integer>> entrySet = map.entrySet();
-        Iterator<Map.Entry<String, Integer>> iterator = entrySet.iterator();
-        while(iterator.hasNext())
-        {
-            String key = iterator.next().getKey();
-            Integer value = iterator.next().getValue();
-        }
-        ILog.c("entrySet end;");
-
-        String[] str1 = new String[] { "you", "wu" };
-        List list = Arrays.asList(str1);
-        //list.add("dkkk");//java.lang.UnsupportedOperationException
-        str1[0] = "dkkk";
-        ILog.c("list[0]="+list.get(0));
-
-        String str = "a,b,c, ,";
-        String[] arr = str.split(",");
-        ILog.c("arr length["+arr.length+"]");
-    }
-
-    public void insertTaskTest(){
+    public void rqTest()
+    {
         LinkedList<Task> rq = new LinkedList<>();
-        for(int i =110; i<10; i++)
+        for(int i =0; i<5; i++)
         {
             Task task = new Task();
             if(i==0)
@@ -94,7 +50,7 @@ public class Test {
         ILog.c(rq);
         Task newTask = new Task();
         newTask.setTaskId("001");
-        newTask.setPriority(2);
+        newTask.setPriority(1);
 
         //test.insertTask(rq, newTask);
 
