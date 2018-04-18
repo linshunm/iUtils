@@ -58,7 +58,7 @@ public class IUtilsApplication extends Application {
 
         refWatcher = LeakCanary.install(this);
 
-//        BlockDetectByPrinter.start();
+        //BlockDetectByPrinter.start();
         BlockDetectByChoreographer.start();
 
 

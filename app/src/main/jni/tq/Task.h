@@ -14,6 +14,7 @@ public:
 public:
     Task(std::string _id);
     ~Task();
+    Task(const Task &_task);
     std::string getTqId();
     std::string getTaskId();
     void setTimeout(long _timeout);
@@ -23,6 +24,7 @@ public:
     void doTask();
     int getPriority();
     void setPriority(int _priority);
+    static void* run(void *args);
 
 private:
     std::string taskId;
