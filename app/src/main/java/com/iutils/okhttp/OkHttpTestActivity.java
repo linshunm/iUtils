@@ -1,32 +1,39 @@
 package com.iutils.okhttp;
 
-import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.iutils.R;
+import com.iutils.dagger2.DaggerOkHttpTestActivityComponent;
 import com.iutils.utils.ILog;
 import com.iutils.utils.ThreadUtil;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 
-public class OkHttpTestActivity extends AppCompatActivity implements View.OnClickListener{
+public class OkHttpTestActivity extends AppCompatActivity{
 
     private static final String TAG = "OkHttpTestActivity";
 
-    private Button btnReq;
-    private TextView tvResult;
-    private OkHttpTest okHttpTest;
+    @BindView(R.id.btn_request)
+    Button btnReq;
+    @BindView(R.id.tv_req_result)
+    TextView tvResult;
+    @Inject
+    OkHttpTest okHttpTest;
 
     private String result;
 
@@ -34,20 +41,14 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ok_http_test);
+        DaggerOkHttpTestActivityComponent.create().inject(this);
+        ButterKnife.bind(this);
 
-        initView();
-
-        okHttpTest = new OkHttpTest();
     }
 
-    private void initView()
-    {
-        btnReq = (Button)findViewById(R.id.btn_request);
-        btnReq.setOnClickListener(this);
-        tvResult = (TextView) findViewById(R.id.tv_req_result);
-    }
 
-    private void request()
+    @OnClick(R.id.btn_request)
+    void request()
     {
         /*
         ThreadUtil.execute(new Runnable() {
@@ -175,23 +176,6 @@ public class OkHttpTestActivity extends AppCompatActivity implements View.OnClic
             ILog.i(TAG, "I'm wakeup");
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.btn_request:
-            {
-                block1();
-                block2();
-                block3();
-                //request();
-                //async();
-                //download();
-                break;
-            }
         }
     }
 }

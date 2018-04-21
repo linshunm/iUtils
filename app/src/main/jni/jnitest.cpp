@@ -26,7 +26,7 @@
 
 using namespace std;
 
-#define THREAD_NUM 10
+#define THREAD_NUM 3
 void* doTask(void* args){
     LOGI("DO JOB");
     Task *pTask = reinterpret_cast<Task*>(args);
@@ -59,10 +59,14 @@ void createTaskList(vector<Task> &_taskList){
     for(i=0; i<THREAD_NUM; i++){
         Task task = *(it+i);
         LOGI("task id=%s, priority=%d",task.getTaskId().c_str(), task.getPriority());
-        int ret = pthread_create(&tids[i], NULL, doTask, (void*)&(*(it+i)));
+        //int ret = pthread_create(&tids[i], NULL, doTask, (void*)&(*(it+i)));
+        int ret = pthread_create(&tids[i], NULL, Task::run, (void*)&(*(it+i)));
         if(ret != 0){
             cout<<"pthread_create error["<<ret<<"]"<<endl;
+        }else{
+            LOGI("tid[%d]=%ld",i,(long)tids[i]);
         }
+
     }
 
     LOGI("EXIT");
@@ -316,7 +320,7 @@ JNIEXPORT jobject JNICALL Java_com_iutils_framework_JniTest_getTaskList
     string &id =temp;
     vector<Task> taskList;
 
-    for(int i=0; i<10; i++){
+    for(int i=0; i<3; i++){
         StringUtils::int2str(i,id);
 
         jstring taskId = env->NewStringUTF(temp.c_str());

@@ -8,13 +8,23 @@
 Task::Task(std::string _id) {
     LOGI("TASK created %s", _id.c_str());
     taskId = _id;
-    long timeout = 2 * 60 * 1000;//默认两分钟
-    long startTaskTime = 0L;
-    bool isDoing = false;
+    timeout = 2 * 60 * 1000;//默认两分钟
+    startTaskTime = 0L;
+    processing = false;
+
 }
 
 Task::~Task() {
     LOGI("TASK destroy %s", taskId.c_str());
+}
+
+Task::Task(const Task &_task) {
+    LOGI("copy constructor origin task id:%s", _task.taskId.c_str());
+    taskId = _task.taskId;
+    timeout = _task.timeout;
+    startTaskTime = _task.startTaskTime;
+    processing = _task.processing;
+    priority = _task.priority;
 }
 
 std::string Task::getTqId()
@@ -46,6 +56,7 @@ void Task::setProcessing(bool _isDoing)
 void Task::doTask()
 {
     startTaskTime = 0L;
+    LOGI("do task:%s", taskId.c_str());
 }
 
 
@@ -65,4 +76,10 @@ void Task::setPriority(int _priority)
         priority = TASK_MIN_PRIORITY;
     }
     priority = _priority;
+}
+
+void* Task::run(void *args) {
+    Task *pTask = (Task *)args;
+    pTask->doTask();
+    return 0;
 }

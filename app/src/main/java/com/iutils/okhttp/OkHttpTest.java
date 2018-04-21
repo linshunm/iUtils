@@ -5,6 +5,8 @@ import com.iutils.utils.FileUtil;
 import java.io.File;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -30,9 +32,15 @@ public class OkHttpTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
-    OkHttpClient client = new OkHttpClient();
+    @Inject
+    public OkHttpTest(){}
+
+    @Inject
+    OkHttpClient client;
+
     String run(String url) throws IOException {
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
