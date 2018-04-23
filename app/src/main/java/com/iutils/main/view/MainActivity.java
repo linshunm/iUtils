@@ -5,135 +5,71 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.iutils.R;
 import com.iutils.common.BaseActivity;
 import com.iutils.framework.JniTest;
-import com.iutils.framework.JniTestActivity;
-import com.iutils.leak.MemoryLeakActivity;
 import com.iutils.main.presenter.MainPresenter;
 import com.iutils.okhttp.OkHttpTestActivity;
 import com.iutils.utils.ILog;
 
-public class MainActivity extends BaseActivity implements IMainView, View.OnClickListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+@Route(path = "/main/MainActivity")
+public class MainActivity extends BaseActivity implements IMainView {
 
     private static final String TAG = "MainActivity";
+    @BindView(R.id.btn_server)
+    Button btnServer;
+    @BindView(R.id.btn_client)
+    Button btnClient;
+    @BindView(R.id.rl_btn)
+    LinearLayout rlBtn;
+    @BindView(R.id.et_ip)
+    EditText etIp;
+    @BindView(R.id.et_port)
+    EditText etPort;
+    @BindView(R.id.et_msg)
+    EditText etMsg;
+    @BindView(R.id.tv_info)
+    TextView tvInfo;
     private MainPresenter mainPresenter;
-    private Button btnServer;
-    private Button btnClient;
-    private Button btnZipLog;
-    private Button btnStart;
-    private Button btnStop;
-    private Button btnSend;
-    private Button btnSendFile;
-    private TextView tvInfo;
-    private EditText etIp;
-    private EditText etPort;
-    private EditText etMsg;
-
-    private Button btnTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ILog.i(TAG,"onCreate");
+        ILog.i(TAG, "onCreate");
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         mainPresenter = new MainPresenter(this);
-//        try {
-//            ILog.i("hook","hook point");
-//            // 在这里进行Hook
-//            HookHelper.attachContext();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        initWidget();
+
 
         initData();
     }
 
-    private void initWidget() {
-        btnTest = (Button) findViewById(R.id.btn_test);
-        btnTest.setOnClickListener(this);
 
-        btnZipLog = (Button) findViewById(R.id.btn_ziplog);
-        btnZipLog.setOnClickListener(this);
-        btnZipLog.setVisibility(View.GONE);
-
-        btnServer = (Button) findViewById(R.id.btn_server);
-        btnServer.setOnClickListener(this);
-        btnClient = (Button) findViewById(R.id.btn_client);
-        btnClient.setOnClickListener(this);
-        btnStart = (Button) findViewById(R.id.btn_start);
-        btnStart.setOnClickListener(this);
-        btnStop = (Button) findViewById(R.id.btn_stop);
-        btnStop.setOnClickListener(this);
-        btnSend = (Button) findViewById(R.id.btn_send);
-        btnSend.setOnClickListener(this);
-        btnSendFile = (Button) findViewById(R.id.btn_send_file);
-        btnSendFile.setOnClickListener(this);
-
-        tvInfo = (TextView) findViewById(R.id.tv_info);
-        etIp = (EditText) findViewById(R.id.et_ip);
-        etPort = (EditText) findViewById(R.id.et_port);
-        etMsg = (EditText) findViewById(R.id.et_msg);
-
-    }
-
-    private void initData()
-    {
+    private void initData() {
         tvInfo.setText("packageName: " + JniTest.getPackageName(MainActivity.this));
     }
 
 
-
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_test: {
-                Intent intent = new Intent(this, OkHttpTestActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.btn_ziplog: {
-                mainPresenter.zipLog();
-                break;
-            }
-            case R.id.btn_start: {
-                start();
-                break;
-            }
-            case R.id.btn_stop: {
-                stop();
-                break;
-            }
-            case R.id.btn_send: {
-                mainPresenter.send();
-                break;
-            }
-            case R.id.btn_send_file: {
-                mainPresenter.sendFile();
-                break;
-            }
-            case R.id.btn_server: {
-                server();
-                break;
-            }
-            case R.id.btn_client: {
-                client();
-                break;
-            }
-        }
+    @OnClick(R.id.btn_test)
+    void gotoTestActivity(){
+        ARouter.getInstance().build("/okhttp/OkHttpTestActivity").navigation();
     }
 
-    private void start() {
+    void start() {
         mainPresenter.start();
         showInfo("start ...");
     }
 
-    private void stop() {
+    void stop() {
         mainPresenter.stop();
         btnClient.setVisibility(View.VISIBLE);
         etIp.setVisibility(View.VISIBLE);
@@ -141,14 +77,14 @@ public class MainActivity extends BaseActivity implements IMainView, View.OnClic
         btnServer.setVisibility(View.VISIBLE);
     }
 
-    private void server() {
+    void server() {
         mainPresenter.setMode(1);
         btnServer.setVisibility(View.VISIBLE);
         btnClient.setVisibility(View.GONE);
         etIp.setVisibility(View.GONE);
     }
 
-    private void client() {
+    void client() {
         mainPresenter.setMode(2);
         btnServer.setVisibility(View.GONE);
         btnClient.setVisibility(View.VISIBLE);

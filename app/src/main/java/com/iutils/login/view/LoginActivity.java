@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.iutils.common.BaseActivity;
 import com.iutils.R;
 import com.iutils.leak.InputManagerMemoryLeak;
@@ -162,9 +163,12 @@ public class LoginActivity extends BaseActivity implements ILoginView,
     @Override
     public void gotoMainActivity() {
         ILog.i(TAG, "gotoMainActivity()");
-        Intent intent = new Intent(this, MainActivity.class);
-
-        startActivity(intent);
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+        ARouter.getInstance()
+                .build("/main/MainActivity")
+                .withBoolean("BOOLEAN_KEY",true)
+        .withString("STRING", "LOGIN").navigation();
         finish();
     }
 

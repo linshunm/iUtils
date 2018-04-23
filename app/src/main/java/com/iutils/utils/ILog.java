@@ -17,7 +17,8 @@ public class ILog {
     public static void i(String tag, String msg)
     {
         //Log.i(tag, msg);
-        NLogger.i(tag, msg);
+        //NLogger.i(tag, msg);
+        System.out.println(tag+":"+msg);
 
     }
 

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.iutils.R;
 import com.iutils.dagger2.DaggerOkHttpTestActivityComponent;
 import com.iutils.utils.ILog;
@@ -24,6 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+@Route(path = "/okhttp/OkHttpTestActivity")
 public class OkHttpTestActivity extends AppCompatActivity{
 
     private static final String TAG = "OkHttpTestActivity";
