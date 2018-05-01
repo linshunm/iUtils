@@ -105,6 +105,8 @@ jstring charToJstring(JNIEnv* env, const char* pat)
 }
 
 JNIEXPORT jstring JNICALL Java_com_iutils_framework_JniTest_getPackageName(JNIEnv *env, jclass clazz, jobject obj){
+    //gJavaObj = env->NewGlobalRef(obj);
+    //env->GetObjectClass(obj);
     jclass native_class = env->GetObjectClass(obj);
     jmethodID mId = env->GetMethodID(native_class, "getPackageName", "()Ljava/lang/String;");
     jstring packName = static_cast<jstring>(env->CallObjectMethod(obj, mId));
@@ -148,8 +150,15 @@ JNIEXPORT jstring JNICALL Java_com_iutils_framework_JniTest_getPackageName(JNIEn
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved) {
-
     LOGI("JNI_OnLoad");
+    gJavaVM = jvm;
+
+    JNIEnv *env;
+
+    //https://blog.csdn.net/fu_shuwu/article/details/41121741
+    //gJavaVM->AttachCurrentThread(&env, NULL);
+
+    //gJavaVM->DetachCurrentThread();
 
     return JNI_VERSION_1_4;
 }

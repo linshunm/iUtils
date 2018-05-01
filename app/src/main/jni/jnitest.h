@@ -7,6 +7,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+JavaVM *gJavaVM;
+jobject gJavaObj;
 /*
  * Class:     com_iutils_framework_JniTest
  * Method:    getPackageName
