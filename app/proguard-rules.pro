@@ -118,3 +118,7 @@
    java.lang.Object writeReplace();
    java.lang.Object readResolve();
 }
+
+
+-keep public class com.alibaba.android.arouter.routes.**{*;}
+-keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}

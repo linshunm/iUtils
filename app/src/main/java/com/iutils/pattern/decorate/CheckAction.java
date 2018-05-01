@@ -6,7 +6,7 @@ public class CheckAction extends Action {
     final static String tag = "CheckAction";
     @Override
     public void doAction() {
-        ILog.i(tag, "only do check action");
+        ILog.c(tag, "only do check action");
         super.doAction();
     }
 }

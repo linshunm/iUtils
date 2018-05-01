@@ -35,5 +35,9 @@ public class ILog {
         System.out.println(DateFormatUtil.getRecordDateStr()+":"+out);
     }
 
+    public static void c(String tag, String msg){
+        System.out.println(DateFormatUtil.getRecordDateStr()+" "+tag+":"+msg);
+    }
+
 
 }

@@ -95,6 +95,7 @@ char* jstringToChar(JNIEnv* env, jstring jstr)
 //char* to jstring
 jstring charToJstring(JNIEnv* env, const char* pat)
 {
+
        jclass strClass = env->FindClass("Ljava/lang/String;");
        jmethodID ctorID = env->GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");
        jbyteArray bytes = env->NewByteArray(strlen(pat));
