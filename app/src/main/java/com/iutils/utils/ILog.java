@@ -16,9 +16,8 @@ public class ILog {
 
     public static void i(String tag, String msg)
     {
-        //Log.i(tag, msg);
-        //NLogger.i(tag, msg);
-        System.out.println(tag+":"+msg);
+        Log.i(tag, msg);
+        NLogger.i(tag, msg);
 
     }
 
@@ -32,11 +31,11 @@ public class ILog {
 
     public static void c(Object out)
     {
-        System.out.println(DateFormatUtil.getRecordDateStr()+":"+out);
+        System.out.println(TimeUtil.getRecordDateStr()+":"+out);
     }
 
     public static void c(String tag, String msg){
-        System.out.println(DateFormatUtil.getRecordDateStr()+" "+tag+":"+msg);
+        System.out.println(TimeUtil.getRecordDateStr()+" "+tag+":"+msg);
     }
 
 

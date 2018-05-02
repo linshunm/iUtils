@@ -4,9 +4,9 @@ import android.support.annotation.NonNull;
 
 import com.iutils.network.bean.IupMsg;
 import com.iutils.utils.AES128;
-import com.iutils.utils.DateFormatUtil;
 import com.iutils.utils.FileUtil;
 import com.iutils.utils.ILog;
+import com.iutils.utils.TimeUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -203,7 +203,7 @@ private static final String TAG = "IupUtil";
         // 设置消息随机数
         String szMsgId = null;
 
-        String timeStamp = DateFormatUtil.getCompleteTimeStr1();
+        String timeStamp = TimeUtil.getCompleteTimeStr1();
 
         synchronized(idSeq)
         {

@@ -1,7 +1,7 @@
 package com.iutils.network;
 
-import android.support.annotation.NonNull;
-
+import com.iutils.network.bean.CheckIpConnTask;
+import com.iutils.network.utils.SocketUtil;
 import com.iutils.utils.AES128;
 import com.iutils.utils.ILog;
 
@@ -15,16 +15,53 @@ import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by linshunming on 2018/1/23.
  */
 public class SocketTest {
+    final static String tag = "SocketTest";
 
     public static void main(String[] args)
     {
         SocketTest test = new SocketTest();
+        test.checkConnectTest();
         //test.fileCopy();
-        test.bufferOp();
+        //test.bufferOp();
+    }
+
+    void checkConnectTest()
+    {
+        String dominListStr = "moaportal.zte.com.cn|hk.moaportal.zte.com.cn|de.moaportal.zte.com.cn|sa.moaportal.zte.com.cn|br.moaportal.zte.com.cn|us.moaportal.zte.com.cn";
+        int xcapPort = 8088;
+        int sipTcpPort = 15065;
+        String[] domainArray = dominListStr.split("\\|");
+
+        for(String domain:domainArray){
+            long startTime = System.currentTimeMillis();
+            ILog.c(tag, "get ip by domain["+domain+"]");
+            String ip = SocketUtil.getIpByDomain(domain);
+            long endTime = System.currentTimeMillis();
+            ILog.c(tag, "parse domain end, get ip["+ip+"] take["+(endTime-startTime)+"]ms");
+
+            connServer(ip, xcapPort);
+        }
+
+    }
+
+    void connServer(final String ip, final int port){
+
+        new Thread(){
+            public void run(){
+                CheckIpConnTask task = new CheckIpConnTask.Builder(ip, port).build();
+                //SocketUtil.checkServerConn(task);
+                ILog.c(tag, task.toString());
+            }
+        }.start();
     }
 
     void bufferOp()

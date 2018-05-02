@@ -1,12 +1,13 @@
 package com.iutils.pattern.observer;
 
+import com.iutils.network.utils.SocketUtil;
 import com.iutils.utils.ThreadUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class AP {
-    private final static int TIME_OUT = 10 * 1000;//ap检测10秒超时
+    public final static int TIME_OUT = 10 * 1000;//ap检测10秒超时
     public String domain;
     public String ip;
     public int sipPort;
@@ -21,13 +22,15 @@ public class AP {
             @Override
             public void run() {
                 try{
-                    Thread.sleep(checkTime);
+                    //Thread.sleep(checkTime);
+                    ip = SocketUtil.getIpByDomain(domain);
+                    SocketUtil.checkServerConn(AP.this);
                     if(!isTimeout){
                         timer.cancel();
                         isTimeout = false;
                         listener.onResult(AP.this);
                     }
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

@@ -7,6 +7,26 @@ import java.util.regex.Pattern;
  * Created by 10110878 on 2016/12/16.
  */
 public class StringUtil {
+    private static Integer idSeq = 0;
+
+    /**
+     * 获取17位MsgId
+     */
+    public static String getUniqueStrId()
+    {
+        // 设置消息随机数
+        String szMsgId = null;
+
+        String timeStamp = TimeUtil.getCompleteTimeStr1();
+
+        synchronized(idSeq)
+        {
+            szMsgId = String.format("%s%03x", timeStamp, idSeq++%4096);
+        }
+
+        return szMsgId;
+    }
+
     public static String replaceBlank(String str) {
         String dest = "";
         if (str != null) {

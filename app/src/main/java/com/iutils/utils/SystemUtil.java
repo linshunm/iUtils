@@ -154,4 +154,20 @@ public class SystemUtil {
         m_szUniqueID = m_szUniqueID.toUpperCase();
         return m_szUniqueID;
     }
+
+    /*
+    public static String getPID(){
+        // 在windows上，获取到得name格式为 1234@userName
+        // 1234为PID，@为分隔符，userName为当前用户
+        String pid = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();
+        int indexOf = pid.indexOf('@');
+        if (indexOf > 0)
+        {
+            pid = pid.substring(0, indexOf);
+        }
+
+        System.out.println("当前JVM Process ID: " + pid);
+        return pid;
+    }
+    */
 }

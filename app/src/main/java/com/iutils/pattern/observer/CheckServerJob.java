@@ -10,19 +10,6 @@ public class CheckServerJob extends Job implements AP.ICheckApListener{
 
 
     @Override
-    public void onResult(AP ap) {
-        ILog.c(tag, "onResult ap["+ap+"]");
-        CheckServerResult result = new CheckServerResult();
-        if(ap.isTimeout){
-            result.resultCode = 408;
-        }else{
-            result.resultCode = 200;
-        }
-        result.ip = ap.domain;
-        result.checkTime = ap.checkTime;
-        LoginManager.getInstance().notify(result);
-    }
-
     public void doJob(){
         ILog.c(tag, "check server access ip list");
         LoginManager.getInstance().setObserver(this);
@@ -46,7 +33,7 @@ public class CheckServerJob extends Job implements AP.ICheckApListener{
         List<AP> serverList = new ArrayList<>();
         int sipPort = 15065;
         int xcapPort = 8088;
-        String domainStr = "us.moaportal.zet.com.cn|hk.moaportal.zet.com.cn|de.moaportal.zet.com.cn|moaportal.zet.com.cn";
+        String domainStr = "moaportal.zte.com.cn|hk.moaportal.zte.com.cn|de.moaportal.zte.com.cn|sa.moaportal.zte.com.cn|br.moaportal.zte.com.cn|us.moaportal.zte.com.cn";
         String[] domainArr = domainStr.split("\\|");
         for(String domain : domainArr){
             AP ap = new AP();
@@ -56,5 +43,19 @@ public class CheckServerJob extends Job implements AP.ICheckApListener{
             serverList.add(ap);
         }
         return serverList;
+    }
+
+    @Override
+    public void onResult(AP ap) {
+        ILog.c(tag, "onResult ap["+ap+"]");
+        CheckServerResult result = new CheckServerResult();
+        if(ap.isTimeout){
+            result.resultCode = 408;
+        }else{
+            result.resultCode = 200;
+        }
+        result.ip = ap.domain;
+        result.checkTime = ap.checkTime;
+        LoginManager.getInstance().notify(result);
     }
 }

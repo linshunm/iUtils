@@ -52,28 +52,6 @@ public class OkHttpTestActivity extends AppCompatActivity{
     @OnClick(R.id.btn_request)
     void request()
     {
-        /*
-        ThreadUtil.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    result = okHttpTest.run("http://www.wooyun.org/");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tvResult.setText(result);
-                    }
-                });
-
-            }
-        });
-        */
-
-
         Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
