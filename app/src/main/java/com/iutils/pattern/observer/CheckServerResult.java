@@ -10,6 +10,7 @@ public class CheckServerResult extends Result {
                 "ip='" + ip + '\'' +
                 ", checkTime=" + checkTime +
                 ", resultCode=" + resultCode +
+                ", sessionId='" + sessionId + '\'' +
                 '}';
     }
 }

@@ -15,7 +15,7 @@ public class LoginJob extends Job {
 
     @Override
     public void doJob(){
-        ILog.c(tag, "do login userId["+userId+"] pwd["+pwd+"]");
+        ILog.c(tag, "do login sessionId["+sessionId+"] userId["+userId+"] pwd["+pwd+"]");
         LoginManager.getInstance().setObserver(this);
         //TODO FOR REQUEST
 
@@ -26,6 +26,7 @@ public class LoginJob extends Job {
                     Thread.sleep(1000);
                     LoginResult result = new LoginResult();
                     result.resultCode= 202;
+                    result.sessionId = sessionId;
                     LoginManager.getInstance().notify(result);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

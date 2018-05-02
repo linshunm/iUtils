@@ -11,7 +11,7 @@ public class CheckServerJob extends Job implements AP.ICheckApListener{
 
     @Override
     public void doJob(){
-        ILog.c(tag, "check server access ip list");
+        ILog.c(tag, "check server access ip list sessionId["+sessionId+"]");
         LoginManager.getInstance().setObserver(this);
         //TODO FOR REQUEST
         final List<AP> serverList = getServerList();
@@ -28,6 +28,20 @@ public class CheckServerJob extends Job implements AP.ICheckApListener{
         }
     }
 
+    @Override
+    public void onResult(AP ap) {
+        ILog.c(tag, "onResult ap["+ap+"]");
+        CheckServerResult result = new CheckServerResult();
+        if(ap.isTimeout){
+            result.resultCode = 408;
+        }else{
+            result.resultCode = 200;
+        }
+        result.sessionId = sessionId;
+        result.ip = ap.domain;
+        result.checkTime = ap.checkTime;
+        LoginManager.getInstance().notify(result);
+    }
 
     private List<AP> getServerList(){
         List<AP> serverList = new ArrayList<>();
@@ -45,17 +59,4 @@ public class CheckServerJob extends Job implements AP.ICheckApListener{
         return serverList;
     }
 
-    @Override
-    public void onResult(AP ap) {
-        ILog.c(tag, "onResult ap["+ap+"]");
-        CheckServerResult result = new CheckServerResult();
-        if(ap.isTimeout){
-            result.resultCode = 408;
-        }else{
-            result.resultCode = 200;
-        }
-        result.ip = ap.domain;
-        result.checkTime = ap.checkTime;
-        LoginManager.getInstance().notify(result);
-    }
 }

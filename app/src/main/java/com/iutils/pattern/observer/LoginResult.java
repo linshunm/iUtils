@@ -5,6 +5,7 @@ public class LoginResult extends Result {
     public String toString() {
         return "LoginResult{" +
                 "resultCode=" + resultCode +
+                ", sessionId='" + sessionId + '\'' +
                 '}';
     }
 }

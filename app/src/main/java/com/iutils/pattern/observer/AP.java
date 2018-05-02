@@ -24,6 +24,9 @@ public class AP {
                 try{
                     //Thread.sleep(checkTime);
                     ip = SocketUtil.getIpByDomain(domain);
+                    if(ip == null){
+                        ip = domain;
+                    }
                     SocketUtil.checkServerConn(AP.this);
                     if(!isTimeout){
                         timer.cancel();
