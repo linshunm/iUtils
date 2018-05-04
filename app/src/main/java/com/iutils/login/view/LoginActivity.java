@@ -168,7 +168,8 @@ public class LoginActivity extends BaseActivity implements ILoginView,
         ARouter.getInstance()
                 .build("/main/MainActivity")
                 .withBoolean("BOOLEAN_KEY",true)
-        .withString("STRING", "LOGIN").navigation();
+                .withString("STRING", "LOGIN")
+                .navigation();
         finish();
     }
 

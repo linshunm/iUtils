@@ -3,25 +3,8 @@
 #include <stdio.h>
 #include <jni.h>
 #include "rcscontroller.h"
-#include "../rcsagent/SoftdaNew_RCSCtl.h"       //for UI call interface
-#include "../rcsagent/global.h"
-#include "../rcsagent/Interface.h"      //for TransFile_T
-#include "../rcsagent/MOAControl.h"
-#ifdef _WIN32
-#else
-#include <pthread.h>
-#endif
 
-#include "../MediaModule/MediaModule/MediaModule.h"	//zk
-#include "../rcsagent/CallCtrl/CallCtrl.h" 
-#include "../rcsagent/CallCtrl/IMS_Method_Conf.h"
-#include "../rcsagent/softagent.h" 
-#include "../rcsagent/CallCtrl/xcomm.h"
 #include "JObjectWrapper.hpp"
-#include "../rcsagent/CallCtrl/ConferenceBridge.h"
-#include "../basicfundll/AES/ocx_aes.h" //¿Ø¼þµÄAES¼Ó½âÃÜËã·¨
-#include "../basicfundll/jpegdeal/jpegdeal.h" //libjpeg¿â
-#include "../basicfundll/AES/file_encrypt.h"
 
 typedef union
 {
@@ -39,7 +22,7 @@ static jclass gpostClass = NULL;
 char *getStringField(JNIEnv* env, jobject jobj, jclass jcs,  const char * fieldName, char *result, int ilen);
 char *safeGetStringUTFChars(JNIEnv* env, jstring string, char* dest, int size, jboolean *iscopy);
 char *safeAllocStringUTFCharsFromJString(JNIEnv* env, jstring string);
-//´ÓjobjµÄfieldName(jstring)ÀàÐÍ£¬ÉêÇë¶ÔÓ¦µÄchar*ÄÚ´æ²¢´æ·Å£¬ÐèÒª×Ô¼ºÊÍ·ÅÄÚ´æ
+
 char* safeAllocStringUTFchars(JNIEnv* env, jobject jobj, jclass jcs,  const char * fieldName);
 
 int getStaticJniMethod(char *pFuncName, char *paraList, JNIEnv **pEnv, jmethodID *pJinMethod)
@@ -1219,7 +1202,7 @@ void java_FireIMSGotUserInfo(short far* pNotify)
     jfieldID id_fieldID;
     USER_INFO *pResult = (USER_INFO *)pNotify;
     int i;
-    long lDataLen = 0; //´óÍ·ÏñData³¤¶È
+    long lDataLen = 0; //ï¿½ï¿½Í·ï¿½ï¿½Dataï¿½ï¿½ï¿½ï¿½
 
     TraceMsgWindow1(1, "rcscontroller java_FireIMSGotUserInfo begin");
 
@@ -1386,7 +1369,7 @@ void java_FireIMSGotUserInfo(short far* pNotify)
     env->DeleteLocalRef(cPhotoFile);
     if(pResult->cPhotoFile)
     {
-        ZX_free(pResult->cPhotoFile);//±ðÍü¼ÇÁËÊÍ·Å(ÔÚ½â°üµÄÊ±ºò·ÖÅäµÄÄÚ´æ)
+        ZX_free(pResult->cPhotoFile);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½(ï¿½Ú½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½)
         pResult->cPhotoFile = NULL;
     }    
 
@@ -1395,7 +1378,7 @@ void java_FireIMSGotUserInfo(short far* pNotify)
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cSoftPhone);
     env->DeleteLocalRef(cSoftPhone);
 
-//¸öÈËÆóÒµÐÅÏ¢
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½Ï¢
     jstring cAffiliation = env->NewStringUTF(pResult->cAffiliation);
     id_fieldID = env->GetFieldID(class_IMSGotUserInfo, "cAffiliation", "Ljava/lang/String;");
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cAffiliation);
@@ -1441,7 +1424,7 @@ void java_FireIMSGotUserInfo(short far* pNotify)
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cURI2);
     env->DeleteLocalRef(cURI2);
 
-//ecp¼æÈÝ
+//ecpï¿½ï¿½ï¿½ï¿½
     jstring cBusinessPhone = env->NewStringUTF(pResult->cBusinessPhone);
     id_fieldID = env->GetFieldID(class_IMSGotUserInfo, "cBusinessPhone", "Ljava/lang/String;");
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cBusinessPhone);
@@ -1580,12 +1563,12 @@ void java_FireIMSGotGroupInfo(int index, int count, short far* pNotify)
 
     id_fieldID = env->GetFieldID(class_GroupInfo, "iNum", "I");
 //    env->SetIntField(obj_GroupInfo, id_fieldID, pGroupInfo->iNum);
-    env->SetIntField(obj_GroupInfo, id_fieldID, count); //¸ÄÎª·ÖÅúÉÏ±¨
+    env->SetIntField(obj_GroupInfo, id_fieldID, count); //ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 
     jclass class_FireAllGroup = env->FindClass("com/zte/softda/ocx/FireAllGroupPara");
     jmethodID id_FireAllGroup  = env->GetMethodID(class_FireAllGroup, "<init>", "()V");
 //    jobjectArray array_group = env->NewObjectArray(pGroupInfo->iNum, class_FireAllGroup, NULL);
-    jobjectArray array_group = env->NewObjectArray(count, class_FireAllGroup, NULL); //¸ÄÎª·ÖÅúÉÏ±¨
+    jobjectArray array_group = env->NewObjectArray(count, class_FireAllGroup, NULL); //ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
     for(i = index; i < index + count; i++)
     {
         FIRE_ALL_GROUP* pFireGroupInfo = &pGroupInfo->pFireGroupInfo[i];
@@ -1888,7 +1871,7 @@ void java_FireIMSGotAddressList(int iNum, short far* pNotify)
         env->SetObjectField(obj_IMSGotAddressList, id_fieldID, cDisplayName);
         env->DeleteLocalRef(cDisplayName);
 
-        if(g_WriteLogType == 2)//2013.06.05Ìí¼Ó²âÊÔÈÕÖ¾ÓÃÓÚ¶¨Î»ÎÊÌâ
+        if(g_WriteLogType == 2)//2013.06.05ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½Ú¶ï¿½Î»ï¿½ï¿½ï¿½ï¿½
             TraceMsgWindow1(1, "[java_FireIMSGotAddressList] pURI[%s] cRealName[%s] cName[%s] cDisplayName[%s]", pServcie->pURI, pServcie->sListInfo.cRealName, pServcie->sListInfo.cName, pServcie->pDisplayName);
         else if(g_WriteLogType == 1)
             LOGI(TAG, "[java_FireIMSGotAddressList] pURI[%s] cRealName[%s] cName[%s] cDisplayName[%s]", pServcie->pURI, pServcie->sListInfo.cRealName, pServcie->sListInfo.cName, pServcie->pDisplayName);
@@ -2222,7 +2205,7 @@ void java_FireIMSGotOnePublicGroup(int flag, LPCTSTR pGroupName, LPCTSTR pGroupU
         ENTRY_TYPE *pMember = (ENTRY_TYPE *)pMemberList[i];
 
         if(pMember->iMemberStatus == 4)
-        {//É¾³ý×´Ì¬µÄ²»¸øUI
+        {//É¾ï¿½ï¿½×´Ì¬ï¿½Ä²ï¿½ï¿½ï¿½UI
             continue;
         }
         
@@ -2268,7 +2251,7 @@ void java_FireIMSGotOnePublicGroup(int flag, LPCTSTR pGroupName, LPCTSTR pGroupU
 
         env->SetObjectArrayElement(array_EntryType, iNum, obj_EntryType);
         env->DeleteLocalRef(obj_EntryType);
-        iNum++; //¼ÇÂ¼ÕæÊµµÄ³ÉÔ±¸öÊý
+        iNum++; //ï¿½ï¿½Â¼ï¿½ï¿½Êµï¿½Ä³ï¿½Ô±ï¿½ï¿½ï¿½ï¿½
     }
     env->CallStaticVoidMethod(gpostClass, gJinMethod, flag, JNI_STR(env,pGroupName), JNI_STR(env,pGroupURI), JNI_STR(env,pOperUser), iMyRole, obj_AttributeType,
                               iNum, array_EntryType, iBlacklistNum, NULL);
@@ -2911,7 +2894,7 @@ void java_FireIMSGotPersonSubInfo(int retCode, long lType, short far*pPersonSubI
     jfieldID id_fieldID;
     USER_INFO *pResult = (USER_INFO *)pPersonSubInfoEvent;
     int i;
-    long lDataLen = 0; //´óÍ·ÏñData³¤¶È
+    long lDataLen = 0; //ï¿½ï¿½Í·ï¿½ï¿½Dataï¿½ï¿½ï¿½ï¿½
 
     if(g_WriteLogType == 2)
         TraceMsgWindow1(1, "rcscontroller java_FireIMSGotPersonSubInfo begin, lType[%d]", lType);
@@ -3095,7 +3078,7 @@ void java_FireIMSGotPersonSubInfo(int retCode, long lType, short far*pPersonSubI
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cSoftPhone);
     env->DeleteLocalRef(cSoftPhone);
 
-//¸öÈËÆóÒµÐÅÏ¢
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½Ï¢
     jstring cAffiliation = env->NewStringUTF(pResult->cAffiliation);
     id_fieldID = env->GetFieldID(class_IMSGotUserInfo, "cAffiliation", "Ljava/lang/String;");
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cAffiliation);
@@ -3141,7 +3124,7 @@ void java_FireIMSGotPersonSubInfo(int retCode, long lType, short far*pPersonSubI
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cURI2);
     env->DeleteLocalRef(cURI2);
 
-//ecp¼æÈÝ
+//ecpï¿½ï¿½ï¿½ï¿½
     jstring cBusinessPhone = env->NewStringUTF(pResult->cBusinessPhone);
     id_fieldID = env->GetFieldID(class_IMSGotUserInfo, "cBusinessPhone", "Ljava/lang/String;");
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cBusinessPhone);
@@ -3484,7 +3467,7 @@ void java_FireIMSGotOneListInfo(short far* pListInfo, int iReturnCode,LPCTSTR pU
     jfieldID id_fieldID;
     USER_INFO *pResult = NULL;
     int i;
-    long lDataLen = 0; //´óÍ·ÏñData³¤¶È
+    long lDataLen = 0; //ï¿½ï¿½Í·ï¿½ï¿½Dataï¿½ï¿½ï¿½ï¿½
 
     pResult = (USER_INFO *)pListInfo;
 
@@ -3506,7 +3489,7 @@ void java_FireIMSGotOneListInfo(short far* pListInfo, int iReturnCode,LPCTSTR pU
         return;
     }
 
-    if(pResult == NULL)//ÁªÏµÈËÎª¿ÕÖ±½Ó·µ»Ø²»ÐèÒªÉÏ±¨
+    if(pResult == NULL)//ï¿½ï¿½Ïµï¿½ï¿½Îªï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½Ø²ï¿½ï¿½ï¿½Òªï¿½Ï±ï¿½
     {
         if(g_WriteLogType == 2)
             TraceMsgWindow1(1, "rcscontroller java_FireIMSGotOneListInfo pResult == NULL so return");
@@ -3672,7 +3655,7 @@ void java_FireIMSGotOneListInfo(short far* pListInfo, int iReturnCode,LPCTSTR pU
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cSoftPhone);
     env->DeleteLocalRef(cSoftPhone);
 
-//¸öÈËÆóÒµÐÅÏ¢
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½Ï¢
     jstring cAffiliation = env->NewStringUTF(pResult->cAffiliation);
     id_fieldID = env->GetFieldID(class_IMSGotUserInfo, "cAffiliation", "Ljava/lang/String;");
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cAffiliation);
@@ -3718,7 +3701,7 @@ void java_FireIMSGotOneListInfo(short far* pListInfo, int iReturnCode,LPCTSTR pU
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cURI2);
     env->DeleteLocalRef(cURI2);
 
-//ecp¼æÈÝ
+//ecpï¿½ï¿½ï¿½ï¿½
     jstring cBusinessPhone = env->NewStringUTF(pResult->cBusinessPhone);
     id_fieldID = env->GetFieldID(class_IMSGotUserInfo, "cBusinessPhone", "Ljava/lang/String;");
     env->SetObjectField(obj_IMSGotUserInfo, id_fieldID, cBusinessPhone);
@@ -3825,7 +3808,7 @@ void java_FireIMSGotListInfo(List *pListInfo)
     int iresult = -1;
     jfieldID id_fieldID;
     int i;
-    long lDataLen = 0; //´óÍ·ÏñData³¤¶È
+    long lDataLen = 0; //ï¿½ï¿½Í·ï¿½ï¿½Dataï¿½ï¿½ï¿½ï¿½
     int nNum = (NULL == pListInfo ? 0 : list_len(pListInfo));
 
     if(g_WriteLogType == 2)
@@ -4283,7 +4266,7 @@ void java_FireIMSDispUICmdResult(int iType, short* pPara)
 
         if((pImPreStructInfo->iOperType == 1) ||
            (pImPreStructInfo->iOperType == 3) ||
-           (pImPreStructInfo->iOperType == 4))//±íÊ¾²éÑ¯ÏûÏ¢ÀàÒµÎñÏà¹ØÑ¡ÏîÉèÖÃ½á¹û
+           (pImPreStructInfo->iOperType == 4))//ï¿½ï¿½Ê¾ï¿½ï¿½Ñ¯ï¿½ï¿½Ï¢ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½
         {
             PERSON_IM_RELATED_INFO *pPersonImRelatedInfo = NULL;
             pPersonImRelatedInfo = (PERSON_IM_RELATED_INFO *)pImPreStructInfo->pAddrList;
@@ -4623,7 +4606,7 @@ void java_FireIMSDispUICmdResult(int iType, short* pPara)
         id_fieldID = env->GetFieldID(class_IMSDispUICmdResultPara, "GroupClassInfo", "Lcom/zte/softda/ocx/GROUP_CLASS;");
         env->SetObjectField(obj_IMSDispUICmdResultPara, id_fieldID, obj_GroupClassInfoPara);
     }
-    else if (iType == 20) //http·½Ê½¹Òµô»áÒé½á¹û
+    else if (iType == 20) //httpï¿½ï¿½Ê½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
         HTTP_HANGUP_CONF_EVENT_PARAM *pHttpHangUpConfInfo = NULL;
         pHttpHangUpConfInfo = (HTTP_HANGUP_CONF_EVENT_PARAM *)pPara;
@@ -4782,7 +4765,7 @@ void java_FireIMSGotOnePrivateList(LPCTSTR szGroupName, int iListNum, short far 
 
 //		memcpy(pListURI+i*(MAX_IMS_URI_LEN+1), pTemp->cURI, strlen(pTemp->cURI));
 #if 0
-        jstr = env->NewStringUTF(pMemberInfo);//µ¼ÖÂµÇÂ¼ÓÐµÄÊ±ºòcoreµÄÎÊÌâ
+        jstr = env->NewStringUTF(pMemberInfo);//ï¿½ï¿½ï¿½Âµï¿½Â¼ï¿½Ðµï¿½Ê±ï¿½ï¿½coreï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         pMemberInfo += (MAX_IMS_URI_LEN + 1);
 #endif
         env->SetObjectArrayElement(array_members, i, jstr);
@@ -6202,7 +6185,7 @@ void java_FireIMSConfEvent(long iType, long iNum, short far*pConfEvent)
 
     jobject obj_ConfEventPara = env->NewObject(class_ConfEventPara, id_ConfEventPara);
 
-    //´´½¨»áÒé·µ»ØµÄ½á¹û
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é·µï¿½ØµÄ½ï¿½ï¿½
     if (GT_EVENT_CONF_CONTROL == iType)
     {
         CONF_CONTROL_EVENT *pConfControlPara = NULL;
@@ -6286,7 +6269,7 @@ void java_FireIMSConfEvent(long iType, long iNum, short far*pConfEvent)
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iType, iNum,  obj_ConfEventPara);
     }
 
-    //»á³¡×´Ì¬
+    //ï¿½á³¡×´Ì¬
     if (GT_EVENT_CONF_STATUS_CHANGE == iType)
     {
         CONF_STATUS_EVENT *pConfStatusEventPara = NULL;
@@ -6335,7 +6318,7 @@ void java_FireIMSConfEvent(long iType, long iNum, short far*pConfEvent)
 
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iType, iNum, obj_ConfEventPara);
     }
-    //»ñÈ¡ÏµÍ³Ê±¼äµÄ½á¹û
+    //ï¿½ï¿½È¡ÏµÍ³Ê±ï¿½ï¿½Ä½ï¿½ï¿½
     if(GT_EVENT_ASSISTTANT_CONTROL == iType)
     {
         CONF_ASSISTTANT_CONTROL_EVENT *pConfAssisttantControlPara = NULL;
@@ -6367,7 +6350,7 @@ void java_FireIMSConfEvent(long iType, long iNum, short far*pConfEvent)
 
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iType, iNum, obj_ConfEventPara);
     }
-    //»ñÈ¡»áÒé¼ÇÂ¼½á¹û
+    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½
     if(GT_EVENT_QUERY_CONF == iType)
     {
         if(g_WriteLogType == 2)
@@ -6449,7 +6432,7 @@ void java_FireIMSConfEvent(long iType, long iNum, short far*pConfEvent)
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iType, iNum, obj_ConfEventPara);
     }
 
-    //È¡ÏûÔ¤Ô¼»áÒé½á¹û
+    //È¡ï¿½ï¿½Ô¤Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if (ST_EVENT_CANCEL_ORDER_CONF == iType)
     {
         CANCEL_ORDER_CONF_RESULT_STRUCT *pCancelOrderResultPara = NULL;
@@ -6533,7 +6516,7 @@ void java_FireIMSConfEvent(long iType, long iNum, short far*pConfEvent)
 
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iType, iNum, obj_ConfEventPara);
     }
-    //»ñÈ¡»áÒé³ÉÔ±ÐÅÏ¢½á¹û
+    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½
     if (GT_EVENT_QUERY_CONF_MEMBERLIST == iType)
     {
         PRE_CONF_MEMBER_LIST_EVENT *pPreConfMemberList = NULL;
@@ -6973,7 +6956,7 @@ void java_FireDataConfEvent(int iType,  short far* pConfEvent)
         	return;
     	}
 
-	//×é×°javaÀàÉÏ±¨½çÃæ
+	//ï¿½ï¿½×°javaï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½
 	jclass class_FireDataConfEvent= env->FindClass("com/zte/softda/ocx/conference/ConfEventPara");
     	jmethodID id_FireDataConfEvent  = env->GetMethodID(class_FireDataConfEvent, "<init>", "()V");
     	jobject obj_FireDataConfEvent = env->NewObject(class_FireDataConfEvent, id_FireDataConfEvent);
@@ -7381,7 +7364,7 @@ void java_FireRecvFromMrsEvent(int iType, short far* pRecvMessage)
         	return;
     	}
 
-	//×é×°javaÀàÉÏ±¨½çÃæ
+	//ï¿½ï¿½×°javaï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½
 	jclass class_FireRecvFromMrsEvent= env->FindClass("com/zte/softda/ocx/conference/ConfMrsEventPara");
     	jmethodID id_FireRecvFromMrsEvent  = env->GetMethodID(class_FireRecvFromMrsEvent, "<init>", "()V");
     	jobject obj_FireRecvFromMrsEvent = env->NewObject(class_FireRecvFromMrsEvent, id_FireRecvFromMrsEvent);
@@ -8303,7 +8286,7 @@ void java_FireCheckConnectResult(int iResult, int delaysec)
 
     env->CallStaticVoidMethod(gpostClass, gJinMethod, iResult, delaysec);
 }
-//Èº×éÀëÏßÏûÏ¢ÊýÁ¿Í¨Öª
+//Èºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Í¨Öª
 void java_FireIMSGroupOfflineMsgNotify(int iMsgNum, LPCTSTR cGroupURI, LPCTSTR pMessage, LPCTSTR timestamp)
 {
     jmethodID gJinMethod;
@@ -8330,7 +8313,7 @@ void java_FireIMSGroupOfflineMsgNotify(int iMsgNum, LPCTSTR cGroupURI, LPCTSTR p
     TraceMsgWindow1(1, "rcscontroller java_FireIMSGroupOfflineMsgNotify fire over");
 }
 
-//Èº×éÀëÏßÏûÏ¢Í¨Öª½çÃæ
+//Èºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢Í¨Öªï¿½ï¿½ï¿½ï¿½
 //void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int nOverFlag, LPCTSTR cGroupURI, LPCTSTR cMaxTimeQue, int nNum, List *pMsgList)
 void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int nOverFlag, LPCTSTR cGroupURI, LPCTSTR cMaxTimeQue, int nNum, void **pMsgList)
 {
@@ -8377,9 +8360,9 @@ void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int 
 		if (NULL == pMsgItem)
 			continue;
 
-        //Èç¹ûÊÇÈº×é³ÉÔ±±ä»¯ÏûÏ¢£¬ÓÉ¿Ø¼þ½âÎö²¢µ¥¶ÀÍ¨ÖªUI
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Èºï¿½ï¿½ï¿½Ô±ï¿½ä»¯ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½É¿Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ÖªUI
         if(pMsgItem->iType == IM_TYPE_GROUP_MEMBER_CHANGED)
-        {//½«cID´«¸øUI½øÐÐÅÅÖØ
+        {//ï¿½ï¿½cIDï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             DoPublicGroupMemberChanged(pMsgItem->pMessage, pMsgItem->cID, FALSE);        
         }
         else
@@ -8582,7 +8565,7 @@ void java_FireAddOnePubAccountResult(int iResult, int nNum, void **pPubAccountLi
 
 	PubAccount_T *pPubAccountItem = NULL;
 	if(nNum >= 1)
-    {//Õý³£Çé¿önNum=1
+    {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nNum=1
        	pPubAccountItem = (PubAccount_T*)pPubAccountList[0];
 		if (NULL != pPubAccountItem)
         {      
@@ -8943,7 +8926,7 @@ void java_FireAudioStatNotify(short *pNotify)
     else if(g_WriteLogType == 1)
         LOGI(TAG, "java_FireAudioStatNotify begin, iNum=");
 
-    //ÔÝÊ±²»ÓÃ
+    //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
     return;
 
     iresult = getStaticJniMethod((char *)"java_FireAudioStatNotify", (char *)"(Lcom/zte/softda/ocx/FireAudioStatInfoPara;)V", &env, &gJinMethod);
@@ -8958,7 +8941,7 @@ void java_FireAudioStatNotify(short *pNotify)
         return;
     }
 
-	//AudioStatÀà
+	//AudioStatï¿½ï¿½
     jclass class_AudioStat = env->FindClass("com/zte/softda/ocx/AudioStat");
     jmethodID id_AudioStat  = env->GetMethodID(class_AudioStat, "<init>", "()V");
 
@@ -9333,10 +9316,10 @@ static jboolean jni_launcherThreads(JNIEnv* env, jclass cls, jstring jstrcfgName
     char cfgName[256 + 1] = {0};
 
     safeGetStringUTFChars(env, jstrcfgName, cfgName, sizeof(cfgName) - 1, NULL);
-    SetCfgfileName(cfgName);//´Ó½çÃæµÃµ½gcCfgFileÂ·¾¶ÁË
+    SetCfgfileName(cfgName);//ï¿½Ó½ï¿½ï¿½ï¿½Ãµï¿½gcCfgFileÂ·ï¿½ï¿½ï¿½ï¿½
 #if 0
     if(WRITELOG == 1)
-        SetLogFileName();//ÉèÖÃÈÕÖ¾³õÊ¼»¯Â·¾¶
+        SetLogFileName();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½Ê¼ï¿½ï¿½Â·ï¿½ï¿½
 #endif
     LoadLogConfig();
 
@@ -9345,7 +9328,7 @@ static jboolean jni_launcherThreads(JNIEnv* env, jclass cls, jstring jstrcfgName
     else if(g_WriteLogType == 1)
         LOGI(TAG, "this cfg path is [%s]", cfgName);
 
-    StartAllAgent();//¿ÉÒÔzai´ÎÖ®Ç°³õÊ¼»¯ÈÕÖ¾Â·¾¶,²»¹ý¹ØÓÚso¼ÓÔØ²¿·ÖµÄÈÕÖ¾²»ÄÜ´òÓ¡ÁË¡£
+    StartAllAgent();//ï¿½ï¿½ï¿½ï¿½zaiï¿½ï¿½Ö®Ç°ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ö¾Â·ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½soï¿½ï¿½ï¿½Ø²ï¿½ï¿½Öµï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½Ü´ï¿½Ó¡ï¿½Ë¡ï¿½
 
     return JNI_TRUE;
 }
@@ -9737,7 +9720,7 @@ static jboolean  jni_bIMSSendFileResponse(JNIEnv* env, jclass cls, jstring pFile
     return bIMSSendMessage(IM_TYPE_FILE_TRANS_RESPONSE, 100, szMessage, szFileId, szReceiverURI, szLocalMsgId, szStatus, (DWORD)iFileSeekSize);
 }
 static jboolean jni_bIMSGetPublicGroup(JNIEnv* env, jclass cls, jstring jstr_Identifier, jint iOperType)
-{//iOperType: 0--¸ù¾ÝetagÔöÁ¿²éÑ¯, 1--µ½·þÎñÆ÷È«Á¿ÏÂÔØ
+{//iOperType: 0--ï¿½ï¿½ï¿½ï¿½etagï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯, 1--ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     char cIdentifierURI[256 + 1] = {0};
 
     safeGetStringUTFChars(env, jstr_Identifier, cIdentifierURI, sizeof(cIdentifierURI) - 1, NULL);
@@ -9747,13 +9730,13 @@ static jboolean jni_bIMSGetPublicGroup(JNIEnv* env, jclass cls, jstring jstr_Ide
 
 static jobjectArray jni_bSyncGetMyGroupList(JNIEnv* env, jclass cls, jstring jstr_phone)
 {
-    //²éÑ¯Èº×é»º´æÊý¾Ý
+    //ï¿½ï¿½Ñ¯Èºï¿½é»ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     char filename[256] = {0};  
     char phone[64 + 1] = {0};
     
     FIRE_GROUP_INFO groupInfo; 
     memset(&groupInfo, 0, sizeof(FIRE_GROUP_INFO));
-    //´Ë´¦ÊÇÎªÁË±ÜÃâÎ´µÇÂ¼Çé¿öÏÂ²»ÄÜ»ñÈ¡Êý¾ÝÎÄ¼þ
+    //ï¿½Ë´ï¿½ï¿½ï¿½Îªï¿½Ë±ï¿½ï¿½ï¿½Î´ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Â²ï¿½ï¿½Ü»ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
     safeGetStringUTFChars(env, jstr_phone, phone, sizeof(phone) - 1, NULL);
     if(gUserInfo.phone[0] == '\0')
         ZX_strcpy(gUserInfo.phone, phone);
@@ -9819,7 +9802,7 @@ static jobject jni_bSyncGetGroupMembers(JNIEnv* env, jclass cls, jstring jstr_Id
 
     safeGetStringUTFChars(env, jstr_Identifier, cGroupURI, sizeof(cGroupURI) - 1, NULL);
 
-    //²éÑ¯±¾µØ»º´æÊý¾Ý
+    //ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     char strTemp[256] = {0};
     char filename[256] = {0};
     char filenameShort[256] = {0};
@@ -9843,8 +9826,8 @@ static jobject jni_bSyncGetGroupMembers(JNIEnv* env, jclass cls, jstring jstr_Id
     if(!ReadLocalGroupDataFile(filename, &gMsgBuf, &groupData, &memberList))
     {
         DEBUG_INFO("[jni_bSyncGetGroupMembers(%s)] Get group data from local file failed!", cGroupURI);
-        //Í¨ÖªsoftagentÖ÷¶¯È¥»ñÈ¡
-        if(pGroup)//pGroupÃ»ÓÐÕÒµ½µÄÇé¿ö£¬¼´Ê¹µ÷ÓÃ·½·¨Ò²»á±»¾Ü
+        //Í¨Öªsoftagentï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½È¡
+        if(pGroup)//pGroupÃ»ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½Ò²ï¿½á±»ï¿½ï¿½
             bIMSGetPublicGroup(cGroupURI, 0);
         return NULL;
     }
@@ -9854,7 +9837,7 @@ static jobject jni_bSyncGetGroupMembers(JNIEnv* env, jclass cls, jstring jstr_Id
             cGroupURI, groupData.cEtag, groupData.pGroupName, groupData.memberNum);
 
         if(pGroup && _stricmp(groupData.cEtag, pGroup->cGroupEtag))
-        {//±¾µØetagºÍµÇÂ½Ê±»ñÈ¡¸öÈËÐÅÏ¢·µ»ØµÄ²»ÏàÍ¬£¬ÄÇÃ´Í¨ÖªsoftagentÖ÷¶¯È¥»ñÈ¡
+        {//ï¿½ï¿½ï¿½ï¿½etagï¿½Íµï¿½Â½Ê±ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ØµÄ²ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½Ã´Í¨Öªsoftagentï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½È¡
             DEBUG_INFO("[jni_bSyncGetGroupMembers(%s)] local data etag:%s, pGroup->cGroupEtag[%s]", 
                 cGroupURI, groupData.cEtag, pGroup->cGroupEtag);
              bIMSGetPublicGroup(cGroupURI, 0);
@@ -10104,7 +10087,7 @@ static jboolean jni_bDispUICmdForEcp2Method(JNIEnv* env, jclass cls, jint iType,
     /* get the class */
     jclass class_UICmdForEcp2objectPara = env->GetObjectClass(UICmdForEcp2object);
 
-    if(iType == 1)//ÐÞ¸ÄÃÜÂë¹¦ÄÜ
+    if(iType == 1)//ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ë¹¦ï¿½ï¿½
     {
         Modify_MyPassword ModifyMyPasswordPara = {0};
 
@@ -10117,7 +10100,7 @@ static jboolean jni_bDispUICmdForEcp2Method(JNIEnv* env, jclass cls, jint iType,
 
         bRturn = bDispUICmdForEcp2Method((long)iType, (short far*)&ModifyMyPasswordPara);
     }
-    else if(iType == 8)//·¢ËÍÓÃ»§µÇÂ¼ÐÅÏ¢µ½·þÎñÆ÷
+    else if(iType == 8)//ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
         USER_LOGON_INFO_METHOD UserlogonInfoPara = {0};
 
@@ -10511,7 +10494,7 @@ static jboolean jni_bIMSDeleteOneAddressList(JNIEnv* env, jclass cls,  jstring j
     safeGetStringUTFChars(env, jstr_URI, szURI, sizeof(szURI) - 1, NULL);
     return bIMSDeleteOneAddressList(szURI);
 }
-//add by zhanghe 2011-11-15 ´¦ÀíÇëÇó¶©ÔÄ±¾ÈËÐÅÏ¢µÄÓ¦´ð·½
+//add by zhanghe 2011-11-15 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ó¦ï¿½ï¿½
 static jboolean jni_bIMSDoWatcherSubSeq(JNIEnv* env, jclass cls, jstring jstr_WatcherURI, jlong iAccept)
 {
     char szWatcherURI[256 + 1] = {0};
@@ -10597,9 +10580,9 @@ static jboolean jni_bIMSLoadAddrList(JNIEnv* env, jclass cls, jint iType, jobjec
         class_PersonInfoArrayList = env->GetObjectClass(PersonListInfoList);
         getMethodID = (env)->GetMethodID(class_PersonInfoArrayList, "get", "(I)Ljava/lang/Object;");
         sizeMethodID = (env)->GetMethodID(class_PersonInfoArrayList, "size", "()I");
-        size = (env)->CallIntMethod(PersonListInfoList, sizeMethodID);//¸ÃsizeÓ¦¸ÃºÍiNumÒ»Ñù
+        size = (env)->CallIntMethod(PersonListInfoList, sizeMethodID);//ï¿½ï¿½sizeÓ¦ï¿½Ãºï¿½iNumÒ»ï¿½ï¿½
     }
-    if(size > 0)//Èç¹ûsizeºÍiNumÖµ²»Ò»Ñù£¬¾ÍÓ¦¸ÃÒÔsizeÎª×¼
+    if(size > 0)//ï¿½ï¿½ï¿½sizeï¿½ï¿½iNumÖµï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½sizeÎª×¼
     {
         pPersonListInfoPara = (PERSON_LIST_INFO *)ZX_malloc(sizeof(PERSON_LIST_INFO) * size);
         if(pPersonListInfoPara == NULL)
@@ -10676,10 +10659,10 @@ static jboolean jni_bIMSLoadAddrList(JNIEnv* env, jclass cls, jint iType, jobjec
 static jboolean jni_bIMSDoPublicGroupJoinReq(JNIEnv* env, jclass cls,
                                              jstring jstr_pReqMemberName, jstring jstr_pReqURI, jlong iResult, jstring jstr_pReturn1, jstring jstr_pReturn2)
 {
-    char cReqMemberName[256 + 1] = {0}; //ÉêÇëÈËµÄURI£¬¸ñÊ½Îª£ºsip:ÕÊºÅ@ÓòÃû£¬×î³¤64×Ö½Ú
-    char cReqURI[256 + 1] = {0}; //ÉêÇëÈËµÄURI£¬¸ñÊ½Îª£ºsip:ÕÊºÅ@ÓòÃû£¬×î³¤64×Ö½Ú
-    char cReturn1[256 + 1] = {0}; //´ÓÊÂ¼þIMSReqJoinMyPublicGroupÖÐµÃµ½µÄ×Ö·û´®, Êµ¼ÊÎª ¹«¹²Èº×éµÄURI
-    char cReturn2[128 + 1] = {0}; //´ÓÊÂ¼þIMSReqJoinMyPublicGroupÖÐµÃµ½µÄ×Ö·û´®, Êµ¼ÊÎª ¹«¹²Èº×éÎÄµµµÄURL
+    char cReqMemberName[256 + 1] = {0}; //ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½URIï¿½ï¿½ï¿½ï¿½Ê½Îªï¿½ï¿½sip:ï¿½Êºï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î³¤64ï¿½Ö½ï¿½
+    char cReqURI[256 + 1] = {0}; //ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½URIï¿½ï¿½ï¿½ï¿½Ê½Îªï¿½ï¿½sip:ï¿½Êºï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î³¤64ï¿½Ö½ï¿½
+    char cReturn1[256 + 1] = {0}; //ï¿½ï¿½ï¿½Â¼ï¿½IMSReqJoinMyPublicGroupï¿½ÐµÃµï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½, Êµï¿½ï¿½Îª ï¿½ï¿½ï¿½ï¿½Èºï¿½ï¿½ï¿½URI
+    char cReturn2[128 + 1] = {0}; //ï¿½ï¿½ï¿½Â¼ï¿½IMSReqJoinMyPublicGroupï¿½ÐµÃµï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½, Êµï¿½ï¿½Îª ï¿½ï¿½ï¿½ï¿½Èºï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½URL
 
     safeGetStringUTFChars(env, jstr_pReqMemberName, cReqMemberName, sizeof(cReqMemberName), NULL);
     safeGetStringUTFChars(env, jstr_pReqURI, cReqURI, sizeof(cReqURI), NULL);
@@ -10698,7 +10681,7 @@ static jboolean jni_bIMSModifyOneListDpName(JNIEnv* env, jclass cls, jstring jst
 
     return bIMSModifyOneListDpName(cURI, cDisplayName);
 }
-//»áÒé½Ó¿Ú
+//ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½
 static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobject  jobj_bIMSConfMethodObject)
 {
     int i = 0;
@@ -10710,7 +10693,7 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
 
     jclass class_bIMSConfMethodPara = env->GetObjectClass(jobj_bIMSConfMethodObject);
 
-    //´´½¨»áÒéºÍ´´½¨Ô¤Ô¼»áÒé½áÊø»áÒéÄ£¿é
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½Ô¤Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
     if (GT_METHOD_CONF_CONTROL == iType)
     {
 
@@ -10878,7 +10861,7 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
 
         return iResult;
     }
-    //»ñÈ¡·þÎñÆ÷Ê±¼ä
+    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     if (GT_METHOD_ASSISTTANT_CONTROL == iType)
     {
         CONF_ASSISTTANT_CONTROL_METHOD ConfAssisttantControlMethod = {0};
@@ -10891,7 +10874,7 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
 
         return bIMSConfMethod(iType, (short far*)&ConfAssisttantControlMethod);
     }
-    //ÇëÇó²éÑ¯»áÒé¼ÇÂ¼
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½Â¼
     if (GT_METHOD_QUERY_CONF == iType)
     {
         QUERY_CONF_STRUCT QueryConfStruct = {0};
@@ -10915,7 +10898,7 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
 
         return bIMSConfMethod(iType, (short far*)&QueryConfStruct);
     }
-    //È¡ÏûÔ¤Ô¼»áÒé
+    //È¡ï¿½ï¿½Ô¤Ô¼ï¿½ï¿½ï¿½ï¿½
     if (ST_METHOD_CANCEL_CONF == iType)
     {
         char QueryCancel[MAX_IMS_MUL_CONf_URI_LEN + 1] = "";
@@ -10940,7 +10923,7 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
 
         return bIMSConfMethod(iType, (short far*)&DoOrderNotify);
     }
-    //»ñÈ¡»áÒé³ÉÔ±iÐÅÏ¢
+    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ô±iï¿½ï¿½Ï¢
     if (GT_METHOD_ORDERCONF_MEMBER_INFO == iType)
     {
         char ConfUri[MAX_IMS_MUL_CONf_URI_LEN + 1] = "";
@@ -10955,8 +10938,8 @@ static jboolean jni_bIMSReqJoinPublicGroup(JNIEnv* env, jclass cls, jstring jstr
     char GroupURI[64 + 1] = {0};
     char GroupIdentifier[128 + 1] = {0};
     char cDisplayName[64 + 1] = {0};
-    char cShareUserURI[64+1] = {0};//¶þÎ¬Âë·ÖÏíÕßsipÕËºÅ
-	char cShareUserName[128+1] = {0};//¶þÎ¬Âë·ÖÏíÕßÐÕÃû
+    char cShareUserURI[64+1] = {0};//ï¿½ï¿½Î¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sipï¿½Ëºï¿½
+	char cShareUserName[128+1] = {0};//ï¿½ï¿½Î¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     safeGetStringUTFChars(env, jstr_pGroupURI, GroupURI, sizeof(GroupURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pGroupIdentifier, GroupIdentifier, sizeof(GroupIdentifier) - 1, NULL);
@@ -10995,7 +10978,7 @@ static jboolean jni_bIMSDeleteOneFromMyPublicGroup(JNIEnv* env, jclass cls, jstr
     return bIMSDeleteOneFromMyPublicGroup(SomeoneURI, GroupURI);
 }
 
-//iType == 11Èº×éÀúÊ·ÏûÏ¢ºÍÎ´¶ÁÏûÏ¢²éÑ¯
+//iType == 11Èºï¿½ï¿½ï¿½ï¿½Ê·ï¿½ï¿½Ï¢ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ñ¯
 static jboolean jni_bIMSDispUICmdMethod_11(JNIEnv* env, jclass cls, jint nMethodType, jstring cGroupURI, jstring timestamp, jint maxNum)
 {
     GROUP_OFFLINE_MSG_METHOD_PARAM GroupOfflineMsgMethodPara = {0};
@@ -11055,7 +11038,7 @@ static jboolean jni_bIMSDispUICmdMethod(JNIEnv* env, jclass cls, jint iType, job
 
         bReturn = bIMSDispUICmdMethod((long)iType, (short far*)&GroupQueryClassMethodPara);
     }
-    else if(iType == 5)//»ñÈ¡ºô½ÐÈ¨ÏÞ
+    else if(iType == 5)//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½
     {
         bReturn = bIMSDispUICmdMethod((long)iType, NULL);
     }
@@ -11371,15 +11354,15 @@ static jboolean jni_bSetXCAPAccount(JNIEnv* env, jclass cls, jstring jstrAccount
 
 //by smm for AVTest 2012.11.08 begin
 typedef struct AVTEST_METHOD {
-	int		iOperateType;	//0-Í£Ö¹; 1-¿ªÊ¼
-	int		iAudioType;	//0-ÎÞÒôÆµ; 1-G711a; 2-G711u; 3-G729AB; 4-SILK
-	int		iVideoType;//0-ÎÞÊÓÆµ; 1-H264; 2-H263
-	char	cRemoteIPAddress[16+1];//Ô¶¶ËIPµØÖ·
-	char	cLocalIPAddress[16+1];//±¾µØIPµØÖ·
-	long	lRemoteAudioPort;//Ô¶¶ËIPµÄÒôÆµ¶Ë¿ÚºÅ
-	long	lRemoteVideoPort;//Ô¶¶ËIPµÄÒôÆµ¶Ë¿ÚºÅ
-	long	lLocalAudioPort;//±¾¶ËIPµÄÒôÆµ¶Ë¿ÚºÅ
-	long	lLocalVideoPort;//±¾¶ËIPµÄÊÓÆµ¶Ë¿ÚºÅ
+	int		iOperateType;	//0-Í£Ö¹; 1-ï¿½ï¿½Ê¼
+	int		iAudioType;	//0-ï¿½ï¿½ï¿½ï¿½Æµ; 1-G711a; 2-G711u; 3-G729AB; 4-SILK
+	int		iVideoType;//0-ï¿½ï¿½ï¿½ï¿½Æµ; 1-H264; 2-H263
+	char	cRemoteIPAddress[16+1];//Ô¶ï¿½ï¿½IPï¿½ï¿½Ö·
+	char	cLocalIPAddress[16+1];//ï¿½ï¿½ï¿½ï¿½IPï¿½ï¿½Ö·
+	long	lRemoteAudioPort;//Ô¶ï¿½ï¿½IPï¿½ï¿½ï¿½ï¿½Æµï¿½Ë¿Úºï¿½
+	long	lRemoteVideoPort;//Ô¶ï¿½ï¿½IPï¿½ï¿½ï¿½ï¿½Æµï¿½Ë¿Úºï¿½
+	long	lLocalAudioPort;//ï¿½ï¿½ï¿½ï¿½IPï¿½ï¿½ï¿½ï¿½Æµï¿½Ë¿Úºï¿½
+	long	lLocalVideoPort;//ï¿½ï¿½ï¿½ï¿½IPï¿½ï¿½ï¿½ï¿½Æµï¿½Ë¿Úºï¿½
 }AVTEST_METHOD;
 
 #define AVTEST_OPERATE_START	1
@@ -11436,7 +11419,7 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 			MediaEngin_VideoEnd(0);
 		}
 	} 
-	else if(AVTestMethod.iOperateType == AVTEST_OPERATE_START)//¿ªÊ¼
+	else if(AVTestMethod.iOperateType == AVTEST_OPERATE_START)//ï¿½ï¿½Ê¼
 	{
 		jfieldID  id_iAudioType = env->GetFieldID(class_AVTestMethodObject, "iAudioType", "I");
 		AVTestMethod.iAudioType = env->GetIntField(jobj_AVTestMethodObject, id_iAudioType);
@@ -11446,10 +11429,10 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 
 		LOGI(TAG,"[jni_AVTest]iAudioType=%d, iVideoType=%d", AVTestMethod.iAudioType, AVTestMethod.iVideoType);
 
-		//Ô¶¶ËIPµØÖ·
+		//Ô¶ï¿½ï¿½IPï¿½ï¿½Ö·
 		getStringField(env, jobj_AVTestMethodObject, class_AVTestMethodObject, "cRemoteIPAddress", AVTestMethod.cRemoteIPAddress,  sizeof(AVTestMethod.cRemoteIPAddress)-1);
 		
-		//±¾¶ËIPµØÖ·
+		//ï¿½ï¿½ï¿½ï¿½IPï¿½ï¿½Ö·
 		getStringField(env, jobj_AVTestMethodObject, class_AVTestMethodObject, "cLocalIPAddress", AVTestMethod.cLocalIPAddress,  sizeof(AVTestMethod.cLocalIPAddress)-1);
 		MediaEngin_SetValue(VB_g_dwLocalIP, inet_addr(AVTestMethod.cLocalIPAddress), AVTestMethod.cLocalIPAddress);
 
@@ -11460,18 +11443,18 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 		} 
 		else
 		{
-			//±¾µØÊÓÆµ¶Ë¿ÚºÅ
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ë¿Úºï¿½
 			jfieldID  id_lLocalAudioPort = env->GetFieldID(class_AVTestMethodObject, "lLocalAudioPort", "J");
 			AVTestMethod.lLocalAudioPort = env->GetLongField(jobj_AVTestMethodObject, id_lLocalAudioPort);
 			
-			//Ô¶¶ËÊÓÆµ¶Ë¿ÚºÅ
+			//Ô¶ï¿½ï¿½ï¿½ï¿½Æµï¿½Ë¿Úºï¿½
 			jfieldID  id_lRemoteAuidoPort = env->GetFieldID(class_AVTestMethodObject, "lRemoteAudioPort", "J");
 			AVTestMethod.lRemoteAudioPort = env->GetLongField(jobj_AVTestMethodObject, id_lRemoteAuidoPort);
 
 			LOGI(TAG,"[jni_AVTest]lLocalAudioPort=%d, lRemoteAudioPort=%d", AVTestMethod.lLocalAudioPort, AVTestMethod.lRemoteAudioPort);
 
-			WORD m_wAudioMillSecsPerFrame = 20;		//Ä¬ÈÏ°´G711a²ÎÊýÌîÐ´
-			unsigned int m_AuidoRtpPT = G711ALAW;	//Ä¬ÈÏ°´G711a²ÎÊýÌîÐ´
+			WORD m_wAudioMillSecsPerFrame = 20;		//Ä¬ï¿½Ï°ï¿½G711aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´
+			unsigned int m_AuidoRtpPT = G711ALAW;	//Ä¬ï¿½Ï°ï¿½G711aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´
 
 			switch (AVTestMethod.iAudioType)
 			{
@@ -11493,7 +11476,7 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 					m_AuidoRtpPT = G729A;
 				}
 				break;
-				//by smm 2012.12.21 ´´×÷ÓÚÊÀ½ç»ÙÃðÖ®Ç°
+				//by smm 2012.12.21 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®Ç°
 			case AVTEST_AUDIOTYPE_SILK:		//SILK
 				{
 					WORD m_wAudioMillSecsPerFrame = 20;
@@ -11530,17 +11513,17 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 
 		switch (AVTestMethod.iVideoType)
 		{
-		case AVTEST_VIDEOTYPE_NONE:			//ÎÞÊÓÆµ
+		case AVTEST_VIDEOTYPE_NONE:			//ï¿½ï¿½ï¿½ï¿½Æµ
 			{
 			}
 			break;
 		case AVTEST_VIDEOTYPE_H264:			//H264
 			{
-				//±¾µØÊÓÆµ¶Ë¿ÚºÅ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ë¿Úºï¿½
 				jfieldID  id_lLocalVideoPort = env->GetFieldID(class_AVTestMethodObject, "lLocalVideoPort", "J");
 				AVTestMethod.lLocalVideoPort = env->GetLongField(jobj_AVTestMethodObject, id_lLocalVideoPort);
 
-				//Ô¶¶ËÊÓÆµ¶Ë¿ÚºÅ
+				//Ô¶ï¿½ï¿½ï¿½ï¿½Æµï¿½Ë¿Úºï¿½
 				jfieldID  id_lRemoteVideoPort = env->GetFieldID(class_AVTestMethodObject, "lRemoteVideoPort", "J");
 				AVTestMethod.lRemoteVideoPort = env->GetLongField(jobj_AVTestMethodObject, id_lRemoteVideoPort);
 
@@ -11599,7 +11582,7 @@ static jboolean jni_bDataConfMethod(JNIEnv* env, jclass cls, jint iType, jobject
 
     jclass class_bConfMethodPara = env->GetObjectClass(jobj_bConfMethodPara);
 
-    //´´½¨»áÒéºÍ´´½¨Ô¤Ô¼»áÒé½áÊø»áÒéÄ£¿é
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½Ô¤Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
     if (GT_METHOD_CONF_CONTROL == iType)
     {
         CONF_CONTROL_METHOD ConfControlMethod = {0};
@@ -11763,7 +11746,7 @@ static jboolean jni_bDataConfMethod(JNIEnv* env, jclass cls, jint iType, jobject
                  ConfControlMethod.cSubject, ConfControlMethod.iConfType, ConfControlMethod.cMasterURI, ConfControlMethod.iInitMemberNum, ConfControlMethod.iEmailNum, ConfControlMethod.iSMSNum, ConfControlMethod.cStartTime);
 
         BOOL iResult = bDataConfMethod(iType, (short far*)&ConfControlMethod);
-	//ÊÍ·ÅÄÚ´æ
+	//ï¿½Í·ï¿½ï¿½Ú´ï¿½
 	int nMemNum = ConfControlMethod.iInitMemberNum;
 	for(int i1=0; i1<nMemNum; i1++)
 	{
@@ -11877,15 +11860,15 @@ WbStylePtr_t getWBStyle(JNIEnv* env, jclass class_shape, jobject obj_shape)
 }
 
 /*******************
-iType=0:Ó¦ÓÃ¹²Ïí(Ô¶³ÌÐ­Öú)
-iType=1:°×°å
-iType=2:ÎÄµµ¹²Ïí
-iType=3:ÍøÒ³¹²Ïí
-iType=4:¹²Ïí¿Õ¼ä
+iType=0:Ó¦ï¿½Ã¹ï¿½ï¿½ï¿½(Ô¶ï¿½ï¿½Ð­ï¿½ï¿½)
+iType=1:ï¿½×°ï¿½
+iType=2:ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½
+iType=3:ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½
+iType=4:ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½
 iType=5:Í¶Æ±
-iType=6:¾ÙÊÖ
-iType=7:Òé³Ì
-iType=8:ÎÄ¼þ´«Êä
+iType=6:ï¿½ï¿½ï¿½ï¿½
+iType=7:ï¿½ï¿½ï¿½
+iType=8:ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 ********************/
 static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject jobj_bMrsMethodPara)
 {
@@ -12793,7 +12776,7 @@ static void   jni_bCheckURIIsMOA(JNIEnv* env, jclass cls, jstring jstrURI)
 }
 
 static jboolean jni_bSendPubAccountReq(JNIEnv* env, jclass cls, jint iType, jstring jstrPubAccId)
-{//iType: 1-²éÑ¯×Ô¼º¹Ø×¢µÄ¹«ÖÚºÅ, 2--¹Ø×¢¹«ÖÚºÅ 3--È¡Ïû¹Ø×¢¹«ÖÚºÅ
+{//iType: 1-ï¿½ï¿½Ñ¯ï¿½Ô¼ï¿½ï¿½ï¿½×¢ï¿½Ä¹ï¿½ï¿½Úºï¿½, 2--ï¿½ï¿½×¢ï¿½ï¿½ï¿½Úºï¿½ 3--È¡ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½Úºï¿½
     char cPubAccId[40] = {0};
     safeGetStringUTFChars(env, jstrPubAccId, cPubAccId, sizeof(cPubAccId) - 1, NULL);
     return bSendPubAccountReq(iType, cPubAccId);
@@ -12819,7 +12802,7 @@ static jboolean jni_bGetHistoryPubMsg(JNIEnv* env, jclass cls, jint count, jstri
 }
 
 static jboolean jni_bSearchPubAccount(JNIEnv* env, jclass cls, jint iType, jstring jstrPubAccName, jint pageNo, jint pageSize)
-{//iType: 1-Í¨¹ý¹«ÖÚºÅÃû×ÖÄ£ºý²éÑ¯£¬2-Í¨¹ý¹«ÖÚºÅID²éÑ¯, 3-°´ÕÕ¹Ø×¢ÈËÊý²éÑ¯£¬4-°´ÕÕ´´½¨Ê±¼ä²éÑ¯
+{//iType: 1-Í¨ï¿½ï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½2-Í¨ï¿½ï¿½ï¿½ï¿½ï¿½Úºï¿½IDï¿½ï¿½Ñ¯, 3-ï¿½ï¿½ï¿½Õ¹ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½4-ï¿½ï¿½ï¿½Õ´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ñ¯
     char strPubAccName[256] = {0};
   
 	safeGetStringUTFChars(env, jstrPubAccName, strPubAccName, sizeof(strPubAccName) - 1, NULL); 
@@ -12832,7 +12815,7 @@ static jboolean jni_bGetRecommendContact(JNIEnv* env, jclass cls, jint pageNo, j
 }
 
 static jboolean jni_bGet2DCodeInfo(JNIEnv* env, jclass cls, jint iType, jstring jstrKeyWord, jint validType, jint clientExist, jint codeType, jstring jstrMsgId)
-{//iType: 1¡ª»ñÈ¡Èº¶þÎ¬Âë²¢¸üÐÂ¶þÎ¬ÂëÓÐÐ§ÆÚ£¬2-¸ù¾Ýkey»ñÈ¡json´®
+{//iType: 1ï¿½ï¿½ï¿½ï¿½È¡Èºï¿½ï¿½Î¬ï¿½ë²¢ï¿½ï¿½ï¿½Â¶ï¿½Î¬ï¿½ï¿½ï¿½ï¿½Ð§ï¿½Ú£ï¿½2-ï¿½ï¿½ï¿½ï¿½keyï¿½ï¿½È¡jsonï¿½ï¿½
     char strKeyWord[1024+1] = {0};
     char msgId[64+1] = {0};
   
@@ -12855,7 +12838,7 @@ static jstring  jni_bVarEncryptPassword(JNIEnv* env, jclass cls, jstring jstrOri
         return NULL;
     }
 
-    //¼ÓÃÜ
+    //ï¿½ï¿½ï¿½ï¿½
     if(!bVarEncryptPassword(str_ori, str_dest, 0))
     {
         return NULL;
@@ -12875,11 +12858,11 @@ static jstring  jni_bVarDecryptPassword(JNIEnv* env, jclass cls, jstring jstrOri
     }
 
     if(strlen(str_ori)<24)
-    {//¶Ô¼ÓÃÜ´®×÷±£»¤£¬·ÀÖ¹jniµ÷ÓÃÊ±ºò±¨´íÖ±½Ó¹Òµô
+    {//ï¿½Ô¼ï¿½ï¿½Ü´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹jniï¿½ï¿½ï¿½ï¿½Ê±ï¿½ò±¨´ï¿½Ö±ï¿½Ó¹Òµï¿½
         return NULL;
     }
 
-    //½âÃÜ
+    //ï¿½ï¿½ï¿½ï¿½
     if(!bVarEncryptPassword(str_ori, str_dest, 1))
     {   
         return NULL;
@@ -12915,7 +12898,7 @@ static jboolean jni_bSyncUserCodeMoaInfo(JNIEnv* env, jclass cls, jint iType, js
     safeGetStringUTFChars(env, jstrDeviceId, strDeviceId, sizeof(strDeviceId) - 1, NULL);
     pXmlBody = safeAllocStringUTFCharsFromJString(env, jstrXmlBody);
     BOOL bRet = bSyncUserCodeMoaInfo(iType, strMsgId, strDeviceId, pXmlBody);
-//    ZX_free(pXmlBody);//ºóÐøsoftagentÓÃÍêºóÊÍ·Å
+//    ZX_free(pXmlBody);//ï¿½ï¿½ï¿½ï¿½softagentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½
     return bRet;
 }
 
@@ -13138,7 +13121,7 @@ static jint  jni_bSendPubAccMsg(JNIEnv* env, jclass cls, jstring jstrPubAccId, j
 }
 
 static jint  jni_bUserBindOperateReq(JNIEnv* env, jclass cls, jint iOperType, jstring jstrBindNumber, jint iNumberType, jstring jstrPasswd, jstring jstrCompanyID)
-{//iOperType:²Ù×÷ÀàÐÍ,1-bind 2-unbind 3-²éÑ¯bind¹ØÏµ
+{//iOperType:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,1-bind 2-unbind 3-ï¿½ï¿½Ñ¯bindï¿½ï¿½Ïµ
     char str_BindNumber[256+1] = {0};
     char str_Passwd[256+1] = {0};
     char str_CompanyID[256+1] = {0};
@@ -13172,15 +13155,15 @@ static jboolean jni_bGetGrayVersion(JNIEnv* env, jclass cls, jstring jstrVersion
 }
 
 static jboolean jni_bMessageMuteNotifyOperateReq(JNIEnv* env, jclass cls, jint iType, jstring jstrURI)
-{/*iType: 1-²éÑ¯ÉèÖÃÁËÏûÏ¢ÃâÈÅµÄÈº¡¢ÁªÏµÈË¡¢¹«ÖÚºÅÁÐ±í  2-ÉèÖÃÈºÃâÈÅ 3-È¡ÏûÉèÖÃÈºÃâÈÅ  4-ÉèÖÃÁªÏµÈËÃâÈÅ 5-È¡ÏûÉèÖÃÁªÏµÈËÃâÈÅ
-6-ÉèÖÃ¹«ÖÚºÅÃâÈÅ 7-È¡ÏûÉèÖÃ¹«ÖÚºÅÃâÈÅ*/
+{/*iType: 1-ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Åµï¿½Èºï¿½ï¿½ï¿½ï¿½Ïµï¿½Ë¡ï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½Ð±ï¿½  2-ï¿½ï¿½ï¿½ï¿½Èºï¿½ï¿½ï¿½ï¿½ 3-È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èºï¿½ï¿½ï¿½ï¿½  4-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 5-È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+6-ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½Úºï¿½ï¿½ï¿½ï¿½ï¿½ 7-È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½Úºï¿½ï¿½ï¿½ï¿½ï¿½*/
     char cURI[256+1] = {0};
     safeGetStringUTFChars(env, jstrURI, cURI, sizeof(cURI) - 1, NULL);
     return bMessageMuteNotifyOperateReq(iType, cURI);
 }
 
 static jboolean jni_bMessageReceiptOperateReq(JNIEnv* env, jclass cls, jint iOperType, jstring jstrSessionID, jint isGroup, jstring jstrURI, jstring jstrMsgIDs)
-{//iOperType: 1-ÔÄ¶Á»ØÖ´ÉÏ±¨  2-µ¥ÁÄÔÄ¶Á»ØÖ´²éÑ¯ÏêÇé  3-ÈºÁÄÔÄ¶Á»ØÖ´²éÑ¯ÏêÇé
+{//iOperType: 1-ï¿½Ä¶ï¿½ï¿½ï¿½Ö´ï¿½Ï±ï¿½  2-ï¿½ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½Ö´ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½  3-Èºï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½Ö´ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½
     char cSessionID[64+1] = {0};
     char cURI[256+1] = {0};
     char *pMsgIDs = NULL;
@@ -13205,10 +13188,10 @@ static jboolean jni_bGetPublicMsg(JNIEnv* env, jclass cls, jstring jstrLocalMsgI
 }
 
 /*
-pSessionID£º±êÊ¶±¾´ÎÉÏ´«ÎÄ¼þµÄIDºÅ,³¤¶ÈÎª32×Ö½Ú
-pFilePathName£º´øÍêÕûÂ·¾¶µÄÎÄ¼þÃû,×î³¤255×Ö½Ú
-iOperType:  0-ÐÂÔöÉÏ´«£¬1-¶ÏµãÐø´«£¬2-È¡ÏûÉÏ´«£¨pSessionIDÓëÇëÇópSessionID±£³ÖÒ»ÖÂ£©
-pFileID£º¶ÏµãÐø´«£¨iOperType=1£©ÐèÒªÌîÐ´·þÎñÆ÷Éú³ÉµÄÎÄ¼þID£¬ÆäËûÇé¿öÌî""
+pSessionIDï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½IDï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Îª32ï¿½Ö½ï¿½
+pFilePathNameï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½,ï¿½î³¤255ï¿½Ö½ï¿½
+iOperType:  0-ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½1-ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2-È¡ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½pSessionIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pSessionIDï¿½ï¿½ï¿½ï¿½Ò»ï¿½Â£ï¿½
+pFileIDï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iOperType=1ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½ï¿½Ä¼ï¿½IDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½""
 */
 static jboolean  jni_bUploadFileReq(JNIEnv* env, jclass cls, jstring jstrSessionID, jstring jstrFilePathName, jint iOperType, jstring jstrFileID)
 {
@@ -13224,10 +13207,10 @@ static jboolean  jni_bUploadFileReq(JNIEnv* env, jclass cls, jstring jstrSession
 }
 
 /*
-pSessionID£º±êÊ¶±¾´ÎÇëÇóµÄ»á»°IDºÅ,³¤¶ÈÎª32×Ö½Ú
-pFilePathName£ºÓÃÓÚ±£´æÎÄ¼þµÄ´øÍêÕûÂ·¾¶µÄÎÄ¼þÃû£¬×î³¤255×Ö½Ú
-iOperType:  0-ÐÂÔöÏÂÔØ£¬1-¶ÏµãÐø´«£¬2-È¡ÏûÏÂÔØ£¨pSessionIDÓëÇëÇópSessionID±£³ÖÒ»ÖÂ£©
-pFileID£ºÌîÐ´·þÎñÆ÷Éú³ÉµÄ´ýÏÂÔØÎÄ¼þID
+pSessionIDï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»á»°IDï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Îª32ï¿½Ö½ï¿½
+pFilePathNameï¿½ï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î³¤255ï¿½Ö½ï¿½
+iOperType:  0-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½1-ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2-È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½pSessionIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pSessionIDï¿½ï¿½ï¿½ï¿½Ò»ï¿½Â£ï¿½
+pFileIDï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉµÄ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ID
 */
 static jboolean  jni_bDownloadFileReq(JNIEnv* env, jclass cls, jstring jstrSessionID, jstring jstrFilePathName, jint iOperType, jstring jstrFileID)
 {
@@ -13243,10 +13226,10 @@ static jboolean  jni_bDownloadFileReq(JNIEnv* env, jclass cls, jstring jstrSessi
 }
 
 /*
-jstrSessionID:»á»°ID,ÏìÓ¦Ê±¿Ø¼þÍ¸´«»ØUI,×î´ó³¤¶È32×Ö½Ú
-jstrRequestPath: ÇëÇóurlµÄÂ·¾¶£¬Èç: http://IP:PORT/xxxxxÖÐµÄ"xxxxx"²¿·ÖÄÚÈÝ
-jstrMethod: HTTP·½·¨£¬ÈçGET,POSTµÈ
-jstrBody:HTTPµÄbodyÄÚÈÝ£¬Ã»ÓÐbodyÊ±ÌîÐ´""
+jstrSessionID:ï¿½á»°ID,ï¿½ï¿½Ó¦Ê±ï¿½Ø¼ï¿½Í¸ï¿½ï¿½ï¿½ï¿½UI,ï¿½ï¿½ó³¤¶ï¿½32ï¿½Ö½ï¿½
+jstrRequestPath: ï¿½ï¿½ï¿½ï¿½urlï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: http://IP:PORT/xxxxxï¿½Ðµï¿½"xxxxx"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+jstrMethod: HTTPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½GET,POSTï¿½ï¿½
+jstrBody:HTTPï¿½ï¿½bodyï¿½ï¿½ï¿½Ý£ï¿½Ã»ï¿½ï¿½bodyÊ±ï¿½ï¿½Ð´""
 */
 static jboolean  jni_bSendRequestMsgToHttpAP (JNIEnv* env, jclass cls, jstring jstrSessionID, jstring jstrRequestLine, jstring jstrMethod, jstring jstrBody)
 {
@@ -13465,7 +13448,7 @@ static JNINativeMethod methods[] =
 	{"jni_SensorAngle", "(I)V", (void*)jni_SensorAngle},		//by smm 2013.04.02
 	{"jni_AVTest", "(Lcom/zte/softda/ocx/AVTest_MethodPara;)V",(void*)jni_AVTest},//by smm 2012.11.08
 	{"jni_bHasCreateSurfacet", "()Z", (void*)jni_bHasCreateSurfacet},//by gongsuling 20.13.7.26
-    //»áÒé½Ó¿Ú
+    //ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½
     {"jni_bDataConfMethod", "(ILcom/zte/softda/ocx/conference/ConfMethodPara;)Z", (void*)jni_bDataConfMethod},
     {"jni_bSend2MrsMethod", "(ILcom/zte/softda/ocx/conference/ConfMrsMethodPara;)Z", (void*)jni_bSend2MrsMethod}, 
     {"jni_setFileSocktPath", "(Ljava/lang/String;)V", (void*)jni_setFileSocktPath},//by yanglei 2013.8.29
@@ -13473,35 +13456,35 @@ static JNINativeMethod methods[] =
     {"jni_bSetXCAPAccount", "(Ljava/lang/String;Ljava/lang/String;)Z", (void*)jni_bSetXCAPAccount},
     {"jni_bDataConfFileUpload", "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;JJJ)Z", (void*)jni_bDataConfFileUpload},
     {"jni_bDataConfFileDownload", "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", (void*)jni_bDataConfFileDownload},
-    //MOA½Ó¿Ú
-    //»ñÈ¡ËùÓÐIM·Ö×éÐÅÏ¢
+    //MOAï¿½Ó¿ï¿½
+    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½IMï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
     {"jni_bGetAllIMPrivateGroupList", "()Z", (void*)jni_bGetAllIMPrivateGroupList},
-    //»ñÈ¡IM·Ö×éÏÂµÄ³ÉÔ±ÁÐ±í
+    //ï¿½ï¿½È¡IMï¿½ï¿½ï¿½ï¿½ï¿½ÂµÄ³ï¿½Ô±ï¿½Ð±ï¿½
     {"jni_bGetIMPrivateGroupMember", "(Ljava/lang/String;)Z", (void*)jni_bGetIMPrivateGroupMember},
-    //Í¨¹ýxcapÐ­ÒéÕ»·¢ËÍhttpÇëÇó¸øÆäËûµÄwebservices
+    //Í¨ï¿½ï¿½xcapÐ­ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½httpï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½webservices
     {"jni_bSendSoapMessageByXcap", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", (void*)jni_bSendSoapMessageByXcap},
     {"jni_bCheckURIIsMOA", "(Ljava/lang/String;)Z", (void*)jni_bCheckURIIsMOA}, 
-    //¹«ÖÚÕÊºÅÏà¹Ø¹¦ÄÜ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Êºï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ï¿½
     {"jni_bSendPubAccountReq", "(ILjava/lang/String;)Z", (void*)jni_bSendPubAccountReq}, 
     {"jni_bGetHistoryPubMsg", "(ILjava/lang/String;ILjava/lang/String;)Z", (void*)jni_bGetHistoryPubMsg},
     {"jni_bSearchPubAccount", "(ILjava/lang/String;II)Z", (void*)jni_bSearchPubAccount},
     {"jni_bGetPubAccountMenu", "(Ljava/lang/String;Ljava/lang/String;)Z", (void*)jni_bGetPubAccountMenu},
     {"jni_bSendPubAccMsg", "(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", (void*)jni_bSendPubAccMsg},
-    //²éÑ¯ºÃÓÑÍÆ¼ö
+    //ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½
     {"jni_bGetRecommendContact", "(II)Z", (void*)jni_bGetRecommendContact},
     
-    //Èº×éÀëÏßÏûÏ¢»ñÈ¡
+    //Èºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½È¡
     {"jni_bIMSDispUICmdMethod_11", "(ILjava/lang/String;Ljava/lang/String;I)Z", (void*)jni_bIMSDispUICmdMethod_11},
-    //AES¼Ó½âÃÜËã·¨,Ìá¹©¸øUIµ÷ÓÃ
+    //AESï¿½Ó½ï¿½ï¿½ï¿½ï¿½ã·¨,ï¿½á¹©ï¿½ï¿½UIï¿½ï¿½ï¿½ï¿½
     {"jni_bVarEncryptPassword", "(Ljava/lang/String;)Ljava/lang/String;", (void*)jni_bVarEncryptPassword},
     {"jni_bVarDecryptPassword", "(Ljava/lang/String;)Ljava/lang/String;", (void*)jni_bVarDecryptPassword},
     //CheckOsTimer
     {"jni_bCheckOsTimer", "()V", (void*)jni_bCheckOsTimer},
     {"jni_bClientLoginNotify", "()Z", (void*)jni_bClientLoginNotify}, 
     {"jni_bMOAImmediatelyReReg", "()Z", (void*)jni_bMOAImmediatelyReReg},
-    //¼ì²âÓë·þÎñÆ÷µÄÍøÂç
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {"jni_bCheckConnection", "()Z", (void*)jni_bCheckConnection},
-    //jpgdealÏà¹Ø
+    //jpgdealï¿½ï¿½ï¿½
     {"jni_bSetJGPLibLogpath", "(Ljava/lang/String;)V", (void*)jni_bSetJGPLibLogpath},
     //{"jni_bMakeGroupThumbnailJpg", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I", (void*)jni_bMakeGroupThumbnailJpg},
     {"jni_bMakeGroupThumbnailJpg", "([Ljava/lang/String;IILjava/lang/String;)I", (void*)jni_bMakeGroupThumbnailJpg},
@@ -13518,7 +13501,7 @@ static JNINativeMethod methods[] =
     {"jni_bUserRegistReq", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", (void*)jni_bUserRegistReq},
     {"jni_bUserModifyPasswdReq", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", (void*)jni_bUserModifyPasswdReq},
     {"jni_bGetGrayVersion", "(Ljava/lang/String;)Z", (void*)jni_bGetGrayVersion},
-    //ºÅÂëbindÏà¹Ø²Ù×÷
+    //ï¿½ï¿½ï¿½ï¿½bindï¿½ï¿½Ø²ï¿½ï¿½ï¿½
     {"jni_bUserBindOperateReq", "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z", (void*)jni_bUserBindOperateReq}, 
     {"jni_bModifyGroupAttribute", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", (void*)jni_bModifyGroupAttribute}, 
     {"jni_bGet2DCodeInfo", "(ILjava/lang/String;IIILjava/lang/String;)Z", (void*)jni_bGet2DCodeInfo},
@@ -13540,11 +13523,11 @@ static JNINativeMethod methods[] =
 	{"jni_bScaleToRect", "(Ljava/lang/String;IILjava/lang/String;)I", (void*)jni_bScaleToRect},
 };
 
-//getStringFieldº¯ÊýÖÐ¶Ô¿ÕµÄÖ¸ÕëÓ¦¸Ã×ö¸ö±£»¤(µ«ÊÇÈç¹û¶ÔÏó²»¿Õ£¬Ö»ÊÇ¶ÔÏóµÄÄ³²¿·ÖÄÚÈÝ¿Õ
-//¿Ø¼þºÜÄÑ±£»¤¡£ËùÒÔ½çÃæ´«¸ø¿Ø¼þµÄ¶ÔÏó²»ÄÜÎª¿Õ£¬¶ÔÏóµÄÄ³²¿·ÖÄÚÈÝÈç¹ûÃ»ÓÐ£¬¾ÍÒª³õÊ¼»¯""
-//·ñÔò¿Ø¼þ²»ÕÒ²»µ½\0½áÊø·û¡£)
-//¿Ø¼þÒ²¿ÉÒÔÊÔ×Å¶ÔÄ³¸ö¶ÔÏóÈç¹ûÎª¿ÕÒ²×ö±£»¤¡£
-//×îºÃÊÇ½çÃæ×ö±£»¤
+//getStringFieldï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ô¿Õµï¿½Ö¸ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó²»¿Õ£ï¿½Ö»ï¿½Ç¶ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½
+//ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½Ñ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½ï¿½ï¿½æ´«ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½Õ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ð£ï¿½ï¿½ï¿½Òªï¿½ï¿½Ê¼ï¿½ï¿½""
+//ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½\0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+//ï¿½Ø¼ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¶ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 char *getStringField(JNIEnv* env, jobject jobj, jclass jcs,  const char * fieldName, char *result, int ilen)
 {
     const char *str = NULL;
@@ -13595,7 +13578,7 @@ char *safeGetStringUTFChars(JNIEnv* env, jstring string, char* dest, int size, j
 }
 
 
-//ÄÚ´æÐèÒªºóÐø×Ô¼ºÊÍ·Å£¬ZX_freeÊÍ·Å
+//ï¿½Ú´ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Í·Å£ï¿½ZX_freeï¿½Í·ï¿½
 char *safeAllocStringUTFCharsFromJString(JNIEnv* env, jstring string)
 {
    if(string != NULL)
@@ -13615,7 +13598,7 @@ char *safeAllocStringUTFCharsFromJString(JNIEnv* env, jstring string)
 	return NULL;
 }
 
-//ÄÚ´æÐèÒªºóÐø×Ô¼ºÊÍ·Å(ZX_free)
+//ï¿½Ú´ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Í·ï¿½(ZX_free)
 char* safeAllocStringUTFchars(JNIEnv* env, jobject jobj, jclass jcs,  const char * fieldName)
 {
 	//

@@ -27,6 +27,8 @@ JNIEXPORT void JNICALL Java_com_iutils_pattern_observer_LoginService_initSDK
 JNIEXPORT void JNICALL Java_com_iutils_pattern_observer_LoginService_login
         (JNIEnv *, jobject, jobject);
 
+static void* ocxCallback(void *arg);
+
 #ifdef __cplusplus
 }
 #endif

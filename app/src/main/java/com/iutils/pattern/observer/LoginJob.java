@@ -1,7 +1,7 @@
 package com.iutils.pattern.observer;
 
 import com.iutils.utils.ILog;
-import com.iutils.utils.ThreadUtil;
+import com.iutils.utils.SystemUtil;
 
 public class LoginJob extends Job {
     private final static String tag = "LoginJob";
@@ -15,10 +15,20 @@ public class LoginJob extends Job {
 
     @Override
     public void doJob(){
-        ILog.c(tag, "do login sessionId["+sessionId+"] userId["+userId+"] pwd["+pwd+"]");
-        LoginManager.getInstance().setObserver(this);
+        ILog.i(tag, "do login sessionId["+sessionId+"] userId["+userId+"] pwd["+pwd+"]");
+        ObserverManager.getInstance().setObserver(this);
         //TODO FOR REQUEST
 
+        LoginParam param = new LoginParam();
+        param.account = userId;
+        param.password = pwd;
+        param.deviceId = SystemUtil.getDeviceId();
+        param.terminalType = "Android@Phone";
+        param.versionCode = SystemUtil.getVersionCode();
+
+        LoginService.getInstance().login(param);
+
+        /*
         ThreadUtil.execute(new Runnable() {
             @Override
             public void run() {
@@ -27,19 +37,21 @@ public class LoginJob extends Job {
                     LoginResult result = new LoginResult();
                     result.resultCode= 202;
                     result.sessionId = sessionId;
-                    LoginManager.getInstance().notify(result);
+                    ObserverManager.getInstance().notify(result);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         });
+        */
 
     }
 
     @Override
     public void onCallback(Result result) {
         if(result instanceof LoginResult){
-            ILog.c(tag, result.toString());
+            ILog.i(tag, result.toString());
+            super.onCallback(result);
             super.doJob();
         }
     }

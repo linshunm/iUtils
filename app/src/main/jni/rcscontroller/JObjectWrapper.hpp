@@ -1,12 +1,10 @@
 
 #include <jni.h>
-#include "../rcsagent/softagent.h" 
 
 
 static char TAG_L[64] = "JOjbectWrapper";
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//env->NewStringUTF ·â×°£¬·ÀÖ¹ÄÚ´æĞ¹Â¶
+
 class JNIString
 {
 

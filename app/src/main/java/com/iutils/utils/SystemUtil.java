@@ -4,9 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
@@ -15,6 +17,7 @@ import android.view.WindowManager;
 
 import com.iutils.IUtilsApplication;
 
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -40,6 +43,21 @@ public class SystemUtil {
         return metrics.widthPixels;
     }
 
+    public static String getWorkPath(){
+        File sdDir = null;
+        boolean sdCardExist = Environment.getExternalStorageState()
+                .equals(android.os.Environment.MEDIA_MOUNTED);//判断sd卡是否存在
+        if(sdCardExist)
+        {
+            sdDir = Environment.getExternalStorageDirectory();//获取跟目录
+        }
+        return sdDir.toString();
+    }
+
+    public static String getAppPath(){
+        return mContext.getFilesDir().getAbsolutePath();
+    }
+
     @SuppressLint("MissingPermission")
     public static String getDeviceId() {
         String deviceId = null;
@@ -50,6 +68,24 @@ public class SystemUtil {
 
         return deviceId;
     }
+
+    /**
+     * get App versionCode
+     * @return
+     */
+    public static int getVersionCode(){
+        PackageManager packageManager=mContext.getPackageManager();
+        PackageInfo packageInfo;
+        int versionCode = -1;
+        try {
+            packageInfo=packageManager.getPackageInfo(mContext.getPackageName(),0);
+            versionCode=packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionCode;
+    }
+
     /**
      * Pseudo-Unique ID, 这个在任何Android手机中都有效
      * 有一些特殊的情况，一些如平板电脑的设置没有通话功能，或者你不愿加入READ_PHONE_STATE许可。而你仍然想获得唯

@@ -20,6 +20,6 @@ public class LoginService {
     public native void login(LoginParam param);
 
     public void onLoginResult(LoginResult result){
-        LoginManager.getInstance().notify(result);
+        ObserverManager.getInstance().notify(result);
     }
 }

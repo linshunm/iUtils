@@ -12,7 +12,7 @@ public class CheckServerJob extends Job implements AP.ICheckApListener{
     @Override
     public void doJob(){
         ILog.c(tag, "check server access ip list sessionId["+sessionId+"]");
-        LoginManager.getInstance().setObserver(this);
+        ObserverManager.getInstance().setObserver(this);
         //TODO FOR REQUEST
         final List<AP> serverList = getServerList();
         for(int i = 0; i<serverList.size();i++){
@@ -40,7 +40,7 @@ public class CheckServerJob extends Job implements AP.ICheckApListener{
         result.sessionId = sessionId;
         result.ip = ap.domain;
         result.checkTime = ap.checkTime;
-        LoginManager.getInstance().notify(result);
+        ObserverManager.getInstance().notify(result);
     }
 
     private List<AP> getServerList(){

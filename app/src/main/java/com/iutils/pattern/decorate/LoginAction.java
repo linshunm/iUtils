@@ -7,7 +7,7 @@ public class LoginAction extends Action {
 
     @Override
     public void doAction() {
-        ILog.c(tag, "only do login action");
+        ILog.i(tag, "only do login action");
         super.doAction();
     }
 }

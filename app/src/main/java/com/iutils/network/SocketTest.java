@@ -43,10 +43,10 @@ public class SocketTest {
 
         for(String domain:domainArray){
             long startTime = System.currentTimeMillis();
-            ILog.c(tag, "get ip by domain["+domain+"]");
+            ILog.i(tag, "get ip by domain["+domain+"]");
             String ip = SocketUtil.getIpByDomain(domain);
             long endTime = System.currentTimeMillis();
-            ILog.c(tag, "parse domain end, get ip["+ip+"] take["+(endTime-startTime)+"]ms");
+            ILog.i(tag, "parse domain end, get ip["+ip+"] take["+(endTime-startTime)+"]ms");
 
             connServer(ip, xcapPort);
         }
@@ -59,7 +59,7 @@ public class SocketTest {
             public void run(){
                 CheckIpConnTask task = new CheckIpConnTask.Builder(ip, port).build();
                 //SocketUtil.checkServerConn(task);
-                ILog.c(tag, task.toString());
+                ILog.i(tag, task.toString());
             }
         }.start();
     }

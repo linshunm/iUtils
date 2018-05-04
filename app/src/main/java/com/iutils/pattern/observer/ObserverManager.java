@@ -1,16 +1,16 @@
 package com.iutils.pattern.observer;
 
-public class LoginManager {
-    private static LoginManager instance;
+public class ObserverManager {
+    private static ObserverManager instance;
 
     private IObserver observer= null;
-    private LoginManager(){}
+    private ObserverManager(){}
 
-    public static LoginManager getInstance(){
+    public static ObserverManager getInstance(){
         if(instance == null){
-            synchronized (LoginManager.class){
+            synchronized (ObserverManager.class){
                 if(instance == null){
-                    instance = new LoginManager();
+                    instance = new ObserverManager();
                 }
             }
         }

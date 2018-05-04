@@ -11,7 +11,7 @@ extern "C" {
 	void java_FireLogonResult(long lResult, long lReason, long extraCode);
 	void java_FireReportMemberStatus(char *lpJID, char *lpCallee, long lStatus, long lCallType);
 	void java_FireSomeOneCallMe(char *lpJID, char *lpCaller, long lType);	
-	void java_FireRegisterSoftPhoneToSS(char * lpSoftPhone, int lType)	;   
+	void java_FireRegisterSoftPhoneToSS(char * lpSoftPhone, int lType);
 	void java_FireAlreadyLogout(long lReason);
 	void java_FireLogoutServerSuccess();
 	void java_FireServerLinkLost(int itype);
@@ -78,9 +78,9 @@ extern "C" {
 	void java_FireIMSDeleteMeInPublicGroup(LPCTSTR pGroupURI, int iType);
 	void java_FireIMSDoPublicGroupInviteResult(long lDoType, LPCTSTR pGroupURI, LPCTSTR pGroupName, LPCTSTR lpcsOwnerName, long lCode);
 	void java_FireIMSPersonSubInfoChanged(long lType, short far* pPersonSubInfoEvent);
-	void java_FireIMSSetUserInfoResult(long lResult);//ÉèÖÃ±¾ÈËÏêÏ¸ÐÅÏ¢½á¹ûÊÂ¼þ
+	void java_FireIMSSetUserInfoResult(long lResult);
 	void java_FireIMSGotOneListInfo(short far* pListInfo,int iReturnCode, LPCTSTR pURI);
-	void java_FireIMSGotListInfo(List *pListInfo); //ÅúÁ¿ÉÏ±¨ÁªÏµÈËÏêÏ¸ÐÅÏ¢
+	void java_FireIMSGotListInfo(List *pListInfo);
 	long java_FireFIndFileSize(LPCTSTR pFilePath);
 	void java_FireCtdCallEvent(long lType, short far* pPara);
 	void java_FireDispUICmdForEcp2Result(long lType, short far* pPara);
@@ -95,7 +95,7 @@ extern "C" {
 	void java_FireIMSCopyPrivateGroupListResult(LPCTSTR pGroupName, long iGroupType, LPCTSTR pListURI, long iResult);
 	void java_FireIMSDelPrivateGroupListResult(LPCTSTR pGroupName, LPCTSTR pListURI, long iResult);
 
-	//ÁªÏµÈËÏà¹Ø
+	
 	void java_FireIMSSearchUserByURIResult(LPCTSTR pURI, LPCTSTR pDName, LPCTSTR pSex, int iAge, LPCTSTR pCity, int iOnline);
 	void java_FireIMSSearchUserByDNameResult(LPCTSTR pURI, LPCTSTR pDName, LPCTSTR pSex, int iAge, LPCTSTR pCity, int iOnline);
 	void java_FireIMSSearchOneUserOnlineResult(int iPos, LPCTSTR pURI, LPCTSTR pDName, LPCTSTR pSex, int iAge, LPCTSTR pCity);
@@ -109,14 +109,14 @@ extern "C" {
 
 	void java_FireIMSSetPresenceRulesResult(LPCTSTR pURI, int iType);
 	
-	// ÁÄÌìÊÒÏà¹Ø
+	
 	void java_FireIMSCreateChatRoomResult(LPCTSTR pDlgID, long iResult, LPCTSTR pSubject, LPCTSTR pChatRoomURI);
 	void java_FireIMSGotChatRoomUserInfo(short *info);
 	void java_FireIMSInvitedToChatRoom(LPCTSTR pCreaterURI, LPCTSTR pChatRoomURI, LPCTSTR pSubject);
 	void java_FireIMSJoinChatRoomResult(long iResult, LPCTSTR pSubject, LPCTSTR pChatRoomURI);
 	void java_FireIMSLeaveChatRoom(LPCTSTR pChatRoomURI);
 	
-	// Í¨Ñ¶Â¼Ïà¹Ø
+	//
 	void java_FireIMSGotDeptAddrListResult(long iType, long iCode, long iNum, short far* pAddrList, LPCTSTR pNodeURI);
 	void java_FireIMSSearchAddrListResult(long iType, long iCode, short far* pAddrList);
 
@@ -128,23 +128,23 @@ extern "C" {
 	void java_FireIMSDeletePublicGroupResult(LPCTSTR pGroupURI, long iResult);
 	void java_FireIMSDelFromMyPuGroupResult(LPCTSTR pSomeoneURI, LPCTSTR pGroupURI, long iResult);
 
-	//ÊäÈë×´Ì¬
+
 	void java_FireMsgIndicationNotify(short far* pPara);
 
-	//×îºóÒ»´ÎµÇÂ¼ÐÅÏ¢
+	//
 	void java_FireGotRegInfoNotify(int IResult, short far* pPara);
 
-	void java_FireIMSSubResult(int iType, LPCTSTR pURI, int iResult);//¶©ÔÄ½á¹ûÉÏ±¨
+	void java_FireIMSSubResult(int iType, LPCTSTR pURI, int iResult);//
 	void java_FireRegisterSoftPhoneToSSNew(short far* pInfo);
 
-       //»áÒéÏà¹Ø
+       //
        void java_FireDataConfEvent(int iType,  short far* pConfEvent);
 	void java_FireRecvFromMrsEvent(int iType, short far* pRecvMessage);
     
        void java_FireInitControlResult(long lResult);
        void java_FireConfBridgeControlResult(int iType, short far* pRecvMessage);
 
-	//MOA ÊÂ¼þ
+	//
 	void java_FireGotIMAllPrivateGroupListResult(int iResult, List *pGroupList);
 	void java_FireGotIMPrivateGroupMemberResult(LPCTSTR pGroupIdendifier, int iResult, List *pMemberList);
 	void java_FireCheckURIIsMOAResult(int iResult, List *pCheckList);
@@ -153,7 +153,7 @@ extern "C" {
 	void java_FireGetCheckCodeResult(int iHttpCode, int iResultCode, LPCTSTR lpResultDesc);
 	void java_FireIMSMessageListArrived(int nNum, void **pMsgList);
 
-	//403Á÷³ÌÉÏ±¨½çÃæ
+	//
 	void java_FireTry403FlowBegin();
 	void java_FireTry403FlowResult(int iResult);
 	void java_FireCheckConnectResult(int iResult, int delaysec);
@@ -161,7 +161,7 @@ extern "C" {
 	void java_FireIMSGroupOfflineMsgNotify(int iMsgNum, LPCTSTR cGroupURI, LPCTSTR pMessage, LPCTSTR timestamp);
 	void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int nOverFlag, LPCTSTR cGroupURI, LPCTSTR cMaxTimeQue, int nNum, void **pMsgList);
 
-	//¹«ÖÚºÅ
+
 	void java_FireGotPubAccountListResult(int iResult, int nNum, void **pPubAccountList);
 	void java_FireIMSGotPublishMsgResult(int msgType, LPCTSTR localMsgID, LPCTSTR pubAccId, LPCTSTR cTime, LPCTSTR msgid, int seq, int nNum, void **pMsgList);
 	void java_FireAddOnePubAccountResult(int iResult, int nNum, void **pPubAccountList);
@@ -170,24 +170,24 @@ extern "C" {
 	void java_FireUserCodeMoaInfoResult(int iType, int iResult, LPCTSTR msgId, LPCTSTR etag, int nNum, void **pUserMoaInfo);
 	void java_FireGotPubAccountMenuResult(int iResult, LPCTSTR pubAccId, LPCTSTR etag, int nNum, void **pPubAccountMenu);
 	void java_FireSendPubAccMsgResult(int iHttpCode, int iResultCode, LPCTSTR lpResultDesc, int iMsgType, LPCTSTR lpPutMsgId, LPCTSTR lpMenuId, LPCTSTR lpDate);
-    //ÍÆ¼öºÃÓÑ
+
 	void java_FireGetRecommendContactResult(int iResult, int pageNo, int pageSize, int nNum, void **pContactInfoList);
-	//Ãô¸Ð´Ê
+	//ï¿½ï¿½ï¿½Ð´ï¿½
 	void java_FireGetSensWordListResult(int nNum, void *pWordList);
-	//ºÅÂë°ó¶¨Ïà¹Ø²Ù×÷½á¹û
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void java_FireUserBindOperResult(int iResultCode, int iOperType, LPCTSTR lpURI, LPCTSTR lpCompanyID);
-	//Èº×éÊôÐÔÐÞ¸Ä½á¹û
+	//Èºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä½ï¿½ï¿½
 	void java_FireModifyGroupAttributeResult(LPCTSTR lpGroupURI, LPCTSTR lpModType, LPCTSTR lpNewValue, int iResultCode);
 	void java_FireMessageMuteNotifyOperateResult(int iResultCode, int iType, LPCTSTR lpURI, int iGroupNum, void* lpGroupURI, int iContactNum, void* lpContactURI
 		, int iPubAccNum, void* lpPubAccURI);
 	void java_FireMessageReceiptOperateResult(int iOperType, LPCTSTR sessionID, int iResultCode, LPCTSTR pMsgIDs, void* qryRsp);	
 	void java_FireMessageReceiptNotify(int isGroup, LPCTSTR lpURI, int iListNum, void* lpMsgIDList, char* pMsgIDs);
-	//»Ò¶È°æ±¾
+	//ï¿½Ò¶È°æ±¾
 	void java_FireGetGrayVersionResult(int iHttpCode, LPCTSTR lpGrayVersion, LPCTSTR lpDownloadUri, LPCTSTR lpDownloadSize, LPCTSTR lpGrayVerInfo);
-	//¶þÎ¬Âë»ñÈ¡½á¹û
+	//ï¿½ï¿½Î¬ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½
 	void java_FireGet2DCodeInfoResult(int iType, int iReturnCode, LPCTSTR pDataStr, LPCTSTR jsonKey, LPCTSTR validTime, int codeType, LPCTSTR msgId);
 
-    //lmd20141204£¬»áÒéÏà¹ØµÄ
+    //lmd20141204ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½
     void java_FireStartVNCDLLEvent(LPCTSTR pLocalIP, int iLocalPort,LPCTSTR pIP, int iPort,LPCTSTR pDPassword, LPCTSTR plinkid);
 	void java_FireDataConfFileDownload(long iOperateType, long iSuccess);
 	void java_FireDataConfFileUploadResult(long iOperateType, long iSuccess);

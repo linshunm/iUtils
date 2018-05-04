@@ -7,7 +7,8 @@ LOCAL_MODULE := JNI_ANDROID_TEST
 #编译模块需要的源文件
 LOCAL_SRC_FILES := jnitest.cpp \
                    util/StringUtils.cpp \
-                   tq/Task.cpp
+                   tq/Task.cpp \
+                   login/LoginParam.cpp login/LoginService.cpp
 #引入一个和日志相关的库文件
 LOCAL_LDLIBS:=-L$(SYSROOT)/usr/lib -llog
 #指定编译出的库类型，BUILD_SHARED_LIBRARY：动态库；BUILD_STATIC_LIBRARY：静态库， BUILD_EXECUTEABLE指：可执行文件

@@ -9,6 +9,7 @@ import com.iutils.hook.BinderHookHelper;
 import com.iutils.hook.HookHelper;
 import com.iutils.monitor.BlockDetectByChoreographer;
 import com.iutils.monitor.BlockDetectByPrinter;
+import com.iutils.pattern.observer.UCSDK;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -62,14 +63,7 @@ public class IUtilsApplication extends Application {
         //BlockDetectByPrinter.start();
         BlockDetectByChoreographer.start();
 
-        ARouter.openLog();     // 打印日志
-        //ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
-
-        ARouter.init(this); // 尽可能早，推荐在Application中初始化
-
-
-//        Intent mIntent = new Intent(this, CoreService.class);
-//        startService(mIntent);
+        UCSDK.init();
 
 
         // 这两行必须写在init之前，否则这些配置在init过程中将无效
