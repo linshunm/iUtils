@@ -2,7 +2,7 @@
 #include <jni.h>
 
 
-static char TAG_L[64] = "JOjbectWrapper";
+static char TAG_L[64] = "JObjectWrapper";
 
 
 class JNIString
@@ -51,7 +51,7 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-class JOjbectWrapper
+class JObjectWrapper
 {
     JNIEnv* _env;
     jclass _cls;
@@ -66,43 +66,43 @@ class JOjbectWrapper
         _obj = obj;
     }
 public:
-    JOjbectWrapper(JNIEnv* env, jobject obj)
+    JObjectWrapper(JNIEnv* env, jobject obj)
     {
         set(env, env->GetObjectClass(obj), obj);
         _bNewcls = true;
         _bNewobj = false;
     }
-    JOjbectWrapper(JNIEnv* env, jclass cls, jobject obj)
+    JObjectWrapper(JNIEnv* env, jclass cls, jobject obj)
     {
         set(env, cls, obj);
         _bNewcls = false;
         _bNewobj = false;	
     }
-    JOjbectWrapper(JNIEnv* env, char const*  clsName)
+    JObjectWrapper(JNIEnv* env, char const*  clsName)
     {
         set(env, env->FindClass(clsName), NULL);
         _bNewcls = true;
         _bNewobj = false;		
     }
-    JOjbectWrapper(JNIEnv* env, jclass jcls)
+    JObjectWrapper(JNIEnv* env, jclass jcls)
     {
     	set(env, jcls, NULL);
         _bNewcls = false;
         _bNewobj = false;		
     }
-    JOjbectWrapper(JNIEnv* env, char const*  clsName, jobject obj)
+    JObjectWrapper(JNIEnv* env, char const*  clsName, jobject obj)
     {
         set(env, env->FindClass(clsName), obj);
         _bNewcls = true;
         _bNewobj = false;		
     }
-    JOjbectWrapper(JOjbectWrapper const& rv)
+    JObjectWrapper(JObjectWrapper const& rv)
     {
         set(rv._env, rv._cls, rv._obj);
         _bNewcls = rv._bNewcls;
         _bNewobj = rv._bNewobj;
     }
-    ~JOjbectWrapper()
+    ~JObjectWrapper()
     {
     	if (NULL != _cls && _bNewcls)
     	{
@@ -113,7 +113,7 @@ public:
     		_env->DeleteLocalRef(_obj);
     	}
     }
-    JOjbectWrapper operator=(JOjbectWrapper const& rv)
+    JObjectWrapper operator=(JObjectWrapper const& rv)
     {
         set(rv._env, rv._cls, rv._obj);
         _bNewcls = rv._bNewcls;
@@ -194,11 +194,8 @@ public:
         jfieldID id = _env->GetFieldID(_cls, fieldName, "Ljava/lang/String;");
         if(NULL == id)
         {
-         if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "SetStringValue no such field[%s]", fieldName);
-            else if(g_WriteLogType == 1)
-        	LOGI(TAG_L, "SetStringValue no such field[%s]", fieldName);
-         return;
+            LOGE(TAG_L, "SetStringValue no such field[%s]", fieldName);
+            return;
         }
 	 
         jstring jstr = _env->NewStringUTF(NULL==value?"":value);
@@ -206,14 +203,14 @@ public:
         _env->DeleteLocalRef(jstr);
     }
 
-    JOjbectWrapper GetContainsObject(char const* fieldName, char const* clsName)
+    JObjectWrapper GetContainsObject(char const* fieldName, char const* clsName)
     {
         jfieldID id = _env->GetFieldID(_cls, fieldName, clsName);
         jobject containsObj = _env->GetObjectField(_obj, id);
-        return JOjbectWrapper(_env, containsObj);
+        return JObjectWrapper(_env, containsObj);
     }
 
-    void SetContainsObject(char const* fieldName, char const* clsName, JOjbectWrapper jobj)
+    void SetContainsObject(char const* fieldName, char const* clsName, JObjectWrapper jobj)
     {
         SetContainsObject(fieldName, clsName, jobj.GetObject());
     }

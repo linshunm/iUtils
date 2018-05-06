@@ -149,16 +149,6 @@ JNIEXPORT jstring JNICALL Java_com_iutils_framework_JniTest_getPackageName(JNIEn
     return packName;
 }
 
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved) {
-    LOGI("JNI_OnLoad");
-
-    //https://blog.csdn.net/fu_shuwu/article/details/41121741
-    //gJavaVM->AttachCurrentThread(&env, NULL);
-
-    //gJavaVM->DetachCurrentThread();
-
-    return JNI_VERSION_1_4;
-}
 
 /*
  * Class: com_iutils_framework_JniTest

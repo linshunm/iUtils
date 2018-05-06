@@ -974,7 +974,7 @@ void java_FireIMSGotUserInfo(short far* pNotify)
     int i;
     long lDataLen = 0;
 
-    TraceMsgWindow1(1, "rcscontroller java_FireIMSGotUserInfo begin");
+    LOGI(TAG, "rcscontroller java_FireIMSGotUserInfo begin");
 
     iresult = getStaticJniMethod((char *)"java_FireIMSGotUserInfo", (char *)"(Lcom/zte/softda/ocx/FireIMSGotUserInfoPara;)V", &env, &gJinMethod);
 
@@ -2342,7 +2342,7 @@ void java_FireIMSPublicGroupMemberNotify(short far* pPara)
         return;
     }
 
-    JOjbectWrapper objEvent(env, "com/zte/softda/ocx/GroupMemberNotifyPara");
+    JObjectWrapper objEvent(env, "com/zte/softda/ocx/GroupMemberNotifyPara");
 	objEvent.NewObject();
 
     objEvent.SetStringValue("pGroupURI", pNotify->pGroupURI);
@@ -3353,7 +3353,7 @@ void java_FireIMSGotListInfo(List *pListInfo)
         return;
     }
 
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FireIMSGotUserInfoListPara");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FireIMSGotUserInfoListPara");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FireIMSGotUserInfoPara");
@@ -3366,7 +3366,7 @@ void java_FireIMSGotListInfo(List *pListInfo)
 		if (NULL == pUserItem)
 			continue;
 
-		JOjbectWrapper objUserItem(env, "com/zte/softda/ocx/FireIMSGotUserInfoPara");
+		JObjectWrapper objUserItem(env, "com/zte/softda/ocx/FireIMSGotUserInfoPara");
 		objUserItem.NewObject();
 		objUserItem.SetStringValue("cName", pUserItem->cName);
 		objUserItem.SetStringValue("cSex", pUserItem->cSex);
@@ -3455,7 +3455,7 @@ void java_FireCtdCallEvent(long lType, short far* pPara)
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireCtdCallEvent");
+        LOGI(TAG, "rcscontroller not found java_FireCtdCallEvent");
         return;
     }
     jclass class_CtdCallEventPara = env->FindClass("com/zte/softda/ocx/FireCtdCallEventPara");
@@ -5984,8 +5984,7 @@ void java_FireGotRegInfoNotify(int IResult, short far* pPara)
     iresult = getStaticJniMethod((char *)"java_FireGotRegInfoNotify", (char *)"(ILcom/zte/softda/ocx/FireLastLogInfo;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        LOGI(TAG, "not found java_FireGotRegInfoNotify");
-
+        LOGE(TAG, "not found java_FireGotRegInfoNotify");
         return;
     }
     jclass class_FireGotRegInfoNotify = env->FindClass("com/zte/softda/ocx/FireLastLogInfo");
@@ -6005,19 +6004,13 @@ void java_FireIMSSubResult(int iType, LPCTSTR pURI, int iResult)
     JNIEnv *env;
     int iresult = -1;
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireIMSSubResult iType[%d] pURI[%s] iResult[%d]", iType, pURI, iResult);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "java_FireIMSSubResult iType[%d] pURI[%s] iResult[%d]", iType, pURI, iResult);
+    LOGI(TAG, "java_FireIMSSubResult iType[%d] pURI[%s] iResult[%d]", iType, pURI, iResult);
 
     iresult = getStaticJniMethod((char *)"java_FireIMSSubResult", (char *)"(ILjava/lang/String;I)V", &env, &gJinMethod);
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireIMSSubResult");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "not found java_FireIMSSubResult");
+        LOGE(TAG, "not found java_FireIMSSubResult");
 
         return;
     }
@@ -6174,23 +6167,17 @@ void java_FireDataConfEvent(int iType,  short far* pConfEvent)
     	int iresult = -1;
     	jfieldID id_fieldID;
 
-    	if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller java_FireDataConfEvent begin %d", iType);
-    	else if(g_WriteLogType == 1)
-        	LOGI(TAG, "java_FireDataConfEventbegin %d", iType);
+    	LOGI(TAG, "java_FireDataConfEventbegin %d", iType);
 
     	iresult = getStaticJniMethod((char *)"java_FireDataConfEvent", (char *)"(ILcom/zte/softda/ocx/conference/ConfEventPara;)V", &env, &gJinMethod);
     	if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     	{
-        	if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireDataConfEvent");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireDataConfEvent");
+        	LOGE(TAG, "not found java_FireDataConfEvent");
 
         	return;
     	}
 
-	//��װjava���ϱ�����
+
 	jclass class_FireDataConfEvent= env->FindClass("com/zte/softda/ocx/conference/ConfEventPara");
     	jmethodID id_FireDataConfEvent  = env->GetMethodID(class_FireDataConfEvent, "<init>", "()V");
     	jobject obj_FireDataConfEvent = env->NewObject(class_FireDataConfEvent, id_FireDataConfEvent);
@@ -6207,7 +6194,7 @@ void java_FireDataConfEvent(int iType,  short far* pConfEvent)
 
 				id_fieldID = env->GetFieldID(class_ConfCtrlEvent, "iType", "I");
 				env->SetIntField(obj_ConfCtrlEvent, id_fieldID, pConfCtrlStruct->iType);
-				TraceMsgWindow1(1, "pConfCtrlStruct->iType=%d, pConfCtrlStruct->iConfType=%d, pConfCtrlStruct->iResult=%d"
+				LOGI(TAG, "pConfCtrlStruct->iType=%d, pConfCtrlStruct->iConfType=%d, pConfCtrlStruct->iResult=%d"
 					, pConfCtrlStruct->iType, pConfCtrlStruct->iConfType, pConfCtrlStruct->iResult);
 				id_fieldID = env->GetFieldID(class_ConfCtrlEvent, "iResult", "I");
 				env->SetIntField(obj_ConfCtrlEvent, id_fieldID, pConfCtrlStruct->iResult);
@@ -6390,7 +6377,7 @@ void java_FireInitControlResult(long lResult)
     jfieldID id_fieldID;
 
     if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireInitControlResult result:%d", lResult);
+        LOGI(TAG, "rcscontroller java_FireInitControlResult result:%d", lResult);
     else if(g_WriteLogType == 1)
         LOGI(TAG, "java_FireInitControlResult result:%d", lResult);
 
@@ -6398,7 +6385,7 @@ void java_FireInitControlResult(long lResult)
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
         if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireInitControlResult");
+            LOGI(TAG, "rcscontroller not found java_FireInitControlResult");
         else if(g_WriteLogType == 1)
             LOGI(TAG, "not found java_FireInitControlResult");
 
@@ -6430,22 +6417,15 @@ void java_FireConfBridgeControlResult(int iType, short far* pResult)
 	char buf[2048] = "";
 	BirdgeEventToString(*pInfoPara, buf, 2047);
 	
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireConfBridgeControlResult iType=%d, params{%s}", iType, buf);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "java_FireConfBridgeControlResult iType=%d, params{%s}", iType, buf);
+    LOGI(TAG, "java_FireConfBridgeControlResult iType=%d, params{%s}", iType, buf);
 
     iresult = getStaticJniMethod((char *)"java_FireConfBridgeControlResult", (char *)"(ILcom/zte/softda/ocx/confbridge/ConfBridgeControlEvent;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireConfBridgeControlResult");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "not found java_FireConfBridgeControlResult");
-
+        LOG(ETAG, "not found java_FireConfBridgeControlResult");
         return;
     }
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/confbridge/ConfBridgeControlEvent");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/confbridge/ConfBridgeControlEvent");
 	objEvent.NewObject();
 	objEvent.SetIntValue("type", pInfoPara->type);
 	objEvent.SetStringValue("szConfURI", pInfoPara->szConfURI);
@@ -6477,7 +6457,7 @@ void java_FireConfBridgeControlResult(int iType, short far* pResult)
 		for (i = 0; i < pInfoPara->nConfBridgeInfoCount; i++)
 		{
 			ConfBridgeInfo_T * pInfo = pInfoPara->pConfBridgeInfoArray + i;
-			JOjbectWrapper objBridgeInfo(env, classBridgeInfo, NULL);
+			JObjectWrapper objBridgeInfo(env, classBridgeInfo, NULL);
 			objBridgeInfo.NewObject();
 			objBridgeInfo.SetIntValue("iConfType", pInfo->iConfType);
 			objBridgeInfo.SetStringValue("szStartTime", pInfo->szStartTime);
@@ -6505,19 +6485,13 @@ void java_FireDataConfFileDownload(long iOperateType, long iSuccess)
     JNIEnv *env;
     int iresult = -1;
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireDataConfFileDownload iOperateType[%d] iSuccess[%d]", iOperateType, iSuccess);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "java_FireDataConfFileDownload iOperateType[%d] iSuccess[%d]", iOperateType, iSuccess);
+    LOGI(TAG, "java_FireDataConfFileDownload iOperateType[%d] iSuccess[%d]", iOperateType, iSuccess);
 
     iresult = getStaticJniMethod((char *)"java_FireDataConfFileDownload", (char *)"(II)V", &env, &gJinMethod);
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireDataConfFileDownload");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "not found java_FireDataConfFileDownload");
+        LOGE(TAG, "not found java_FireDataConfFileDownload");
 
         return;
     }
@@ -6530,19 +6504,13 @@ void java_FireDataConfFileUploadResult(long iOperateType, long iSuccess)
     JNIEnv *env;
     int iresult = -1;
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireDataConfFileUploadResult iOperateType[%d] iSuccess[%d]", iOperateType, iSuccess);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "java_FireDataConfFileUploadResult iOperateType[%d] iSuccess[%d]", iOperateType, iSuccess);
+    LOGI(TAG, "java_FireDataConfFileUploadResult iOperateType[%d] iSuccess[%d]", iOperateType, iSuccess);
 
     iresult = getStaticJniMethod((char *)"java_FireDataConfFileUploadResult", (char *)"(II)V", &env, &gJinMethod);
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireDataConfFileUploadResult");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "not found java_FireDataConfFileUploadResult");
+        LOGE(TAG, "not found java_FireDataConfFileUploadResult");
 
         return;
     }
@@ -6555,19 +6523,13 @@ void java_FireTransScheduleNotify(long iOperateType, long iType,long iTotalSize,
     JNIEnv *env;
     int iresult = -1;
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireTransScheduleNotify iOperateType[%d] iType[%d] iTotalSize[%d] iFinishedSize[%d]", iOperateType,iType,iTotalSize, iFinishedSize);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "java_FireTransScheduleNotify iOperateType[%d] iType[%d] iTotalSize[%d] iFinishedSize[%d]", iOperateType,iType,iTotalSize, iFinishedSize);
+    LOGI(TAG, "java_FireTransScheduleNotify iOperateType[%d] iType[%d] iTotalSize[%d] iFinishedSize[%d]", iOperateType,iType,iTotalSize, iFinishedSize);
 
     iresult = getStaticJniMethod((char *)"java_FireTransScheduleNotify", (char *)"(IIII)V", &env, &gJinMethod);
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireTransScheduleNotify");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "not found java_FireTransScheduleNotify");
+        LOGE(TAG, "not found java_FireTransScheduleNotify");
 
         return;
     }
@@ -6582,23 +6544,17 @@ void java_FireRecvFromMrsEvent(int iType, short far* pRecvMessage)
     	int iresult = -1;
     	jfieldID id_fieldID;
 
-    	if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller java_FireRecvFromMrsEvent begin %d", iType);
-    	else if(g_WriteLogType == 1)
-        	LOGI(TAG, "java_FireRecvFromMrsEvent begin %d", iType);
+    	LOGI(TAG, "java_FireRecvFromMrsEvent begin %d", iType);
 
     	iresult = getStaticJniMethod((char *)"java_FireRecvFromMrsEvent", (char *)"(ILcom/zte/softda/ocx/conference/ConfMrsEventPara;)V", &env, &gJinMethod);
     	if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     	{
-        	if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireRecvFromMrsEvent");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireRecvFromMrsEvent");
+        	LOGE(TAG, "not found java_FireRecvFromMrsEvent");
 
         	return;
     	}
 
-	//��װjava���ϱ�����
+
 	jclass class_FireRecvFromMrsEvent= env->FindClass("com/zte/softda/ocx/conference/ConfMrsEventPara");
     	jmethodID id_FireRecvFromMrsEvent  = env->GetMethodID(class_FireRecvFromMrsEvent, "<init>", "()V");
     	jobject obj_FireRecvFromMrsEvent = env->NewObject(class_FireRecvFromMrsEvent, id_FireRecvFromMrsEvent);
@@ -6614,37 +6570,37 @@ void java_FireRecvFromMrsEvent(int iType, short far* pRecvMessage)
 				LP_WB_CONTROL_EVENT pWBStruct = (LP_WB_CONTROL_EVENT)pRecvMessage;
 			
 				jclass class_wbEvent= env->FindClass("com/zte/softda/ocx/conference/wb/WBControlEvent");
-    				jmethodID id_wbEvent  = env->GetMethodID(class_wbEvent, "<init>", "()V");
-    				jobject obj_wbEvent = env->NewObject(class_wbEvent, id_wbEvent);		
+                jmethodID id_wbEvent  = env->GetMethodID(class_wbEvent, "<init>", "()V");
+    			jobject obj_wbEvent = env->NewObject(class_wbEvent, id_wbEvent);
 					
-    				id_fieldID = env->GetFieldID(class_wbEvent, "iType", "I");
-    				env->SetIntField(obj_wbEvent, id_fieldID, pWBStruct->iType);
+                id_fieldID = env->GetFieldID(class_wbEvent, "iType", "I");
+                env->SetIntField(obj_wbEvent, id_fieldID, pWBStruct->iType);
 				id_fieldID = env->GetFieldID(class_wbEvent, "iResult", "I");
-    				env->SetIntField(obj_wbEvent, id_fieldID, pWBStruct->iResult);
-    				id_fieldID = env->GetFieldID(class_wbEvent, "chConfURI", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chConfURI));
-    				id_fieldID = env->GetFieldID(class_wbEvent, "chChannelID", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chChannelID));
+                env->SetIntField(obj_wbEvent, id_fieldID, pWBStruct->iResult);
+                id_fieldID = env->GetFieldID(class_wbEvent, "chConfURI", "Ljava/lang/String;");
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chConfURI));
+                id_fieldID = env->GetFieldID(class_wbEvent, "chChannelID", "Ljava/lang/String;");
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chChannelID));
 				id_fieldID = env->GetFieldID(class_wbEvent, "uXWBID", "I");
-    				env->SetIntField(obj_wbEvent, id_fieldID, pWBStruct->uXWBID);
+                env->SetIntField(obj_wbEvent, id_fieldID, pWBStruct->uXWBID);
 				id_fieldID = env->GetFieldID(class_wbEvent, "chSizeX", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chSizeX));
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chSizeX));
 				id_fieldID = env->GetFieldID(class_wbEvent, "chSizeY", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chSizeY));
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chSizeY));
 				id_fieldID = env->GetFieldID(class_wbEvent, "chPosX", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chPosX));
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chPosX));
 				id_fieldID = env->GetFieldID(class_wbEvent, "chPosY", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chPosY));
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chPosY));
 				id_fieldID = env->GetFieldID(class_wbEvent, "chWidth", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chWidth));
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chWidth));
 				id_fieldID = env->GetFieldID(class_wbEvent, "chHeight", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chHeight));
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chHeight));
 				id_fieldID = env->GetFieldID(class_wbEvent, "chResolutionX", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chResolutionX));
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chResolutionX));
 				id_fieldID = env->GetFieldID(class_wbEvent, "chResolutionY", "Ljava/lang/String;");
-    				env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chResolutionY));
+                env->SetObjectField(obj_wbEvent, id_fieldID, JNI_STR(env,pWBStruct->chResolutionY));
 				id_fieldID = env->GetFieldID(class_wbEvent, "iPageCount", "I");
-    				env->SetIntField(obj_wbEvent, id_fieldID, pWBStruct->iPageCount);
+                env->SetIntField(obj_wbEvent, id_fieldID, pWBStruct->iPageCount);
 				//make pagelist
 				if (NULL != pWBStruct->pPageList)
 				{
@@ -6660,7 +6616,7 @@ void java_FireRecvFromMrsEvent(int iType, short far* pRecvMessage)
 							
 						int j = 0;
 						jclass class_ShapeList = env->FindClass("com/zte/softda/ocx/conference/wb/WBShape");
-    						jmethodID id_ShapeList  = env->GetMethodID(class_ShapeList, "<init>", "()V");
+                        jmethodID id_ShapeList  = env->GetMethodID(class_ShapeList, "<init>", "()V");
    						jobjectArray array_ShapeList = env->NewObjectArray(GetShapeListSize(pCurPage->pShapeList), class_ShapeList, NULL);
 						
 						WbShapeListPtr_t pCurShape = pCurPage->pShapeList;
@@ -6951,32 +6907,25 @@ void java_FireGotIMAllPrivateGroupListResult(int iResult, List *pGroupList)
 	
 	int i = 0;
 	int nGroupNum = list_len(pGroupList);
-	
-       if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller java_FireGotIMAllPrivateGroupListResult group number[%d]", nGroupNum);
-       else if(g_WriteLogType == 1)
-        	LOGI(TAG, "rcscontroller java_FireGotIMAllPrivateGroupListResult group number[%d]", nGroupNum);
 
-       iresult = getStaticJniMethod((char *)"java_FireGotIMAllPrivateGroupListResult", (char *)"(Lcom/zte/softda/ocx/FireGotIMAllPrivateGroupList;)V", &env, &gJinMethod);
-       if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
-       {
-       	 if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireGotIMAllPrivateGroupListResult");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireGotIMAllPrivateGroupListResult");
+    LOGI(TAG, "rcscontroller java_FireGotIMAllPrivateGroupListResult group number[%d]", nGroupNum);
 
-	      return;
-    	}
+    iresult = getStaticJniMethod((char *)"java_FireGotIMAllPrivateGroupListResult", (char *)"(Lcom/zte/softda/ocx/FireGotIMAllPrivateGroupList;)V", &env, &gJinMethod);
+    if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
+    {
+        LOGE(TAG, "not found java_FireGotIMAllPrivateGroupListResult");
+        return;
+    }
 	
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FireGotIMAllPrivateGroupList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FireGotIMAllPrivateGroupList");
 	objEvent.NewObject();
 	objEvent.SetIntValue("iResult", iResult);
 	objEvent.SetIntValue("iNum", nGroupNum);
 
-	TraceMsgWindow1(1, "java_FireGotIMAllPrivateGroupListResult objEvent[%d] iResult[%d] iNum[%d]", objEvent.GetObject(), iResult, nGroupNum);
+	LOGI(TAG, "java_FireGotIMAllPrivateGroupListResult objEvent[%d] iResult[%d] iNum[%d]", objEvent.GetObject(), iResult, nGroupNum);
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/IMPrivateGroup");
-    	jobjectArray array_groups = env->NewObjectArray(nGroupNum, class_string, NULL);
+    jobjectArray array_groups = env->NewObjectArray(nGroupNum, class_string, NULL);
 
 	Group_T *pGroup = NULL;
 	for (int i = 0; i < nGroupNum; i++)
@@ -6985,11 +6934,11 @@ void java_FireGotIMAllPrivateGroupListResult(int iResult, List *pGroupList)
 		if (NULL == pGroup)
 			continue;
 
-		JOjbectWrapper objGroup(env, "com/zte/softda/ocx/IMPrivateGroup");
+		JObjectWrapper objGroup(env, "com/zte/softda/ocx/IMPrivateGroup");
 		objGroup.NewObject();
 		objGroup.SetStringValue("cGroupName", pGroup->cGroupName);
 		objGroup.SetStringValue("cGroupIdentifier", pGroup->cIdentifier);
-        	env->SetObjectArrayElement(array_groups, i, objGroup.GetObject());
+        env->SetObjectArrayElement(array_groups, i, objGroup.GetObject());
     	}
 	//free list 
 	if (NULL != pGroupList)
@@ -7011,23 +6960,17 @@ void java_FireGotIMPrivateGroupMemberResult(LPCTSTR pGroupIdendifier, int iResul
 	int i = 0;
 	int nMemberNum = list_len(pMemberList);
 	
-       if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller java_FireGotIMPrivateGroupMemberResult member num[%d]", nMemberNum);
-       else if(g_WriteLogType == 1)
-        	LOGI(TAG, "rcscontroller java_FireGotIMPrivateGroupMemberResult member num[%d]", nMemberNum);
+       LOGI(TAG, "rcscontroller java_FireGotIMPrivateGroupMemberResult member num[%d]", nMemberNum);
 
        iresult = getStaticJniMethod((char *)"java_FireGotIMPrivateGroupMemberResult", (char *)"(Lcom/zte/softda/ocx/FireGotIMPrivateGroupMemberResult;)V", &env, &gJinMethod);
        if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
        {
-       	 if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireGotIMPrivateGroupMemberResult");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireGotIMPrivateGroupMemberResult");
+       	 LOGE(TAG, "not found java_FireGotIMPrivateGroupMemberResult");
 
 	      return;
         }
 	
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FireGotIMPrivateGroupMemberResult");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FireGotIMPrivateGroupMemberResult");
 	objEvent.NewObject();
 	objEvent.SetIntValue("iResult", iResult);
 	objEvent.SetIntValue("iNum", nMemberNum);
@@ -7043,7 +6986,7 @@ void java_FireGotIMPrivateGroupMemberResult(LPCTSTR pGroupIdendifier, int iResul
 		if (NULL == pMember)
 			continue;
 
-		JOjbectWrapper objMember(env, "com/zte/softda/ocx/IMPrivateGroupMember");
+		JObjectWrapper objMember(env, "com/zte/softda/ocx/IMPrivateGroupMember");
 		objMember.NewObject();
 		objMember.SetStringValue("cURI", pMember->cURI);
 		objMember.SetStringValue("cName", pMember->cName);
@@ -7072,23 +7015,17 @@ void java_FireCheckURIIsMOAResult(int iResult, List *pCheckList)
 	int i = 0;
 	int nNum = list_len(pCheckList);
 	
-       if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller java_FireCheckURIIsMOAResult num[%d]", nNum);
-       else if(g_WriteLogType == 1)
-        	LOGI(TAG, "rcscontroller java_FireCheckURIIsMOAResult member num[%d]", nNum);
+       LOGI(TAG, "rcscontroller java_FireCheckURIIsMOAResult member num[%d]", nNum);
 
        iresult = getStaticJniMethod((char *)"java_FireCheckURIIsMOAResult", (char *)"(Lcom/zte/softda/ocx/FireCheckURIIsMOAResult;)V", &env, &gJinMethod);
        if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
        {
-       	 if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireCheckURIIsMOAResult");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireCheckURIIsMOAResult");
+       	 LOGE(TAG, "not found java_FireCheckURIIsMOAResult");
 
 	      return;
     	}
 	
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FireCheckURIIsMOAResult");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FireCheckURIIsMOAResult");
 	objEvent.NewObject();
 	objEvent.SetIntValue("iResult", iResult);
 	objEvent.SetIntValue("iNum", nNum);
@@ -7103,7 +7040,7 @@ void java_FireCheckURIIsMOAResult(int iResult, List *pCheckList)
 		if (NULL == pMember)
 			continue;
 
-		JOjbectWrapper objMember(env, "com/zte/softda/ocx/CheckMOAResult");
+		JObjectWrapper objMember(env, "com/zte/softda/ocx/CheckMOAResult");
 		objMember.NewObject();
 		objMember.SetStringValue("cURI", pMember->cURI);
 		objMember.SetBoolValue("bMOA", pMember->nMOA);
@@ -7125,18 +7062,12 @@ void java_FireSendSoapMessageByXcapResult(int iCode, int iType, LPCTSTR lpcsBody
 	JNIEnv *env;
 	int iresult = -1;
 	
-       if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller java_FireSendSoapMessageByXcapResult iCode[%d] iType[%d]", iCode, iType);
-       else if(g_WriteLogType == 1)
-        	LOGI(TAG, "rcscontroller java_FireSendSoapMessageByXcapResult iCode[%d] iType[%d]", iCode, iType);
+       LOGI(TAG, "rcscontroller java_FireSendSoapMessageByXcapResult iCode[%d] iType[%d]", iCode, iType);
 
        iresult = getStaticJniMethod((char *)"java_FireSendSoapMessageByXcapResult", (char *)"(IILjava/lang/String;)V", &env, &gJinMethod);
        if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
        {
-       	 if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireSendSoapMessageByXcapResult");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireSendSoapMessageByXcapResult");
+       	 LOGE(TAG, "not found java_FireSendSoapMessageByXcapResult");
 
 	      return;
     	}
@@ -7153,13 +7084,13 @@ void java_FireResponseMsgFromHttpAP(LPCTSTR pSessionID, LPCTSTR pRequestLine, in
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireResponseMsgFromHttpAP SessionID[%s] RequestLine[%s] RetCode[%d] ContentType[%s]", 
+	LOGI(TAG, "rcscontroller java_FireResponseMsgFromHttpAP SessionID[%s] RequestLine[%s] RetCode[%d] ContentType[%s]",
         pSessionID, pRequestLine, iRetCode, pContentType);
  
     iresult = getStaticJniMethod((char *)"java_FireResponseMsgFromHttpAP", (char *)"(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireResponseMsgFromHttpAP");
+        LOGE(TAG, "rcscontroller not found java_FireResponseMsgFromHttpAP");
         return;
     }
 
@@ -7175,12 +7106,12 @@ void java_FireGetCheckCodeResult(int iHttpCode, int iResultCode, LPCTSTR lpResul
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireGetCheckCodeResult iHttpCode[%d] iResultCode[%d]", iHttpCode, iResultCode);
+	LOGI(TAG, "rcscontroller java_FireGetCheckCodeResult iHttpCode[%d] iResultCode[%d]", iHttpCode, iResultCode);
   
     iresult = getStaticJniMethod((char *)"java_FireGetCheckCodeResult", (char *)"(IILjava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireGetCheckCodeResult");
+        LOGE(TAG, "rcscontroller not found java_FireGetCheckCodeResult");
         return;
     }
 
@@ -7193,12 +7124,12 @@ void java_FireSendPubAccMsgResult(int iHttpCode, int iResultCode, LPCTSTR lpResu
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireSendPubAccMsgResult iHttpCode[%d] iResultCode[%d] lpPutMsgId[%s] lpMenuId[%s]", iHttpCode, iResultCode, lpPutMsgId, lpMenuId);
+	LOGI(TAG, "rcscontroller java_FireSendPubAccMsgResult iHttpCode[%d] iResultCode[%d] lpPutMsgId[%s] lpMenuId[%s]", iHttpCode, iResultCode, lpPutMsgId, lpMenuId);
   
     iresult = getStaticJniMethod((char *)"java_FireSendPubAccMsgResult", (char *)"(IILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireSendPubAccMsgResult");
+        LOGE(TAG, "rcscontroller not found java_FireSendPubAccMsgResult");
         return;
     }
 
@@ -7211,12 +7142,12 @@ void java_FireGetGrayVersionResult(int iHttpCode, LPCTSTR lpGrayVersion, LPCTSTR
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireGetGrayVersionResult iHttpCode[%d] lpGrayVersion[%s] lpDownloadUri[%s] lpDownloadSize[%s]", iHttpCode, lpGrayVersion, lpDownloadUri, lpDownloadSize);
+	LOGI(TAG, "rcscontroller java_FireGetGrayVersionResult iHttpCode[%d] lpGrayVersion[%s] lpDownloadUri[%s] lpDownloadSize[%s]", iHttpCode, lpGrayVersion, lpDownloadUri, lpDownloadSize);
   
     iresult = getStaticJniMethod((char *)"java_FireGetGrayVersionResult", (char *)"(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireGetGrayVersionResult");
+        LOGE(TAG, "rcscontroller not found java_FireGetGrayVersionResult");
         return;
     }
 
@@ -7229,12 +7160,12 @@ void java_FireUserBindOperResult(int iResultCode, int iOperType, LPCTSTR lpURI, 
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireUserBindOperResult iResultCode[%d] iOperType[%d] lpURI[%s] lpCompanyID[%s]", iResultCode, iOperType, lpURI, lpCompanyID);
+	LOGI(TAG, "rcscontroller java_FireUserBindOperResult iResultCode[%d] iOperType[%d] lpURI[%s] lpCompanyID[%s]", iResultCode, iOperType, lpURI, lpCompanyID);
   
     iresult = getStaticJniMethod((char *)"java_FireUserBindOperResult", (char *)"(IILjava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireUserBindOperResult");
+        LOGE(TAG, "rcscontroller not found java_FireUserBindOperResult");
         return;
     }
 
@@ -7247,12 +7178,12 @@ void java_FireModifyGroupAttributeResult(LPCTSTR lpGroupURI, LPCTSTR lpModType, 
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireModifyGroupAttributeResult iResultCode[%d] lpGroupURI[%s] lpModType[%s] lpNewValue[%s]", iResultCode, lpGroupURI, lpModType, lpNewValue);
+	LOGI(TAG, "rcscontroller java_FireModifyGroupAttributeResult iResultCode[%d] lpGroupURI[%s] lpModType[%s] lpNewValue[%s]", iResultCode, lpGroupURI, lpModType, lpNewValue);
   
     iresult = getStaticJniMethod((char *)"java_FireModifyGroupAttributeResult", (char *)"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireModifyGroupAttributeResult");
+        LOGI(TAG, "rcscontroller not found java_FireModifyGroupAttributeResult");
         return;
     }
 
@@ -7265,13 +7196,13 @@ void java_FireMessageMuteNotifyOperateResult(int iResultCode, int iType, LPCTSTR
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireMessageMuteNotifyOperateResult iResultCode[%d] iType[%d] iGroupNum[%d] iContactNum[%d] iPubAccNum[%d]", 
+	LOGI(TAG, "rcscontroller java_FireMessageMuteNotifyOperateResult iResultCode[%d] iType[%d] iGroupNum[%d] iContactNum[%d] iPubAccNum[%d]", 
         iResultCode, iType, iGroupNum, iContactNum, iPubAccNum);
   
     iresult = getStaticJniMethod((char *)"java_FireMessageMuteNotifyOperateResult", (char *)"(IILjava/lang/String;[Ljava/lang/String;[Ljava/lang/String;[Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireMessageMuteNotifyOperateResult");
+        LOGE(TAG, "rcscontroller not found java_FireMessageMuteNotifyOperateResult");
         return;
     }
 
@@ -7314,7 +7245,7 @@ void java_FireMessageMuteNotifyOperateResult(int iResultCode, int iType, LPCTSTR
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iResultCode, iType, JNI_STR(env,lpURI), NULL, NULL, NULL); 
     }
 
-    TraceMsgWindow1(1, "rcscontroller java_FireMessageMuteNotifyOperateResult Over");
+    LOGI(TAG, "rcscontroller java_FireMessageMuteNotifyOperateResult Over");
 }
 
 void java_FireMessageReceiptNotify(int isGroup, LPCTSTR lpURI, int iListNum, void* lpMsgIDList, char* pMsgIDs)
@@ -7323,13 +7254,13 @@ void java_FireMessageReceiptNotify(int isGroup, LPCTSTR lpURI, int iListNum, voi
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireMessageReceiptNotify isGroup[%d] lpURI[%s] iListNum[%d]", 
+	LOGI(TAG, "rcscontroller java_FireMessageReceiptNotify isGroup[%d] lpURI[%s] iListNum[%d]", 
         isGroup, lpURI, iListNum);
   
     iresult = getStaticJniMethod((char *)"java_FireMessageReceiptNotify", (char *)"(ILjava/lang/String;[Ljava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireMessageReceiptNotify");
+        LOGE(TAG, "rcscontroller not found java_FireMessageReceiptNotify");
         return;
     }
 
@@ -7354,7 +7285,7 @@ void java_FireMessageReceiptNotify(int isGroup, LPCTSTR lpURI, int iListNum, voi
         env->CallStaticVoidMethod(gpostClass, gJinMethod, isGroup, JNI_STR(env,lpURI), NULL, JNI_STR(env,pMsgIDs));   
     }
 
-    TraceMsgWindow1(1, "rcscontroller java_FireMessageReceiptNotify Over");
+    LOGI(TAG, "rcscontroller java_FireMessageReceiptNotify Over");
 }
 
 void java_FireMessageReceiptOperateResult(int iOperType, LPCTSTR sessionID, int iResultCode, LPCTSTR pMsgIDs, void* qryRsp)
@@ -7363,13 +7294,13 @@ void java_FireMessageReceiptOperateResult(int iOperType, LPCTSTR sessionID, int 
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireMessageReceiptOperateResult iOperType[%d] sessionID[%s] iResultCode[%d] pMsgIDs[%s]", 
+	LOGI(TAG, "rcscontroller java_FireMessageReceiptOperateResult iOperType[%d] sessionID[%s] iResultCode[%d] pMsgIDs[%s]", 
         iOperType, sessionID, iResultCode, pMsgIDs);
   
     iresult = getStaticJniMethod((char *)"java_FireMessageReceiptOperateResult", (char *)"(ILjava/lang/String;ILjava/lang/String;Lcom/zte/softda/ocx/MessageReceiptQryRsp;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireMessageReceiptOperateResult");
+        LOGE(TAG, "rcscontroller not found java_FireMessageReceiptOperateResult");
         return;
     }
 
@@ -7380,7 +7311,7 @@ void java_FireMessageReceiptOperateResult(int iOperType, LPCTSTR sessionID, int 
     else
     {
         MsgReceiptQryRsp_T *pRsp = (MsgReceiptQryRsp_T *)qryRsp;
-        JOjbectWrapper objEvent(env, "com/zte/softda/ocx/MessageReceiptQryRsp");
+        JObjectWrapper objEvent(env, "com/zte/softda/ocx/MessageReceiptQryRsp");
     	objEvent.NewObject();
 
         objEvent.SetIntValue("isGroup", pRsp->isGroup);
@@ -7393,7 +7324,7 @@ void java_FireMessageReceiptOperateResult(int iOperType, LPCTSTR sessionID, int 
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iOperType, JNI_STR(env,sessionID), iResultCode, JNI_STR(env,pMsgIDs), objEvent.GetObject());     
     }
 
-    TraceMsgWindow1(1, "rcscontroller java_FireMessageReceiptOperateResult Over");
+    LOGI(TAG, "rcscontroller java_FireMessageReceiptOperateResult Over");
 }    
 
 void java_FireIMSMessageListArrived(int nNum, void **pMsgList)
@@ -7402,22 +7333,22 @@ void java_FireIMSMessageListArrived(int nNum, void **pMsgList)
 	JNIEnv *env;
 	int iresult = -1;
 	
-    TraceMsgWindow1(1, "rcscontroller java_FireIMSMessageListArrived nNum[%d]", nNum);
+    LOGI(TAG, "rcscontroller java_FireIMSMessageListArrived nNum[%d]", nNum);
 
     if (NULL == pMsgList)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireIMSMessageListArrived pMsgList is NULL");   
+        LOGI(TAG, "rcscontroller java_FireIMSMessageListArrived pMsgList is NULL");   
     	return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireIMSMessageListArrived", (char *)"(Lcom/zte/softda/ocx/FireMessageList;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireIMSMessageListArrived");
+        LOGE(TAG, "rcscontroller not found java_FireIMSMessageListArrived");
         return;
     }
 	
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FireMessageList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FireMessageList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FireMessageItem");
@@ -7430,7 +7361,7 @@ void java_FireIMSMessageListArrived(int nNum, void **pMsgList)
 		if (NULL == pMsgItem)
 			continue;
 
-		JOjbectWrapper objMsgItem(env, "com/zte/softda/ocx/FireMessageItem");
+		JObjectWrapper objMsgItem(env, "com/zte/softda/ocx/FireMessageItem");
 		objMsgItem.NewObject();
 		objMsgItem.SetIntValue("iType", pMsgItem->iType);
         objMsgItem.SetIntValue("iReceipt", pMsgItem->iReceipt);
@@ -7444,7 +7375,7 @@ void java_FireIMSMessageListArrived(int nNum, void **pMsgList)
 
     objEvent.SetContainsObject("msglist", "[Lcom/zte/softda/ocx/FireMessageItem;", array_msgs);
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireIMSMessageListArrived fire over");
+	LOGI(TAG, "java_FireIMSMessageListArrived fire over");
 }
 
 void java_FireTry403FlowBegin()
@@ -7453,18 +7384,12 @@ void java_FireTry403FlowBegin()
 	JNIEnv *env;
 	int iresult = -1;
 	
-       if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller java_FireTry403FlowBegin" );
-       else if(g_WriteLogType == 1)
-        	LOGI(TAG, "rcscontroller java_FireTry403FlowBegin" );
+       LOGI(TAG, "rcscontroller java_FireTry403FlowBegin" );
 
 	iresult = getStaticJniMethod((char *)"java_FireTry403FlowBegin", (char *)"()V", &env, &gJinMethod);
        if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
        {
-       	 if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireTry403FlowBegin");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireTry403FlowBegin");
+       	 LOGE(TAG, "not found java_FireTry403FlowBegin");
 
 	      return;
     	}
@@ -7477,18 +7402,12 @@ void java_FireTry403FlowResult(int iResult)
 	JNIEnv *env;
 	int iresult = -1;
 	
-   if(g_WriteLogType == 2)
-    	TraceMsgWindow1(1, "rcscontroller java_FireTry403FlowResult iResult[%d]", iResult);
-   else if(g_WriteLogType == 1)
-    	LOGI(TAG, "rcscontroller java_FireTry403FlowResult iResult[%d]", iResult);
+    LOGI(TAG, "rcscontroller java_FireTry403FlowResult iResult[%d]", iResult);
 
 	iresult = getStaticJniMethod((char *)"java_FireTry403FlowResult", (char *)"(I)V", &env, &gJinMethod);
        if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
        {
-       	 if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireTry403FlowResult");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireTry403FlowResult");
+       	 LOGE(TAG, "not found java_FireTry403FlowResult");
 
 	      return;
     	}
@@ -7502,52 +7421,39 @@ void java_FireCheckConnectResult(int iResult, int delaysec)
     JNIEnv *env;
     int iresult = -1;
 
-    if(g_WriteLogType == 2)
-    	TraceMsgWindow1(1, "rcscontroller java_FireCheckConnectResult iResult[%d] delaysec[%d]", iResult, delaysec);
-    else if(g_WriteLogType == 1)
-    	LOGI(TAG, "rcscontroller java_FireCheckConnectResult iResult[%d] delaysec[%d]", iResult, delaysec);
+    LOGI(TAG, "rcscontroller java_FireCheckConnectResult iResult[%d] delaysec[%d]", iResult, delaysec);
 
     iresult = getStaticJniMethod((char *)"java_FireCheckConnectResult", (char *)"(II)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-    	 if(g_WriteLogType == 2)
-        		TraceMsgWindow1(1, "rcscontroller not found java_FireCheckConnectResult");
-    	else if(g_WriteLogType == 1)
-        		LOGI(TAG, "not found java_FireCheckConnectResult");
+    	 LOGE(TAG, "not found java_FireCheckConnectResult");
 
       return;
     }
 
     env->CallStaticVoidMethod(gpostClass, gJinMethod, iResult, delaysec);
 }
-//Ⱥ��������Ϣ����֪ͨ
+
 void java_FireIMSGroupOfflineMsgNotify(int iMsgNum, LPCTSTR cGroupURI, LPCTSTR pMessage, LPCTSTR timestamp)
 {
     jmethodID gJinMethod;
     JNIEnv *env;
     int iresult = -1;
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireIMSGroupOfflineMsgNotify iMsgNum[%d] cGroupURI[%s] pMessage[%s]",
-                        iMsgNum, cGroupURI, pMessage);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "java_FireIMSGroupOfflineMsgNotify iMsgNum[%d] cGroupURI[%s] pMessage[%s]", iMsgNum, cGroupURI, pMessage);
+    LOGI(TAG, "java_FireIMSGroupOfflineMsgNotify iMsgNum[%d] cGroupURI[%s] pMessage[%s]", iMsgNum, cGroupURI, pMessage);
 
     iresult = getStaticJniMethod((char *)"java_FireIMSGroupOfflineMsgNotify", (char *)"(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireIMSGroupOfflineMsgNotify");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "not found java_FireIMSGroupOfflineMsgNotify");
+        LOGE(TAG, "not found java_FireIMSGroupOfflineMsgNotify");
         return;
     }
     env->CallStaticVoidMethod(gpostClass, gJinMethod, iMsgNum, JNI_STR(env,cGroupURI), JNI_STR(env,pMessage), JNI_STR(env,timestamp));
 
-    TraceMsgWindow1(1, "rcscontroller java_FireIMSGroupOfflineMsgNotify fire over");
+    LOGI(TAG, "rcscontroller java_FireIMSGroupOfflineMsgNotify fire over");
 }
 
-//Ⱥ��������Ϣ֪ͨ����
+
 //void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int nOverFlag, LPCTSTR cGroupURI, LPCTSTR cMaxTimeQue, int nNum, List *pMsgList)
 void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int nOverFlag, LPCTSTR cGroupURI, LPCTSTR cMaxTimeQue, int nNum, void **pMsgList)
 {
@@ -7555,32 +7461,23 @@ void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int 
 	JNIEnv *env;
 	int iresult = -1;
 	
-       if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller java_FireIMSGotGroupOfflineMsgResult nNum[%d]", nNum);
-       else if(g_WriteLogType == 1)
-        	LOGI(TAG, "rcscontroller java_FireIMSGotGroupOfflineMsgResult nNum[%d]", nNum);
+       LOGI(TAG, "rcscontroller java_FireIMSGotGroupOfflineMsgResult nNum[%d]", nNum);
 
        if (NULL == pMsgList)
        {
-       	 if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller java_FireIMSGotGroupOfflineMsgResult pMsgList is NULL");
-        else if(g_WriteLogType == 1)
-            		LOGI(TAG, "rcscontroller java_FireIMSGotGroupOfflineMsgResult pMsgList is NULL");       
+       	 LOGE(TAG, "rcscontroller java_FireIMSGotGroupOfflineMsgResult pMsgList is NULL");
 //       return;
        }
 
 	iresult = getStaticJniMethod((char *)"java_FireIMSGotGroupOfflineMsgResult", (char *)"(IIILjava/lang/String;Ljava/lang/String;Lcom/zte/softda/ocx/FireOfflineMsgList;)V", &env, &gJinMethod);
        if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
        {
-       	 if(g_WriteLogType == 2)
-            		TraceMsgWindow1(1, "rcscontroller not found java_FireIMSGotGroupOfflineMsgResult");
-        	else if(g_WriteLogType == 1)
-            		LOGI(TAG, "not found java_FireIMSGotGroupOfflineMsgResult");
+       	 LOGE(TAG, "not found java_FireIMSGotGroupOfflineMsgResult");
 
 	      return;
     	}
 	
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FireOfflineMsgList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FireOfflineMsgList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FireOfflineMsgItem");
@@ -7594,14 +7491,14 @@ void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int 
 		if (NULL == pMsgItem)
 			continue;
 
-        //�����Ⱥ���Ա�仯��Ϣ���ɿؼ�����������֪ͨUI
+
         if(pMsgItem->iType == IM_TYPE_GROUP_MEMBER_CHANGED)
-        {//��cID����UI��������
+        {
             DoPublicGroupMemberChanged(pMsgItem->pMessage, pMsgItem->cID, FALSE);        
         }
         else
         {
-            JOjbectWrapper objMsgItem(env, "com/zte/softda/ocx/FireOfflineMsgItem");
+            JObjectWrapper objMsgItem(env, "com/zte/softda/ocx/FireOfflineMsgItem");
     		objMsgItem.NewObject();
     		objMsgItem.SetStringValue("cID", pMsgItem->cID);
     		objMsgItem.SetStringValue("cSender", pMsgItem->cSender);
@@ -7615,7 +7512,7 @@ void java_FireIMSGotGroupOfflineMsgResult(int iReturnCode, int nMethodType, int 
     objEvent.SetContainsObject("msglist", "[Lcom/zte/softda/ocx/FireOfflineMsgItem;", array_msgs);
     
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, iReturnCode, nMethodType, nOverFlag, JNI_STR(env,cGroupURI), JNI_STR(env,cMaxTimeQue),objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireIMSGotGroupOfflineMsgResult fire over");
+	LOGI(TAG, "java_FireIMSGotGroupOfflineMsgResult fire over");
 }
 
 void java_FireGotPubAccountListResult(int iResult, int nNum, void **pPubAccountList)
@@ -7626,33 +7523,27 @@ void java_FireGotPubAccountListResult(int iResult, int nNum, void **pPubAccountL
 
     if(nNum > MAX_PUBACCOUNT_NUM)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireGotPubAccountListResult nNum[%d] is abnormal, MAX_PUBACCOUNT_NUM[%d]", nNum, MAX_PUBACCOUNT_NUM);
+        LOGI(TAG, "rcscontroller java_FireGotPubAccountListResult nNum[%d] is abnormal, MAX_PUBACCOUNT_NUM[%d]", nNum, MAX_PUBACCOUNT_NUM);
         return;
     }
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireGotPubAccountListResult nNum[%d]", nNum);
+	LOGI(TAG, "rcscontroller java_FireGotPubAccountListResult nNum[%d]", nNum);
 
     if (NULL == pPubAccountList)
     {
-    	 if(g_WriteLogType == 2)
-        		TraceMsgWindow1(1, "rcscontroller java_FireGotPubAccountListResult pPubAccountList is NULL");
-    	else if(g_WriteLogType == 1)
-        		LOGI(TAG, "rcscontroller java_FireGotPubAccountListResult pPubAccountList is NULL");       
+    	 LOGI(TAG, "rcscontroller java_FireGotPubAccountListResult pPubAccountList is NULL");
     	return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireGotPubAccountListResult", (char *)"(ILcom/zte/softda/ocx/FirePubAccountList;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-    	 if(g_WriteLogType == 2)
-        		TraceMsgWindow1(1, "rcscontroller not found java_FireGotPubAccountListResult");
-    	else if(g_WriteLogType == 1)
-        		LOGI(TAG, "not found java_FireGotPubAccountListResult");
+    	 LOGE(TAG, "not found java_FireGotPubAccountListResult");
 
-      return;
+         return;
     }
     
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FirePubAccountList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FirePubAccountList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FirePubAccountItem");
@@ -7665,7 +7556,7 @@ void java_FireGotPubAccountListResult(int iResult, int nNum, void **pPubAccountL
 		if (NULL == pPubAccountItem)
 			continue;
 
-		JOjbectWrapper objPubAccountItem(env, "com/zte/softda/ocx/FirePubAccountItem");
+		JObjectWrapper objPubAccountItem(env, "com/zte/softda/ocx/FirePubAccountItem");
 		objPubAccountItem.NewObject();
 
 		objPubAccountItem.SetStringValue("PubAccId", pPubAccountItem->PubAccId);
@@ -7683,7 +7574,7 @@ void java_FireGotPubAccountListResult(int iResult, int nNum, void **pPubAccountL
     }
     objEvent.SetContainsObject("pubAccountList", "[Lcom/zte/softda/ocx/FirePubAccountItem;", array_msgs);
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, iResult, objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireGotPubAccountListResult fire over");
+	LOGI(TAG, "java_FireGotPubAccountListResult fire over");
 }
 
 void java_FireIMSGotPublishMsgResult(int msgType, LPCTSTR localMsgID, LPCTSTR pubAccId, LPCTSTR cTime, LPCTSTR msgid, int seq, int nNum, void **pMsgList)
@@ -7694,31 +7585,28 @@ void java_FireIMSGotPublishMsgResult(int msgType, LPCTSTR localMsgID, LPCTSTR pu
 
     if(nNum > MAX_PUBMSG_ITEM_NUM)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireIMSGotPublishMsgResult nNum[%d] is abnormal, MAX_PUBMSG_ITEM_NUM[%d]", nNum, MAX_PUBMSG_ITEM_NUM);
+        LOGE(TAG, "rcscontroller java_FireIMSGotPublishMsgResult nNum[%d] is abnormal, MAX_PUBMSG_ITEM_NUM[%d]", nNum, MAX_PUBMSG_ITEM_NUM);
         return;
     }
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireIMSGotPublishMsgResult msgType[%d] localMsgID[%s] nNum[%d] pubAccId[%s] msgid[%s] seq[%d]", 
+	LOGI(TAG, "rcscontroller java_FireIMSGotPublishMsgResult msgType[%d] localMsgID[%s] nNum[%d] pubAccId[%s] msgid[%s] seq[%d]", 
 	    msgType, localMsgID, nNum, pubAccId, msgid, seq);
 
     if (NULL == pMsgList)
     {
-		TraceMsgWindow1(1, "rcscontroller java_FireIMSGotPublishMsgResult pMsgList is NULL");   
+		LOGE(TAG, "rcscontroller java_FireIMSGotPublishMsgResult pMsgList is NULL");
         return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireIMSGotPublishMsgResult", (char *)"(Lcom/zte/softda/ocx/FirePublishMsgList;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-        	TraceMsgWindow1(1, "rcscontroller not found java_FireIMSGotPublishMsgResult");
-        else if(g_WriteLogType == 1)
-        	LOGI(TAG, "not found java_FireIMSGotPublishMsgResult");
+        LOGI(TAG, "not found java_FireIMSGotPublishMsgResult");
 
         return;
     }
 	
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FirePublishMsgList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FirePublishMsgList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FirePublishMsgItem");
@@ -7731,7 +7619,7 @@ void java_FireIMSGotPublishMsgResult(int msgType, LPCTSTR localMsgID, LPCTSTR pu
 		if (NULL == pMsgItem)
 			continue;
    
-        JOjbectWrapper objMsgItem(env, "com/zte/softda/ocx/FirePublishMsgItem");
+        JObjectWrapper objMsgItem(env, "com/zte/softda/ocx/FirePublishMsgItem");
 		objMsgItem.NewObject();
 		objMsgItem.SetStringValue("text", pMsgItem->cText);
 		objMsgItem.SetStringValue("img", pMsgItem->cImg);
@@ -7760,7 +7648,7 @@ void java_FireIMSGotPublishMsgResult(int msgType, LPCTSTR localMsgID, LPCTSTR pu
     objEvent.SetContainsObject("msglist", "[Lcom/zte/softda/ocx/FirePublishMsgItem;", array_msgs);
     
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireIMSGotPublishMsgResult fire over");
+	LOGI(TAG, "java_FireIMSGotPublishMsgResult fire over");
 }
 
 void java_FireAddOnePubAccountResult(int iResult, int nNum, void **pPubAccountList)
@@ -7769,37 +7657,28 @@ void java_FireAddOnePubAccountResult(int iResult, int nNum, void **pPubAccountLi
 	JNIEnv *env;
 	int iresult = -1;
 	
-    if(g_WriteLogType == 2)
-    	TraceMsgWindow1(1, "rcscontroller java_FireAddOnePubAccountResult nNum[%d]", nNum);
-    else if(g_WriteLogType == 1)
-    	LOGI(TAG, "rcscontroller java_FireAddOnePubAccountResult nNum[%d]", nNum);
+    LOGI(TAG, "rcscontroller java_FireAddOnePubAccountResult nNum[%d]", nNum);
 
     if (NULL == pPubAccountList)
     {
-    	 if(g_WriteLogType == 2)
-        		TraceMsgWindow1(1, "rcscontroller java_FireAddOnePubAccountResult pPubAccountList is NULL");
-    	else if(g_WriteLogType == 1)
-        		LOGI(TAG, "rcscontroller java_FireAddOnePubAccountResult pPubAccountList is NULL");       
+    	 LOGE(TAG, "rcscontroller java_FireAddOnePubAccountResult pPubAccountList is NULL");
     	return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireAddOnePubAccountResult", (char *)"(ILcom/zte/softda/ocx/FirePubAccountItem;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-    	 if(g_WriteLogType == 2)
-        		TraceMsgWindow1(1, "rcscontroller not found java_FireAddOnePubAccountResult");
-    	else if(g_WriteLogType == 1)
-        		LOGI(TAG, "not found java_FireAddOnePubAccountResult");
+    	 LOGE(TAG, "not found java_FireAddOnePubAccountResult");
 
       return;
     }
     
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FirePubAccountItem");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FirePubAccountItem");
 	objEvent.NewObject();
 
 	PubAccount_T *pPubAccountItem = NULL;
 	if(nNum >= 1)
-    {//�������nNum=1
+    {
        	pPubAccountItem = (PubAccount_T*)pPubAccountList[0];
 		if (NULL != pPubAccountItem)
         {      
@@ -7818,7 +7697,7 @@ void java_FireAddOnePubAccountResult(int iResult, int nNum, void **pPubAccountLi
     }
 
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, iResult, objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireAddOnePubAccountResult fire over");
+	LOGI(TAG, "java_FireAddOnePubAccountResult fire over");
 }
 
 void java_FireDeleteOnePubAccountResult(int iResult, LPCTSTR pubAccId)
@@ -7827,24 +7706,18 @@ void java_FireDeleteOnePubAccountResult(int iResult, LPCTSTR pubAccId)
 	JNIEnv *env;
 	int iresult = -1;
 	
-    if(g_WriteLogType == 2)
-    	TraceMsgWindow1(1, "rcscontroller java_FireDeleteOnePubAccountResult iResult[%d] pubAccId[%s]", iResult, pubAccId);
-    else if(g_WriteLogType == 1)
-    	LOGI(TAG, "rcscontroller java_FireDeleteOnePubAccountResult iResult[%d] pubAccId[%s]", iResult, pubAccId);
+    LOGI(TAG, "rcscontroller java_FireDeleteOnePubAccountResult iResult[%d] pubAccId[%s]", iResult, pubAccId);
 
 	iresult = getStaticJniMethod((char *)"java_FireDeleteOnePubAccountResult", (char *)"(ILjava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-    	 if(g_WriteLogType == 2)
-        		TraceMsgWindow1(1, "rcscontroller not found java_FireDeleteOnePubAccountResult");
-    	else if(g_WriteLogType == 1)
-        		LOGI(TAG, "not found java_FireDeleteOnePubAccountResult");
+    	 LOGI(TAG, "not found java_FireDeleteOnePubAccountResult");
 
       return;
     }
     
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, iResult, JNI_STR(env,pubAccId));
-	TraceMsgWindow1(1, "java_FireDeleteOnePubAccountResult fire over");
+	LOGI(TAG, "java_FireDeleteOnePubAccountResult fire over");
 }
 
 void java_FireGotPubAccountMenuResult(int iResult, LPCTSTR pubAccId, LPCTSTR etag, int nNum, void **pPubAccountMenu)
@@ -7853,22 +7726,22 @@ void java_FireGotPubAccountMenuResult(int iResult, LPCTSTR pubAccId, LPCTSTR eta
 	JNIEnv *env;
 	int iresult = -1;
 	
-    TraceMsgWindow1(1, "rcscontroller java_FireGotPubAccountMenuResult nNum[%d]", nNum);  
+    LOGI(TAG, "rcscontroller java_FireGotPubAccountMenuResult nNum[%d]", nNum);  
 
     if (NULL == pPubAccountMenu)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireGotPubAccountMenuResult pPubAccountMenu is NULL");   
+        LOGE(TAG, "rcscontroller java_FireGotPubAccountMenuResult pPubAccountMenu is NULL");
     	return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireGotPubAccountMenuResult", (char *)"(ILjava/lang/String;Ljava/lang/String;Lcom/zte/softda/ocx/FirePubAccountMenuList;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireGotPubAccountMenuResult");
+        LOGE(TAG, "rcscontroller not found java_FireGotPubAccountMenuResult");
         return;
     }
     
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FirePubAccountMenuList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FirePubAccountMenuList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FirePubAccountMenuItem");
@@ -7881,7 +7754,7 @@ void java_FireGotPubAccountMenuResult(int iResult, LPCTSTR pubAccId, LPCTSTR eta
 		if (NULL == pPubAccMenuItem)
 			continue;
 
-		JOjbectWrapper objPubAccMenuItem(env, "com/zte/softda/ocx/FirePubAccountMenuItem");
+		JObjectWrapper objPubAccMenuItem(env, "com/zte/softda/ocx/FirePubAccountMenuItem");
 		objPubAccMenuItem.NewObject();
 
 		objPubAccMenuItem.SetStringValue("MenuId", pPubAccMenuItem->MenuId);
@@ -7899,7 +7772,7 @@ void java_FireGotPubAccountMenuResult(int iResult, LPCTSTR pubAccId, LPCTSTR eta
     }
     objEvent.SetContainsObject("pubAccountMenuList", "[Lcom/zte/softda/ocx/FirePubAccountMenuItem;", array_msgs);
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, iResult, JNI_STR(env,pubAccId), JNI_STR(env,etag), objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireGotPubAccountMenuResult fire over");
+	LOGI(TAG, "java_FireGotPubAccountMenuResult fire over");
 }
 
 void java_FireSearchPubAccountResult(int iResult, int iType, int pageNo, int pageSize, int nNum, void **pPubAccountList)
@@ -7908,22 +7781,22 @@ void java_FireSearchPubAccountResult(int iResult, int iType, int pageNo, int pag
 	JNIEnv *env;
 	int iresult = -1;
 	
-    TraceMsgWindow1(1, "rcscontroller java_FireSearchPubAccountResult iResult[%d] iType[%d] pageNo[%d] nNum[%d]", iResult, iType, pageNo, nNum);
+    LOGI(TAG, "rcscontroller java_FireSearchPubAccountResult iResult[%d] iType[%d] pageNo[%d] nNum[%d]", iResult, iType, pageNo, nNum);
 
     if (NULL == pPubAccountList)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireSearchPubAccountResult pPubAccountList is NULL"); 
+        LOGE(TAG, "rcscontroller java_FireSearchPubAccountResult pPubAccountList is NULL");
     	return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireSearchPubAccountResult", (char *)"(IIIILcom/zte/softda/ocx/FirePubAccountList;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireSearchPubAccountResult");
+        LOGE(TAG, "rcscontroller not found java_FireSearchPubAccountResult");
         return;
     }
     
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FirePubAccountList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FirePubAccountList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FirePubAccountItem");
@@ -7936,7 +7809,7 @@ void java_FireSearchPubAccountResult(int iResult, int iType, int pageNo, int pag
 		if (NULL == pPubAccountItem)
 			continue;
 
-		JOjbectWrapper objPubAccountItem(env, "com/zte/softda/ocx/FirePubAccountItem");
+		JObjectWrapper objPubAccountItem(env, "com/zte/softda/ocx/FirePubAccountItem");
 		objPubAccountItem.NewObject();
 
 		objPubAccountItem.SetStringValue("PubAccId", pPubAccountItem->PubAccId);
@@ -7954,7 +7827,7 @@ void java_FireSearchPubAccountResult(int iResult, int iType, int pageNo, int pag
     }
     objEvent.SetContainsObject("pubAccountList", "[Lcom/zte/softda/ocx/FirePubAccountItem;", array_msgs);
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, iResult, iType, pageNo, pageSize, objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireSearchPubAccountResult fire over");
+	LOGI(TAG, "java_FireSearchPubAccountResult fire over");
 }
 
 void java_FireGetRecommendContactResult(int iResult, int pageNo, int pageSize, int nNum, void **pContactInfoList)
@@ -7963,21 +7836,21 @@ void java_FireGetRecommendContactResult(int iResult, int pageNo, int pageSize, i
 	JNIEnv *env;
 	int iresult = -1;
 	
-    TraceMsgWindow1(1, "rcscontroller java_FireGetRecommendContactResult iResult[%d] pageNo[%d] nNum[%d]", iResult, pageNo, nNum);
+    LOGI(TAG, "rcscontroller java_FireGetRecommendContactResult iResult[%d] pageNo[%d] nNum[%d]", iResult, pageNo, nNum);
     if (NULL == pContactInfoList)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireGetRecommendContactResult pPubAccountList is NULL"); 
+        LOGE(TAG, "rcscontroller java_FireGetRecommendContactResult pPubAccountList is NULL");
     	return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireGetRecommendContactResult", (char *)"(IIILcom/zte/softda/ocx/FireRecommendContactList;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireGetRecommendContactResult");
+        LOGE(TAG, "rcscontroller not found java_FireGetRecommendContactResult");
         return;
     }
     
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FireRecommendContactList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FireRecommendContactList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FireRecommendContactItem");
@@ -7990,7 +7863,7 @@ void java_FireGetRecommendContactResult(int iResult, int pageNo, int pageSize, i
 		if (NULL == pContactInfoItem)
 			continue;
 
-		JOjbectWrapper objRecommendContactItem(env, "com/zte/softda/ocx/FireRecommendContactItem");
+		JObjectWrapper objRecommendContactItem(env, "com/zte/softda/ocx/FireRecommendContactItem");
 		objRecommendContactItem.NewObject();
 
 		objRecommendContactItem.SetStringValue("Uri", pContactInfoItem->Uri);
@@ -7999,7 +7872,7 @@ void java_FireGetRecommendContactResult(int iResult, int pageNo, int pageSize, i
     }
     objEvent.SetContainsObject("contactList", "[Lcom/zte/softda/ocx/FireRecommendContactItem;", array_msgs);
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, iResult, pageNo, pageSize, objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireGetRecommendContactResult fire over");
+	LOGI(TAG, "java_FireGetRecommendContactResult fire over");
 }
 
 void java_FireUserCodeMoaInfoResult(int iType, int iResult, LPCTSTR msgId, LPCTSTR etag, int nNum, void **pUserMoaInfo)
@@ -8008,22 +7881,22 @@ void java_FireUserCodeMoaInfoResult(int iType, int iResult, LPCTSTR msgId, LPCTS
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireUserCodeMoaInfoResult iType[%d] iResult[%d] etag[%s] nNum[%d]", iType, iResult, etag, nNum);
+	LOGI(TAG, "rcscontroller java_FireUserCodeMoaInfoResult iType[%d] iResult[%d] etag[%s] nNum[%d]", iType, iResult, etag, nNum);
  
     if (NULL == pUserMoaInfo)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireUserCodeMoaInfoResult pUserMoaInfo is NULL");      
+        LOGE(TAG, "rcscontroller java_FireUserCodeMoaInfoResult pUserMoaInfo is NULL");
     	return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireUserCodeMoaInfoResult", (char *)"(IILjava/lang/String;Ljava/lang/String;Lcom/zte/softda/ocx/FireUserCodeMoaInfoList;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireUserCodeMoaInfoResult");
+        LOGE(TAG, "rcscontroller not found java_FireUserCodeMoaInfoResult");
         return;
     }
     
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/FireUserCodeMoaInfoList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/FireUserCodeMoaInfoList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/FireUserCodeMoaInfoItem");
@@ -8036,7 +7909,7 @@ void java_FireUserCodeMoaInfoResult(int iType, int iResult, LPCTSTR msgId, LPCTS
 		if (NULL == pUserMoaInfoItem)
 			continue;
 
-		JOjbectWrapper objPubAccountItem(env, "com/zte/softda/ocx/FireUserCodeMoaInfoItem");
+		JObjectWrapper objPubAccountItem(env, "com/zte/softda/ocx/FireUserCodeMoaInfoItem");
 		objPubAccountItem.NewObject();
 
 		objPubAccountItem.SetStringValue("UserCode", pUserMoaInfoItem->UserCode);
@@ -8045,7 +7918,7 @@ void java_FireUserCodeMoaInfoResult(int iType, int iResult, LPCTSTR msgId, LPCTS
     }
     objEvent.SetContainsObject("UserCodeMoaInfoList", "[Lcom/zte/softda/ocx/FireUserCodeMoaInfoItem;", array_msgs);
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, iType, iResult, JNI_STR(env,msgId), JNI_STR(env,etag), objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireUserCodeMoaInfoResult fire over");
+	LOGI(TAG, "java_FireUserCodeMoaInfoResult fire over");
 }
 
 void java_FireGet2DCodeInfoResult(int iType, int iReturnCode, LPCTSTR pDataStr, LPCTSTR jsonKey, LPCTSTR validTime, int codeType, LPCTSTR msgId)
@@ -8054,19 +7927,19 @@ void java_FireGet2DCodeInfoResult(int iType, int iReturnCode, LPCTSTR pDataStr, 
 	JNIEnv *env;
 	int iresult = -1;
 
-    TraceMsgWindow1(1, "rcscontroller java_FireGet2DCodeInfoResult iType[%d] iReturnCode[%d] validTime[%s] jsonKey[%s] codeType[%d] msgId[%s]", 
+    LOGI(TAG, "rcscontroller java_FireGet2DCodeInfoResult iType[%d] iReturnCode[%d] validTime[%s] jsonKey[%s] codeType[%d] msgId[%s]", 
         iType, iReturnCode, validTime, jsonKey, codeType, msgId);
 
 	iresult = getStaticJniMethod((char *)"java_FireGet2DCodeInfoResult", (char *)"(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireGet2DCodeInfoResult");
+        LOGE(TAG, "rcscontroller not found java_FireGet2DCodeInfoResult");
         return;
     }
 	
     if (NULL == pDataStr)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireGet2DCodeInfoResult pDataStr is NULL"); 
+        LOGE(TAG, "rcscontroller java_FireGet2DCodeInfoResult pDataStr is NULL");
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iType, iReturnCode, JNI_STR(env,""), JNI_STR(env,jsonKey), JNI_STR(env,validTime), codeType, JNI_STR(env,msgId));
     }
     else
@@ -8075,7 +7948,7 @@ void java_FireGet2DCodeInfoResult(int iType, int iReturnCode, LPCTSTR pDataStr, 
         env->CallStaticVoidMethod(gpostClass, gJinMethod, iType, iReturnCode, JNI_STR(env,pDataStr), JNI_STR(env,jsonKey), JNI_STR(env,validTime), codeType, JNI_STR(env,msgId));
     }
     	
-	TraceMsgWindow1(1, "java_FireGet2DCodeInfoResult fire over");
+	LOGI(TAG, "java_FireGet2DCodeInfoResult fire over");
 }
 
 void java_FireGetSensWordListResult(int nNum, void *pWordList)
@@ -8086,15 +7959,15 @@ void java_FireGetSensWordListResult(int nNum, void *pWordList)
 
     if(nNum > MAX_SENSWORD_NUM)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireGetSensWordListResult nNum[%d] is abnormal, MAX_SENSWORD_NUM[%d]", nNum, MAX_SENSWORD_NUM);
+        LOGE(TAG, "rcscontroller java_FireGetSensWordListResult nNum[%d] is abnormal, MAX_SENSWORD_NUM[%d]", nNum, MAX_SENSWORD_NUM);
         return;
     }
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireGetSensWordListResult nNum[%d]", nNum);    
+	LOGI(TAG, "rcscontroller java_FireGetSensWordListResult nNum[%d]", nNum);    
 
     if (NULL == pWordList)
     {
-		TraceMsgWindow1(1, "rcscontroller java_FireGetSensWordListResult pWordList is NULL");    
+		LOGE(TAG, "rcscontroller java_FireGetSensWordListResult pWordList is NULL");
     	return;
     }
 
@@ -8102,7 +7975,7 @@ void java_FireGetSensWordListResult(int nNum, void *pWordList)
 	iresult = getStaticJniMethod((char *)"java_FireGetSensWordListResult", (char *)"(I[Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-		TraceMsgWindow1(1, "rcscontroller not found java_FireGetSensWordListResult");
+		LOGE(TAG, "rcscontroller not found java_FireGetSensWordListResult");
         return;
     }
     
@@ -8116,7 +7989,7 @@ void java_FireGetSensWordListResult(int nNum, void *pWordList)
         env->DeleteLocalRef(sensWord);
     }
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, nNum, array_words);
-	TraceMsgWindow1(1, "java_FireGetSensWordListResult fire over");
+	LOGI(TAG, "java_FireGetSensWordListResult fire over");
 }
 
 //lmd20141204
@@ -8126,19 +7999,13 @@ void java_FireStartVNCDLLEvent(LPCTSTR pLocalIP, int iLocalPort,LPCTSTR pIP, int
     JNIEnv *env;
     int iresult = -1;
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireStartVNCDLLEvent pLocalIP[%s] iLocalPort[%d] pIP[%s] iPort[%d] pDPassword[%s] plinkid[%s]",pLocalIP,iLocalPort, pIP, iPort,pDPassword,plinkid);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "java_FireStartVNCDLLEvent pLocalIP[%s] iLocalPort[%d] pIP[%s] iPort[%d] pDPassword[%s] plinkid[%s]",pLocalIP,iLocalPort, pIP, iPort,pDPassword,plinkid);
+    LOGI(TAG, "java_FireStartVNCDLLEvent pLocalIP[%s] iLocalPort[%d] pIP[%s] iPort[%d] pDPassword[%s] plinkid[%s]",pLocalIP,iLocalPort, pIP, iPort,pDPassword,plinkid);
 
     iresult = getStaticJniMethod((char *)"java_FireStartVNCDLLEvent", (char *)"(Ljava/lang/String;ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireStartVNCDLLEvent");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "not found java_FireStartVNCDLLEvent");
+        LOGE(TAG, "not found java_FireStartVNCDLLEvent");
 
         return;
     }
@@ -8155,22 +8022,16 @@ void java_FireAudioStatNotify(short *pNotify)
     AudioStatInfo_T *pAudioStatInfo = (AudioStatInfo_T *)pNotify;
     int i;
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller java_FireAudioStatNotify begin");
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "java_FireAudioStatNotify begin, iNum=");
+    LOGI(TAG, "java_FireAudioStatNotify begin, iNum=");
 
-    //��ʱ����
+
     return;
 
     iresult = getStaticJniMethod((char *)"java_FireAudioStatNotify", (char *)"(Lcom/zte/softda/ocx/FireAudioStatInfoPara;)V", &env, &gJinMethod);
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller not found java_FireAudioStatNotify");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "not found java_FireAudioStatNotify");
+        LOGE(TAG, "not found java_FireAudioStatNotify");
 
         return;
     }
@@ -8238,7 +8099,7 @@ void java_FireAudioStatNotify(short *pNotify)
 	env->SetObjectField(obj_AudioStatInfo, id_fieldID, obj_recvStat);
 
     env->CallStaticVoidMethod(gpostClass, gJinMethod, obj_AudioStatInfo);
-    TraceMsgWindow1(1, "rcscontroller java_FireAudioStatNotify over");
+    LOGI(TAG, "rcscontroller java_FireAudioStatNotify over");
 }
 
 void java_FireUploadFileRsp(LPCTSTR pSessionID, LPCTSTR pFileID, int iRetCode, int iRate, DWORD iTransedSize)
@@ -8247,14 +8108,14 @@ void java_FireUploadFileRsp(LPCTSTR pSessionID, LPCTSTR pFileID, int iRetCode, i
     JNIEnv *env;
     int iresult = -1;
 
-    TraceMsgWindow1(1, "rcscontroller java_FireUploadFileRsp pSessionID[%s] pFileID[%s] iRetCode[%d] iRate[%d] iTransedSize[%d]",
+    LOGI(TAG, "rcscontroller java_FireUploadFileRsp pSessionID[%s] pFileID[%s] iRetCode[%d] iRate[%d] iTransedSize[%d]",
         pSessionID, pFileID, iRetCode, iRate, iTransedSize);
    
     iresult = getStaticJniMethod((char *)"java_FireUploadFileRsp", (char *)"(Ljava/lang/String;Ljava/lang/String;IIJ)V", &env, &gJinMethod);
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireUploadFileRsp");
+        LOGE(TAG, "rcscontroller not found java_FireUploadFileRsp");
         return;
     }
     env->CallStaticVoidMethod(gpostClass, gJinMethod, JNI_STR(env,pSessionID), JNI_STR(env,pFileID), iRetCode, iRate, (jlong)iTransedSize);
@@ -8266,14 +8127,14 @@ void java_FireDownloadFileRsp(LPCTSTR pSessionID, LPCTSTR pFileID, int iRetCode,
     JNIEnv *env;
     int iresult = -1;
 
-    TraceMsgWindow1(1, "rcscontroller java_FireDownloadFileRsp pSessionID[%s] pFileID[%s] iRetCode[%d] iRate[%d] iTransedSize[%d]",
+    LOGI(TAG, "rcscontroller java_FireDownloadFileRsp pSessionID[%s] pFileID[%s] iRetCode[%d] iRate[%d] iTransedSize[%d]",
         pSessionID, pFileID, iRetCode, iRate, iTransedSize);
     
     iresult = getStaticJniMethod((char *)"java_FireDownloadFileRsp", (char *)"(Ljava/lang/String;Ljava/lang/String;IIJ)V", &env, &gJinMethod);
 
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireDownloadFileRsp");
+        LOGE(TAG, "rcscontroller not found java_FireDownloadFileRsp");
         return;
     }
     env->CallStaticVoidMethod(gpostClass, gJinMethod, JNI_STR(env,pSessionID), JNI_STR(env,pFileID), iRetCode, iRate, (jlong)iTransedSize);
@@ -8286,27 +8147,27 @@ void java_FireGetOfflineMsgRsp(int iRetCode, LPCTSTR cSeq, int endFlag, int nNum
 
     if(nNum > MAX_OFFLINE_MSG_NUM)
     {
-        TraceMsgWindow1(1, "rcscontroller java_FireGetOfflineMsgRsp nNum[%d] is abnormal, MAX_OFFLINE_MSG_NUM[%d]", nNum, MAX_OFFLINE_MSG_NUM);
+        LOGE(TAG, "rcscontroller java_FireGetOfflineMsgRsp nNum[%d] is abnormal, MAX_OFFLINE_MSG_NUM[%d]", nNum, MAX_OFFLINE_MSG_NUM);
         return;
     }
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireGetOfflineMsgRsp iRetCode[%d] cSeq[%s] endFlag[%d] nNum[%d]", 
+	LOGI(TAG, "rcscontroller java_FireGetOfflineMsgRsp iRetCode[%d] cSeq[%s] endFlag[%d] nNum[%d]", 
 	    iRetCode, cSeq, endFlag, nNum);
 
     if (NULL == pMsgList)
     {
-		TraceMsgWindow1(1, "rcscontroller java_FireGetOfflineMsgRsp pMsgList is NULL");   
+		LOGE(TAG, "rcscontroller java_FireGetOfflineMsgRsp pMsgList is NULL");
         return;
     }
 
 	iresult = getStaticJniMethod((char *)"java_FireGetOfflineMsgRsp", (char *)"(Lcom/zte/softda/ocx/OfflineMessageList;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-    	TraceMsgWindow1(1, "rcscontroller not found java_FireGetOfflineMsgRsp");
+    	LOGE(TAG, "rcscontroller not found java_FireGetOfflineMsgRsp");
         return;
     }
 	
-	JOjbectWrapper objEvent(env, "com/zte/softda/ocx/OfflineMessageList");
+	JObjectWrapper objEvent(env, "com/zte/softda/ocx/OfflineMessageList");
 	objEvent.NewObject();
 
 	jclass class_string = env->FindClass("com/zte/softda/ocx/OfflineMessageItem");
@@ -8319,7 +8180,7 @@ void java_FireGetOfflineMsgRsp(int iRetCode, LPCTSTR cSeq, int endFlag, int nNum
 		if (NULL == pMsgItem)
 			continue;
    
-        JOjbectWrapper objMsgItem(env, "com/zte/softda/ocx/OfflineMessageItem");
+        JObjectWrapper objMsgItem(env, "com/zte/softda/ocx/OfflineMessageItem");
 		objMsgItem.NewObject();
         objMsgItem.SetIntValue("iMsgType", pMsgItem->iMsgType);
 		objMsgItem.SetStringValue("cSenderURI", pMsgItem->cSenderURI);
@@ -8339,7 +8200,7 @@ void java_FireGetOfflineMsgRsp(int iRetCode, LPCTSTR cSeq, int endFlag, int nNum
     objEvent.SetContainsObject("msglist", "[Lcom/zte/softda/ocx/OfflineMessageItem;", array_msgs);
     
 	env->CallStaticVoidMethod(gpostClass, gJinMethod, objEvent.GetObject());
-	TraceMsgWindow1(1, "java_FireGetOfflineMsgRsp fire over");
+	LOGI(TAG, "java_FireGetOfflineMsgRsp fire over");
 }
 
 void java_FireSendBroadcastMsgRsp(int iRetCode, LPCTSTR cMsgID, LPCTSTR pURIs, LPCTSTR gURIs, LPCTSTR filePath)
@@ -8348,13 +8209,13 @@ void java_FireSendBroadcastMsgRsp(int iRetCode, LPCTSTR cMsgID, LPCTSTR pURIs, L
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireSendBroadcastMsgRsp iRetCode[%d] cMsgID[%s] pURIs[%s] gURIs[%s] filePath[%s]", 
+	LOGI(TAG, "rcscontroller java_FireSendBroadcastMsgRsp iRetCode[%d] cMsgID[%s] pURIs[%s] gURIs[%s] filePath[%s]", 
         iRetCode, cMsgID, pURIs, gURIs, filePath);
  
     iresult = getStaticJniMethod((char *)"java_FireSendBroadcastMsgRsp", (char *)"(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireSendBroadcastMsgRsp");
+        LOGE(TAG, "rcscontroller not found java_FireSendBroadcastMsgRsp");
         return;
     }
 
@@ -8371,7 +8232,7 @@ void java_FireGetUserLogonStatusResult(short *pNotify)
 
 	GetUserLogonStatusResult_T *pResult = (GetUserLogonStatusResult_T *)pNotify;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireGetUserLogonStatusResult iResult[%d] cURI[%s] iPhoneType[%d] cPhoneStatus[%s] iPhoneSecLastMsg[%d] cPhoneLastMsgType[%s] cPhoneOSVer[%s] \
+	LOGI(TAG, "rcscontroller java_FireGetUserLogonStatusResult iResult[%d] cURI[%s] iPhoneType[%d] cPhoneStatus[%s] iPhoneSecLastMsg[%d] cPhoneLastMsgType[%s] cPhoneOSVer[%s] \
 iDesktopType[%d] cDesktopStatus[%s] iDesktopMinLastMsg[%d] cPhoneLastMsgType[%s] cDesktopOSVer[%s]", 
         pResult->iResult, pResult->cURI, pResult->iPhoneType, pResult->cPhoneStatus, pResult->iPhoneSecLastMsg, pResult->cPhoneLastMsgType, pResult->cPhoneOSVer,
 		pResult->iDesktopType, pResult->cDesktopStatus, pResult->iDesktopSecLastMsg, pResult->cPhoneLastMsgType, pResult->cDesktopOSVer);
@@ -8379,7 +8240,7 @@ iDesktopType[%d] cDesktopStatus[%s] iDesktopMinLastMsg[%d] cPhoneLastMsgType[%s]
     iresult = getStaticJniMethod((char *)"java_FireGetUserLogonStatusResult", (char *)"(Lcom/zte/softda/ocx/FireGetUserLogonStatusResult;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireGetUserLogonStatusResult");
+        LOGE(TAG, "rcscontroller not found java_FireGetUserLogonStatusResult");
         return;
     }
 
@@ -8461,13 +8322,13 @@ void java_FireConcernGroupOperateResult(int iRetCode, int iType, LPCTSTR eTag, L
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireConcernGroupOperateResult iRetCode[%d] iType[%d] eTag[%s] gURIList[%s]", 
+	LOGI(TAG, "rcscontroller java_FireConcernGroupOperateResult iRetCode[%d] iType[%d] eTag[%s] gURIList[%s]", 
         iRetCode, iType, eTag, gURIList ? gURIList : "");
  
     iresult = getStaticJniMethod((char *)"java_FireConcernGroupOperateResult", (char *)"(IILjava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireConcernGroupOperateResult");
+        LOGE(TAG, "rcscontroller not found java_FireConcernGroupOperateResult");
         return;
     }
 
@@ -8480,13 +8341,13 @@ void java_FireUploadFileByXcapRsp(int iRetCode, int iType, LPCTSTR msgId, LPCTST
 	JNIEnv *env;
 	int iresult = -1;
 	
-	TraceMsgWindow1(1, "rcscontroller java_FireUploadFileByXcapRsp iRetCode[%d] iType[%d] msgId[%s] filePath[%s]", 
+	LOGI(TAG, "rcscontroller java_FireUploadFileByXcapRsp iRetCode[%d] iType[%d] msgId[%s] filePath[%s]", 
         iRetCode, iType, msgId, filePath);
  
     iresult = getStaticJniMethod((char *)"java_FireUploadFileByXcapRsp", (char *)"(IILjava/lang/String;Ljava/lang/String;)V", &env, &gJinMethod);
     if(JNI_ERR == iresult || gJinMethod == 0 || gJinMethod == NULL)
     {
-        TraceMsgWindow1(1, "rcscontroller not found java_FireUploadFileByXcapRsp");
+        LOGE(TAG, "rcscontroller not found java_FireUploadFileByXcapRsp");
         return;
     }
 
@@ -8507,20 +8368,14 @@ get the virtual machine context
 */
 static jint setRcsOCXEnv(JNIEnv* env, jclass cls, jint opr)
 {
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller begin-register rcsOcx jvm Env");
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "begin-register rcsOcx jvm Env");
+    LOGI(TAG, "begin-register rcsOcx jvm Env");
 
     //int retGvm=env->GetJavaVM(&gs_jvm);
 
     jclass	localClass = env->FindClass(classPathName_postagent);
     if (localClass == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller localClass is NULL");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "localClass is NULL");
+        LOGE(TAG, "localClass is NULL");
 
         return JNI_ERR;
     }
@@ -8529,18 +8384,12 @@ static jint setRcsOCXEnv(JNIEnv* env, jclass cls, jint opr)
 
     if(gpostClass == NULL)
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller gpostClass is NULL");
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "gpostClass is NULL");
+        LOGE(TAG, "gpostClass is NULL");
 
         return JNI_ERR;
     }
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller end-register rcsOcx jvm Env");
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "end-register rcsOcx jvm Env");
+    LOGI(TAG, "end-register rcsOcx jvm Env");
 
     return JNI_OK;
 }
@@ -8550,19 +8399,16 @@ static jboolean jni_launcherThreads(JNIEnv* env, jclass cls, jstring jstrcfgName
     char cfgName[256 + 1] = {0};
 
     safeGetStringUTFChars(env, jstrcfgName, cfgName, sizeof(cfgName) - 1, NULL);
-    SetCfgfileName(cfgName);//�ӽ���õ�gcCfgFile·����
+    SetCfgfileName(cfgName);
 #if 0
     if(WRITELOG == 1)
-        SetLogFileName();//������־��ʼ��·��
+        SetLogFileName();
 #endif
     LoadLogConfig();
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller this cfg path is [%s]", cfgName);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "this cfg path is [%s]", cfgName);
+    LOGI(TAG, "this cfg path is [%s]", cfgName);
 
-    StartAllAgent();//����zai��֮ǰ��ʼ����־·��,��������so���ز��ֵ���־���ܴ�ӡ�ˡ�
+    StartAllAgent();
 
     return JNI_TRUE;
 }
@@ -8589,19 +8435,21 @@ static jboolean jni_bLogon(JNIEnv* env, jclass cls, jint iTpye, jobject  LoginPa
     jfieldID  id_LoginType = env->GetFieldID(class_LoginPara, "iLoginType", "I");
     logonPara.iLoginType = env->GetIntField(LoginParaobject, id_LoginType);
 
-    return bLogon(iTpye, (short far*)&logonPara, 0);
+    //return bLogon(iTpye, (short far*)&logonPara, 0);
+    return USSDK_OcxAdapter::bLogon(iTpye, (short far*)&logonPara, 0);
 }
 static jboolean jni_bForceLogonServer(JNIEnv* env, jclass cls)
 {
-    return bForceLogonServer();
+    return USSDK_OcxAdapter::bForceLogonServer();
 }
 static jboolean jni_bGoOnLogonServer(JNIEnv* env, jclass cls)
 {
-    return bGoOnLogonServer();
+    return USSDK_OcxAdapter::bGoOnLogonServer();
 }
 static jboolean jni_bLogoutServer(JNIEnv* env, jclass cls)
 {
-    return bLogoutServer();
+    //return bLogoutServer();p
+     return USSDK_OcxAdapter::bLogoutServer(0);
 }
 static jboolean jni_bCreateMultiCall(JNIEnv* env, jclass cls, jstring lpJID, jstring lpCallee, jlong lType)
 {
@@ -8611,7 +8459,7 @@ static jboolean jni_bCreateMultiCall(JNIEnv* env, jclass cls, jstring lpJID, jst
     safeGetStringUTFChars(env, lpJID, cJID, sizeof(cJID) - 1, NULL);
     safeGetStringUTFChars(env, lpCallee, cCallee, sizeof(cCallee) - 1, NULL);
 
-    return bCreateMultiCall(cJID, cCallee, (long)lType);
+    return USSDK_OcxAdapter::bCreateMultiCall(cJID, cCallee, (long)lType);
 }
 static jboolean jni_bAcceptCall(JNIEnv* env, jclass cls, jstring lpCaller)
 {
@@ -8619,7 +8467,7 @@ static jboolean jni_bAcceptCall(JNIEnv* env, jclass cls, jstring lpCaller)
 
     safeGetStringUTFChars(env, lpCaller, cCaller, sizeof(cCaller) - 1, NULL);
 
-    return bAcceptCall(cCaller);
+    return USSDK_OcxAdapter::bAcceptCall(cCaller);
 }
 static jboolean jni_bRejectCall(JNIEnv* env, jclass cls, jstring lpCaller, jint iCause)
 {
@@ -8627,11 +8475,11 @@ static jboolean jni_bRejectCall(JNIEnv* env, jclass cls, jstring lpCaller, jint 
 
     safeGetStringUTFChars(env, lpCaller, cCaller, sizeof(cCaller) - 1, NULL);
 
-    return bRejectCall(cCaller, (int)iCause);
+    return USSDK_OcxAdapter::bRejectCall(cCaller, (int)iCause);
 }
 static jboolean jni_bLeaveCall(JNIEnv* env, jclass cls, jint iCause)
 {
-    return bLeaveCall(iCause);
+    return USSDK_OcxAdapter::bLeaveCall(iCause);
 }
 static void jni_SecondDialNum(JNIEnv* env, jclass cls, jstring lpNum)
 {
@@ -8639,7 +8487,7 @@ static void jni_SecondDialNum(JNIEnv* env, jclass cls, jstring lpNum)
 
     safeGetStringUTFChars(env, lpNum, cNum, sizeof(cNum) - 1, NULL);
 
-    SecondDialNum(cNum);
+    USSDK_OcxAdapter::SecondDialNum(cNum);
 
     return;
 }
@@ -8649,7 +8497,7 @@ static jboolean jni_bCallHold(JNIEnv* env, jclass cls, jstring pPhoneNumber, jlo
 
     safeGetStringUTFChars(env, pPhoneNumber, cPhoneNumber, sizeof(cPhoneNumber) - 1, NULL);
 
-    return bCallHold(cPhoneNumber, (long)iType);
+    return USSDK_OcxAdapter::bCallHold(cPhoneNumber, (long)iType);
 }
 static jboolean jni_bDoNewCallWhenBusy2(JNIEnv* env, jclass cls, jlong iDoType, jstring pCaller)
 {
@@ -8657,16 +8505,16 @@ static jboolean jni_bDoNewCallWhenBusy2(JNIEnv* env, jclass cls, jlong iDoType, 
 
     safeGetStringUTFChars(env, pCaller, cCaller, sizeof(cCaller) - 1, NULL);
 
-    return bDoNewCallWhenBusy2((long)iDoType, cCaller);
+    return USSDK_OcxAdapter::bDoNewCallWhenBusy2((long)iDoType, cCaller);
 }
 static jboolean jni_bCreateConfCall(JNIEnv* env, jclass cls, jlong lDuration, jlong lParties)
 {
-    return bCreateConfCall((long)lDuration, (long)lParties);
+    return USSDK_OcxAdapter::bCreateConfCall((long)lDuration, (long)lParties);
 }
 static jstring jni_GetAudioProps(JNIEnv* env, jclass cls)
 {
     char *pResult = NULL;
-    pResult = GetAudioProps();
+    pResult = USSDK_OcxAdapter::bGetAudioProps();
     jstring jstrResult = env->NewStringUTF(pResult);
     ZX_free(pResult);
 
@@ -8675,7 +8523,7 @@ static jstring jni_GetAudioProps(JNIEnv* env, jclass cls)
 static jstring jni_GetVideoProps(JNIEnv* env, jclass cls)
 {
     char *pResult = NULL;
-    pResult = GetVideoProps();
+    pResult = USSDK_OcxAdapter::bGetVideoProps();
     jstring jstrResult = env->NewStringUTF(pResult);
     ZX_free(pResult);
 
@@ -8687,7 +8535,7 @@ static void jni_SetAudioProps(JNIEnv* env, jclass cls, jstring jstrCodecName, jl
 
     safeGetStringUTFChars(env, jstrCodecName, cCodecName, sizeof(cCodecName) - 1, NULL);
 
-    SetAudioProps(cCodecName, (long)nPacketPeriod);
+    USSDK_OcxAdapter::bSetAudioProps(cCodecName, (long)nPacketPeriod);
 
     return;
 }
@@ -8697,7 +8545,7 @@ static void jni_SetVideoProps(JNIEnv* env, jclass cls, jstring jstrCodecName, jl
 
     safeGetStringUTFChars(env, jstrCodecName, cCodecName, sizeof(cCodecName) - 1, NULL);
 
-    SetVideoProps(cCodecName, (long)nRate);
+    USSDK_OcxAdapter::bSetVideoProps(cCodecName, (long)nRate);
 
     return;
 }
@@ -8717,11 +8565,11 @@ static jboolean jni_bIMSCallMethod(JNIEnv* env, jclass cls, jlong lType,  jobjec
     jfieldID  id_iTye = env->GetFieldID(class_CallMethod, "iType", "I");
     stNormalCallMethod.iType = env->GetIntField(jobj_NormalCallMethod, id_iTye);
 
-    return bIMSCallMethod((long)lType, (short far*)&stNormalCallMethod);
+    return USSDK_OcxAdapter::bIMSCallMethod((long)lType, (short far*)&stNormalCallMethod);
 }
 static jboolean jni_bWhetherEncrypt(JNIEnv* env, jclass cls, jlong lSetValue)
 {
-    return bWhetherEncrypt((long)lSetValue);
+    return USSDK_OcxAdapter::bWhetherEncrypt((long)lSetValue);
 }
 static jboolean jni_bStartRecord(JNIEnv* env, jclass cls,  jstring jstr_FilePathName)
 {
@@ -8729,11 +8577,11 @@ static jboolean jni_bStartRecord(JNIEnv* env, jclass cls,  jstring jstr_FilePath
 
     safeGetStringUTFChars(env, jstr_FilePathName, cFilePathName, sizeof(cFilePathName) - 1, NULL);
 
-    return bStartRecord(cFilePathName);
+    return USSDK_OcxAdapter::bStartRecord(cFilePathName);
 }
 static jboolean  jni_bStopRecord(JNIEnv* env, jclass cls)
 {
-    return bStopRecord();
+    return USSDK_OcxAdapter::bStopRecord();
 }
 static jboolean  jni_bReleaseTalker(JNIEnv* env, jclass cls, jstring jstr_Callee)
 {
@@ -8741,7 +8589,7 @@ static jboolean  jni_bReleaseTalker(JNIEnv* env, jclass cls, jstring jstr_Callee
 
     safeGetStringUTFChars(env, jstr_Callee, cCallee, sizeof(cCallee) - 1, NULL);
 
-    return bReleaseTalker(cCallee);
+    return USSDK_OcxAdapter::bReleaseTalker(cCallee);
 }
 static jboolean  jni_bSelectTalker(JNIEnv* env, jclass cls, jstring jstr_Callee)
 {
@@ -8749,7 +8597,7 @@ static jboolean  jni_bSelectTalker(JNIEnv* env, jclass cls, jstring jstr_Callee)
 
     safeGetStringUTFChars(env, jstr_Callee, cCallee, sizeof(cCallee) - 1, NULL);
 
-    return bSelectTalker(cCallee);
+    return USSDK_OcxAdapter::bSelectTalker(cCallee);
 }
 static jboolean  jni_bInviteToMultiCall(JNIEnv* env, jclass cls, jstring jstr_JID, jstring jstr_Callee, jlong lType)
 {
@@ -8759,7 +8607,7 @@ static jboolean  jni_bInviteToMultiCall(JNIEnv* env, jclass cls, jstring jstr_JI
     safeGetStringUTFChars(env, jstr_JID, cJID, sizeof(cJID) - 1, NULL);
     safeGetStringUTFChars(env, jstr_Callee, cCallee, sizeof(cCallee) - 1, NULL);
 
-    return bInviteToMultiCall(cJID, cCallee, (long)lType);
+    return USSDK_OcxAdapter::bInviteToMultiCall(cJID, cCallee, (long)lType);
 }
 static jboolean  jni_bIMSSendAttachMessage(JNIEnv* env, jclass cls, jlong iType, jstring jstr_FilePath, jstring jstr_FileType, jstring jstr_Message, jstring jstr_ReceiverURI ,jstring jstr_LocalMsgID, jint iReceipt)
 {
@@ -8790,11 +8638,11 @@ static jboolean  jni_bIMSSendAttachMessage(JNIEnv* env, jclass cls, jlong iType,
     pMessage[strlen(str)] = '\0';
     env->ReleaseStringUTFChars(jstr_Message, str);
 
-    bReturn = bIMSSendAttachMessage((long)iType, cFilePath, cFileType, pMessage, cReceiverURI, cLocalMsgID, iReceipt);
+    bReturn = USSDK_OcxAdapter::bIMSSendAttachMessage((long)iType, cFilePath, cFileType, pMessage, cReceiverURI, cLocalMsgID, iReceipt);
     ZX_free(pMessage);
     return bReturn;
 }
-static jstring     jni_cIMSSendFile(JNIEnv* env, jclass cls, jstring jstr_FilePathName, jstring jstr_ReceiverURI, jstring jstr_FileID)
+static jstring  jni_cIMSSendFile(JNIEnv* env, jclass cls, jstring jstr_FilePathName, jstring jstr_ReceiverURI, jstring jstr_FileID)
 {
     char cFilePathName[256 + 1] = {0};
     char cReceiverURI[256 + 1] = {0};
@@ -8804,7 +8652,7 @@ static jstring     jni_cIMSSendFile(JNIEnv* env, jclass cls, jstring jstr_FilePa
     safeGetStringUTFChars(env, jstr_ReceiverURI, cReceiverURI, sizeof(cReceiverURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_FileID, cFileID, sizeof(cFileID) - 1, NULL);
 
-    return env->NewStringUTF(cIMSSendFile(cFilePathName, cReceiverURI, cFileID));
+    //return env->NewStringUTF(cIMSSendFile(cFilePathName, cReceiverURI, cFileID));n
 }
 static jboolean  jni_bIMSDoFileTransReq(JNIEnv* env, jclass cls, jlong iAccept, jstring jstr_SenderURI, jstring jstr_FilePathName, jstring jstr_SessionID)
 {
@@ -8816,7 +8664,7 @@ static jboolean  jni_bIMSDoFileTransReq(JNIEnv* env, jclass cls, jlong iAccept, 
     safeGetStringUTFChars(env, jstr_FilePathName, cFilePathName, sizeof(cFilePathName) - 1, NULL);
     safeGetStringUTFChars(env, jstr_SessionID, cSessionID, sizeof(cSessionID) - 1, NULL);
 
-    return bIMSDoFileTransReq((long)iAccept, cSenderURI, cFilePathName, cSessionID);
+    //return bIMSDoFileTransReq((long)iAccept, cSenderURI, cFilePathName, cSessionID);n
 }
 static jboolean  jni_bIMSCancelSendingFile(JNIEnv* env, jclass cls, jstring jstr_SessionID)
 {
@@ -8824,7 +8672,7 @@ static jboolean  jni_bIMSCancelSendingFile(JNIEnv* env, jclass cls, jstring jstr
 
     safeGetStringUTFChars(env, jstr_SessionID, cSessionID, sizeof(cSessionID) - 1, NULL);
 
-    return bIMSCancelSendingFile(cSessionID);
+    //return bIMSCancelSendingFile(cSessionID);n
 }
 static jboolean  jni_bIMSCancelRecvingFile(JNIEnv* env, jclass cls, jstring jstr_SessionID)
 {
@@ -8832,7 +8680,7 @@ static jboolean  jni_bIMSCancelRecvingFile(JNIEnv* env, jclass cls, jstring jstr
 
     safeGetStringUTFChars(env, jstr_SessionID, cSessionID, sizeof(cSessionID) - 1, NULL);
 
-    return bIMSCancelRecvingFile(cSessionID);
+    //return bIMSCancelRecvingFile(cSessionID);n
 }
 static jboolean jni_bIMSGetDeptAddrList(JNIEnv* env, jclass cls, jlong iType, jstring pAddrList)
 {
@@ -8840,7 +8688,7 @@ static jboolean jni_bIMSGetDeptAddrList(JNIEnv* env, jclass cls, jlong iType, js
 
     safeGetStringUTFChars(env, pAddrList, cURI, sizeof(cURI) - 1, NULL);
 
-    return bIMSGetDeptAddrList(iType, cURI);
+    return USSDK_OcxAdapter::bIMSGetDeptAddrList(iType, cURI);
 }
 static jboolean jni_bIMSPsMethod(JNIEnv* env, jclass cls, jint iTpye, jobject jobj_IMSPsMethodParaobject)
 {
@@ -8871,19 +8719,19 @@ static jboolean jni_bIMSPsMethod(JNIEnv* env, jclass cls, jint iTpye, jobject jo
     PrenceMethod.CTerminalType[16] = '\0';
     PrenceMethod.COsType[16] = '\0';
 
-    return bIMSPsMethod((long)iTpye, (short far*)&PrenceMethod);
+    return USSDK_OcxAdapter::bIMSPsMethod((long)iTpye, (short far*)&PrenceMethod);
 }
 static jboolean jni_bIMSSearchRLS(JNIEnv* env, jclass cls)
 {
-    return bIMSSearchRLS();
+    return USSDK_OcxAdapter::bIMSSearchRLS();
 }
 static jboolean jni_bIMSGetPresenceRules(JNIEnv* env, jclass cls)
 {
-    return bIMSGetPresenceRules();
+    return USSDK_OcxAdapter::bIMSGetPresenceRules();
 }
 static jboolean jni_bIMSSubWatcher(JNIEnv* env, jclass cls)
 {
-    return bIMSSubWatcher();
+    return USSDK_OcxAdapter::bIMSSubWatcher();
 }	
 static jboolean jni_bIMSSubscribeOneRLS(JNIEnv* env, jclass cls, jstring pURI)
 {
@@ -8891,7 +8739,7 @@ static jboolean jni_bIMSSubscribeOneRLS(JNIEnv* env, jclass cls, jstring pURI)
 
     safeGetStringUTFChars(env, pURI, cURI, sizeof(cURI) - 1, NULL);
 
-    return bIMSSubscribeOneRLS(cURI);
+    return USSDK_OcxAdapter::bIMSSubscribeOneRLS(cURI);
 }
 static jboolean jni_bIMSSendMessage(JNIEnv* env, jclass cls, jint iType, jint iReport, jstring jstr_Message, jstring jstr_DeliverTime,
                                     jstring jstr_ReceiverURI, jstring jstr_LocalMsgID, jstring jstr_TMSubject, jint iFileSeekSize, jint iReceipt)
@@ -8909,11 +8757,11 @@ static jboolean jni_bIMSSendMessage(JNIEnv* env, jclass cls, jint iType, jint iR
     safeGetStringUTFChars(env, jstr_LocalMsgID, szLocalMsgID, sizeof(szLocalMsgID) - 1, NULL);
     safeGetStringUTFChars(env, jstr_TMSubject, szTMsubject, sizeof(szTMsubject) - 1, NULL);
 
-    BOOL bRet = bIMSSendMessage(iType, iReport, szMessage, szDeliverTime, szReceiverURI, szLocalMsgID, szTMsubject, (double)iFileSeekSize, iReceipt);
+    BOOL bRet = USSDK_OcxAdapter::bIMSSendMessage(iType, iReport, szMessage, szDeliverTime, szReceiverURI, szLocalMsgID, szTMsubject, (double)iFileSeekSize, iReceipt);
     ZX_free(szMessage);
     return bRet;
 }
-static jboolean    jni_bIMSSendFileRequest(JNIEnv* env, jclass cls, jbyteArray jstr_FilePathName, jstring jstr_ReceiverURI, jstring jstr_FileID, jint iFileSize)
+static jboolean jni_bIMSSendFileRequest(JNIEnv* env, jclass cls, jbyteArray jstr_FilePathName, jstring jstr_ReceiverURI, jstring jstr_FileID, jint iFileSize)
 {
     char szFileName[1024 + 1] = {0};
     char szReceiverURI[255 + 1] = {0};
@@ -8935,7 +8783,7 @@ static jboolean    jni_bIMSSendFileRequest(JNIEnv* env, jclass cls, jbyteArray j
     safeGetStringUTFChars(env, jstr_ReceiverURI, szReceiverURI, sizeof(szReceiverURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_FileID, szFileID, sizeof(szFileID) - 1, NULL);
 
-    return bIMSSendMessage(IM_TYPE_FILE_TRANS_REQ, iFileSize, szFileID, szFileName, szReceiverURI, "", "Request", 0);
+    return USSDK_OcxAdapter::bIMSSendMessage(IM_TYPE_FILE_TRANS_REQ, iFileSize, szFileID, szFileName, szReceiverURI, "", "Request", 0);
 }
 static jboolean  jni_bIMSSendFileResponse(JNIEnv* env, jclass cls, jstring pFilePathName, jstring pReceiverURI, jstring pLocalMsgId, jstring pFileID, jstring pStatus, jint iFileSeekSize)
 {
@@ -8951,26 +8799,25 @@ static jboolean  jni_bIMSSendFileResponse(JNIEnv* env, jclass cls, jstring pFile
     safeGetStringUTFChars(env, pStatus, szStatus, sizeof(szStatus) - 1, NULL);
     safeGetStringUTFChars(env, pLocalMsgId, szLocalMsgId, sizeof(szLocalMsgId) - 1, NULL);
 
-    return bIMSSendMessage(IM_TYPE_FILE_TRANS_RESPONSE, 100, szMessage, szFileId, szReceiverURI, szLocalMsgId, szStatus, (DWORD)iFileSeekSize);
+    return USSDK_OcxAdapter::bIMSSendMessage(IM_TYPE_FILE_TRANS_RESPONSE, 100, szMessage, szFileId, szReceiverURI, szLocalMsgId, szStatus, (DWORD)iFileSeekSize);
 }
 static jboolean jni_bIMSGetPublicGroup(JNIEnv* env, jclass cls, jstring jstr_Identifier, jint iOperType)
-{//iOperType: 0--����etag������ѯ, 1--��������ȫ������
+{
     char cIdentifierURI[256 + 1] = {0};
 
     safeGetStringUTFChars(env, jstr_Identifier, cIdentifierURI, sizeof(cIdentifierURI) - 1, NULL);
 
-    return bIMSGetPublicGroup(cIdentifierURI, iOperType);
+    return USSDK_OcxAdapter::bIMSGetPublicGroup(cIdentifierURI, iOperType);
 }
 
 static jobjectArray jni_bSyncGetMyGroupList(JNIEnv* env, jclass cls, jstring jstr_phone)
 {
-    //��ѯȺ�黺������
     char filename[256] = {0};  
     char phone[64 + 1] = {0};
     
     FIRE_GROUP_INFO groupInfo; 
     memset(&groupInfo, 0, sizeof(FIRE_GROUP_INFO));
-    //�˴���Ϊ�˱���δ��¼����²��ܻ�ȡ�����ļ�
+
     safeGetStringUTFChars(env, jstr_phone, phone, sizeof(phone) - 1, NULL);
     if(gUserInfo.phone[0] == '\0')
         ZX_strcpy(gUserInfo.phone, phone);
@@ -8980,7 +8827,7 @@ static jobjectArray jni_bSyncGetMyGroupList(JNIEnv* env, jclass cls, jstring jst
         strncpy(gUserInfo.domain, gConfig.IMSDomain, sizeof(gUserInfo.domain) / sizeof(char));
     }
 
-    GetUserDataFile(MY_GROUP_INFO_FILE, filename);
+    //GetUserDataFile(MY_GROUP_INFO_FILE, filename);n
     if(!ReadLocalGroupList(filename, &gMsgBuf, &groupInfo))
     {
         DEBUG_INFO("[jni_bSyncGetMyGroupList] Get group data from local file failed!");
@@ -9036,12 +8883,12 @@ static jobject jni_bSyncGetGroupMembers(JNIEnv* env, jclass cls, jstring jstr_Id
 
     safeGetStringUTFChars(env, jstr_Identifier, cGroupURI, sizeof(cGroupURI) - 1, NULL);
 
-    //��ѯ���ػ�������
+
     char strTemp[256] = {0};
     char filename[256] = {0};
     char filenameShort[256] = {0};
     Group_T *pGroup = NULL;
-    int grpIndex = FindGroupIndex(cGroupURI);
+    //int grpIndex = FindGroupIndex(cGroupURI);n
     if(grpIndex < 0)
     {
         DEBUG_INFO("jni_bSyncGetGroupMembers: cGroupURI[%s] not found in all Public GroupURI", cGroupURI);
@@ -9051,18 +8898,18 @@ static jobject jni_bSyncGetGroupMembers(JNIEnv* env, jclass cls, jstring jstr_Id
         pGroup = (Group_T*)list_get(gUserInfo.pGroups, grpIndex);
     }
 
-    GetPubGroupLocalFile(cGroupURI, filenameShort);
+    //GetPubGroupLocalFile(cGroupURI, filenameShort);n
     IMSGotOnePublicGroup_T groupData;
     GroupMemberList_T memberList;   
     memset(&groupData, 0, sizeof(IMSGotOnePublicGroup_T));
     memset(&memberList, 0, sizeof(GroupMemberList_T));
-    GetUserDataFile(filenameShort, filename);
+    //GetUserDataFile(filenameShort, filename);n
     if(!ReadLocalGroupDataFile(filename, &gMsgBuf, &groupData, &memberList))
     {
         DEBUG_INFO("[jni_bSyncGetGroupMembers(%s)] Get group data from local file failed!", cGroupURI);
-        //֪ͨsoftagent����ȥ��ȡ
+
         if(pGroup)//pGroupû���ҵ����������ʹ���÷���Ҳ�ᱻ��
-            bIMSGetPublicGroup(cGroupURI, 0);
+        USSDK_OcxAdapter::bIMSGetPublicGroup(cGroupURI, 0);
         return NULL;
     }
     else
@@ -9071,10 +8918,10 @@ static jobject jni_bSyncGetGroupMembers(JNIEnv* env, jclass cls, jstring jstr_Id
             cGroupURI, groupData.cEtag, groupData.pGroupName, groupData.memberNum);
 
         if(pGroup && _stricmp(groupData.cEtag, pGroup->cGroupEtag))
-        {//����etag�͵�½ʱ��ȡ������Ϣ���صĲ���ͬ����ô֪ͨsoftagent����ȥ��ȡ
+        {
             DEBUG_INFO("[jni_bSyncGetGroupMembers(%s)] local data etag:%s, pGroup->cGroupEtag[%s]", 
                 cGroupURI, groupData.cEtag, pGroup->cGroupEtag);
-             bIMSGetPublicGroup(cGroupURI, 0);
+             USSDK_OcxAdapter::bIMSGetPublicGroup(cGroupURI, 0);
         }       
     }
 
@@ -9153,7 +9000,7 @@ static jboolean  jni_bIMSSubscribeOneList(JNIEnv* env, jclass cls, jlong iType, 
 
     safeGetStringUTFChars(env, jstr_ListURI, cListURI, sizeof(cListURI) - 1, NULL);
 
-    return bIMSSubscribeOneList((long)iType, cListURI, (long)lURIType);
+    return USSDK_OcxAdapter::bIMSSubscribeOneList((long)iType, cListURI, (long)lURIType);
 }
 static jboolean  jni_bIMSDoPublicGroupInvite(JNIEnv* env, jclass cls, jstring jstr_OwnerName, jstring jstr_InviterURI, jstring jstr_GroupName, jlong iType, jstring jstr_GroupURI, jstring jstr_Return)
 {
@@ -9169,7 +9016,7 @@ static jboolean  jni_bIMSDoPublicGroupInvite(JNIEnv* env, jclass cls, jstring js
     safeGetStringUTFChars(env, jstr_GroupURI, cGroupURI, sizeof(cGroupURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_Return, cReturn, sizeof(cReturn) - 1, NULL);
 
-    return bIMSDoPublicGroupInvite(cOwnerName, cInviterURI, cGroupName, iType, cGroupURI, cReturn);
+    return USSDK_OcxAdapter::bIMSDoPublicGroupInvite(cOwnerName, cInviterURI, cGroupName, iType, cGroupURI, cReturn);
 }
 static jboolean jni_bIMSSetUserInfo(JNIEnv* env, jclass cls, jobject UserInfoParaobject)
 {
@@ -9279,7 +9126,7 @@ static jboolean jni_bIMSSetUserInfo(JNIEnv* env, jclass cls, jobject UserInfoPar
     getStringField(env, UserInfoParaobject, class_UserInfo, "cOnlyNotify", UserInfo.cOnlyNotify,  sizeof(UserInfo.cOnlyNotify) - 1);
     getStringField(env, UserInfoParaobject, class_UserInfo, "cAreaCode", UserInfo.cAreaCode,  sizeof(UserInfo.cAreaCode) - 1);
 
-    bReturn = bIMSSetUserInfo((short far*)&UserInfo);
+    bReturn = USSDK_OcxAdapter::bIMSSetUserInfo((short far*)&UserInfo);
     if(UserInfo.cPhotoFile)
         ZX_free(UserInfo.cPhotoFile);
     return bReturn;
@@ -9294,7 +9141,7 @@ static jboolean jni_bIMSGetPersonSubInfo(JNIEnv* env, jclass cls, jint iType, jo
     getStringField(env, jobj_IMSGetPersonSubInfoParaobject, class_IMSGetPersonSubInfo, "cURI", SubInfoPhoto.cURI, sizeof(SubInfoPhoto.cURI) - 1);
     getStringField(env, jobj_IMSGetPersonSubInfoParaobject, class_IMSGetPersonSubInfo, "cPhotoIndex", SubInfoPhoto.cPhotoIndex, sizeof(SubInfoPhoto.cPhotoIndex) - 1);
 
-    return bIMSGetPersonSubInfo(iType, (short far*)&SubInfoPhoto);
+    return USSDK_OcxAdapter::bIMSGetPersonSubInfo(iType, (short far*)&SubInfoPhoto);
 }
 static jboolean jni_bIMSSetMyPhoto(JNIEnv* env, jclass cls,  jstring jstr_Index, jbyteArray  jbytarr_FileContent, jlong iLen)
 {
@@ -9312,7 +9159,7 @@ static jboolean jni_bIMSSetMyPhoto(JNIEnv* env, jclass cls,  jstring jstr_Index,
         memset(pFileContent, 0, iArrayLen + 1);
         env->GetByteArrayRegion(jbytarr_FileContent, 0, iArrayLen, pFileContent);
     }
-    return bIMSSetMyPhoto(szIndex, (short far*)pFileContent, (long)iArrayLen);
+    return USSDK_OcxAdapter::bIMSSetMyPhoto(szIndex, (short far*)pFileContent, (long)iArrayLen);
 }
 static jboolean jni_bDispUICmdForEcp2Method(JNIEnv* env, jclass cls, jint iType, jobject  UICmdForEcp2object)
 {
@@ -9321,7 +9168,7 @@ static jboolean jni_bDispUICmdForEcp2Method(JNIEnv* env, jclass cls, jint iType,
     /* get the class */
     jclass class_UICmdForEcp2objectPara = env->GetObjectClass(UICmdForEcp2object);
 
-    if(iType == 1)//�޸����빦��
+    if(iType == 1)
     {
         Modify_MyPassword ModifyMyPasswordPara = {0};
 
@@ -9332,9 +9179,9 @@ static jboolean jni_bDispUICmdForEcp2Method(JNIEnv* env, jclass cls, jint iType,
         getStringField(env, obj_ModifyMyPasswordInfo, class_ModifyMyPasswordInfo, "cOldPassword", ModifyMyPasswordPara.cOldPassword,  sizeof(ModifyMyPasswordPara.cOldPassword) - 1);
         getStringField(env, obj_ModifyMyPasswordInfo, class_ModifyMyPasswordInfo, "cNewPassword", ModifyMyPasswordPara.cNewPassword,  sizeof(ModifyMyPasswordPara.cNewPassword) - 1);
 
-        bRturn = bDispUICmdForEcp2Method((long)iType, (short far*)&ModifyMyPasswordPara);
+        bRturn = USSDK_OcxAdapter::bDispUICmdForEcp2Method((long)iType, (short far*)&ModifyMyPasswordPara);
     }
-    else if(iType == 8)//�����û���¼��Ϣ��������
+    else if(iType == 8)
     {
         USER_LOGON_INFO_METHOD UserlogonInfoPara = {0};
 
@@ -9352,7 +9199,7 @@ static jboolean jni_bDispUICmdForEcp2Method(JNIEnv* env, jclass cls, jint iType,
         getStringField(env, UICmdForEcp2object, class_LoginPara, "cOSType", UserlogonInfoPara.cOSType,  sizeof(UserlogonInfoPara.cOSType) - 1);
 #endif
 
-        bRturn = bDispUICmdForEcp2Method((long)iType, (short far*)&UserlogonInfoPara);
+        bRturn = USSDK_OcxAdapter::bDispUICmdForEcp2Method((long)iType, (short far*)&UserlogonInfoPara);
     }
     return bRturn;
 }
@@ -9392,7 +9239,7 @@ static jboolean jni_bCtdCallMethod(JNIEnv* env, jclass cls, jint iType, jobject 
         CtdBindInfoPara.iDoType = env->GetIntField(obj_CtdBindInfo, id_iDoType);
 
 //         if(g_WriteLogType == 2)
-//             TraceMsgWindow1(1, "rcscontroller jni_bCtdCallMethod chPhone[%s], iResult[%d],chSoftPhoneNum[%s], chSoftPhonePwd[%s], chSsIpAddr[%s] iSsPort[%d]",
+//             LOGI(TAG, "rcscontroller jni_bCtdCallMethod chPhone[%s], iResult[%d],chSoftPhoneNum[%s], chSoftPhonePwd[%s], chSsIpAddr[%s] iSsPort[%d]",
 //                             CtdBindInfoPara.chPhone,
 //                             CtdBindInfoPara.iResult,
 //                             CtdBindInfoPara.chSoftPhoneNum,
@@ -9411,7 +9258,7 @@ static jboolean jni_bCtdCallMethod(JNIEnv* env, jclass cls, jint iType, jobject 
 				 CtdBindInfoPara.iSSMeetingPort,
 				 CtdBindInfoPara.iDoType);
 
-        bReturn = bCtdCallMethod((long)iType, (short far*)&CtdBindInfoPara);
+        bReturn = USSDK_OcxAdapter::bCtdCallMethod((long)iType, (short far*)&CtdBindInfoPara);
     }
     else if(iType == CTD_TYPE_CALL)
     {
@@ -9432,20 +9279,13 @@ static jboolean jni_bCtdCallMethod(JNIEnv* env, jclass cls, jint iType, jobject 
         jfieldID  id_iResult = env->GetFieldID(class_CtdCallInfo, "iResult", "I");
         CtdCallInfoPara.iResult = env->GetIntField(obj_CtdCallInfo, id_iResult);
 
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller jni_bCtdCallMethod chPhone[%s],iCallId[%d],iCallType[%d] iResult[%d]",
-                            CtdCallInfoPara.chPhone,
-                            CtdCallInfoPara.iCallId,
-                            CtdCallInfoPara.iCallType,
-                            CtdCallInfoPara.iResult);
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "jni_bCtdCallMethod chPhone[%s],iCallId[%d],iCallType[%d] iResult[%d]",
+        LOGI(TAG, "jni_bCtdCallMethod chPhone[%s],iCallId[%d],iCallType[%d] iResult[%d]",
                  CtdCallInfoPara.chPhone,
                  CtdCallInfoPara.iCallId,
                  CtdCallInfoPara.iCallType,
                  CtdCallInfoPara.iResult);
 
-        bReturn = bCtdCallMethod((long)iType, (short far*)&CtdCallInfoPara);
+        bReturn = USSDK_OcxAdapter::bCtdCallMethod((long)iType, (short far*)&CtdCallInfoPara);
     }
     else if(iType == CTD_TYPE_CTRL)
     {
@@ -9471,16 +9311,7 @@ static jboolean jni_bCtdCallMethod(JNIEnv* env, jclass cls, jint iType, jobject 
         jfieldID  id_iResult = env->GetFieldID(class_CtdCallCtrlInfo, "iResult", "I");
         CtdCallCtrlInfoPara.iResult = env->GetIntField(obj_CtdCallCtrlInfo, id_iResult);
 
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller jni_bCtdCallMethod lCtrlType[%d], iCallId[%d], chPhone[%s], iMemberId[%d], chForwardPhone[%s] iResult[%d]",
-                            CtdCallCtrlInfoPara.lCtrlType,
-                            CtdCallCtrlInfoPara.iCallId,
-                            CtdCallCtrlInfoPara.chPhone,
-                            CtdCallCtrlInfoPara.iMemberId,
-                            CtdCallCtrlInfoPara.chForwardPhone,
-                            CtdCallCtrlInfoPara.iResult);
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "jni_bCtdCallMethod lCtrlType[%d], iCallId[%d], chPhone[%s], iMemberId[%d], chForwardPhone[%s] iResult[%d]",
+        LOGI(TAG, "jni_bCtdCallMethod lCtrlType[%d], iCallId[%d], chPhone[%s], iMemberId[%d], chForwardPhone[%s] iResult[%d]",
                  CtdCallCtrlInfoPara.lCtrlType,
                  CtdCallCtrlInfoPara.iCallId,
                  CtdCallCtrlInfoPara.chPhone,
@@ -9488,7 +9319,7 @@ static jboolean jni_bCtdCallMethod(JNIEnv* env, jclass cls, jint iType, jobject 
                  CtdCallCtrlInfoPara.chForwardPhone,
                  CtdCallCtrlInfoPara.iResult);
 
-        bReturn = bCtdCallMethod((long)iType, (short far*)&CtdCallCtrlInfoPara);
+        bReturn = USSDK_OcxAdapter::bCtdCallMethod((long)iType, (short far*)&CtdCallCtrlInfoPara);
     }
     else if(iType == CTD_TYPE_PROC)
     {
@@ -9514,16 +9345,7 @@ static jboolean jni_bCtdCallMethod(JNIEnv* env, jclass cls, jint iType, jobject 
         jfieldID  id_iAnswerModal = env->GetFieldID(class_CtdInCallProc, "iAnswerModal", "I");
         CtdInCallProcPara.iAnswerModal = env->GetIntField(obj_CtdInCallProc, id_iAnswerModal);
 
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller jni_bCtdCallMethod iCallId[%d], chPhone[%s], iMemberId[%d], lProcType[%d], chForwardPhone[%s] iAnswerModal[%d]",
-                            CtdInCallProcPara.iCallId,
-                            CtdInCallProcPara.chPhone,
-                            CtdInCallProcPara.iMemberId,
-                            CtdInCallProcPara.lProcType,
-                            CtdInCallProcPara.chForwardPhone,
-                            CtdInCallProcPara.iAnswerModal);
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "jni_bCtdCallMethod iCallId[%d], chPhone[%s], iMemberId[%d], lProcType[%d], chForwardPhone[%s] iAnswerModal[%d]",
+        LOGI(TAG, "jni_bCtdCallMethod iCallId[%d], chPhone[%s], iMemberId[%d], lProcType[%d], chForwardPhone[%s] iAnswerModal[%d]",
                  CtdInCallProcPara.iCallId,
                  CtdInCallProcPara.chPhone,
                  CtdInCallProcPara.iMemberId,
@@ -9531,14 +9353,11 @@ static jboolean jni_bCtdCallMethod(JNIEnv* env, jclass cls, jint iType, jobject 
                  CtdInCallProcPara.chForwardPhone,
                  CtdInCallProcPara.iAnswerModal);
 
-        bReturn = bCtdCallMethod((long)iType, (short far*)&CtdInCallProcPara);
+        bReturn = USSDK_OcxAdapter::bCtdCallMethod((long)iType, (short far*)&CtdInCallProcPara);
     }
     else
     {
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller jni_bCtdCallMethod unkown iType[%d]", iType);
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "jni_bCtdCallMethod unkown iType[%d]", iType);
+        LOGI(TAG, "jni_bCtdCallMethod unkown iType[%d]", iType);
     }
     return bReturn;
 }
@@ -9548,7 +9367,7 @@ static void jni_bIMSSearchOneListInfo(JNIEnv* env, jclass cls, jstring pListURI)
 
     safeGetStringUTFChars(env, pListURI, cListURI, sizeof(cListURI) - 1, NULL);
 
-    bIMSSearchOneListInfo(cListURI);
+    USSDK_OcxAdapter::bIMSSearchOneListInfo(cListURI);
 
     return;
 }
@@ -9558,7 +9377,7 @@ static jboolean jni_bIMSCreateOnePrivateGroup(JNIEnv* env, jclass cls, jstring j
 
     safeGetStringUTFChars(env, jstr_pGroupName, szGroupName, sizeof(szGroupName) - 1, NULL);
 
-    return bIMSCreateOnePrivateGroup(szGroupName);
+    return USSDK_OcxAdapter::bIMSCreateOnePrivateGroup(szGroupName);
 }
 static jboolean jni_bIMSModifyPrivateGroupName(JNIEnv* env, jclass cls, jstring jstr_pOldName, jstring jstr_pNewName)
 {
@@ -9568,7 +9387,7 @@ static jboolean jni_bIMSModifyPrivateGroupName(JNIEnv* env, jclass cls, jstring 
     safeGetStringUTFChars(env, jstr_pNewName, szNewName, sizeof(szNewName) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pOldName, szOldName, sizeof(szOldName) - 1, NULL);
 
-    return bIMSModifyPrivateGroupName(szOldName, szNewName);
+    return USSDK_OcxAdapter::bIMSModifyPrivateGroupName(szOldName, szNewName);
 }
 static jboolean jni_bIMSDeleteOnePrivateGroup(JNIEnv* env, jclass cls, jstring jstr_pGroupName)
 {
@@ -9576,7 +9395,7 @@ static jboolean jni_bIMSDeleteOnePrivateGroup(JNIEnv* env, jclass cls, jstring j
 
     safeGetStringUTFChars(env, jstr_pGroupName, szGroupName, sizeof(szGroupName) - 1, NULL);
 
-    return bIMSDeleteOnePrivateGroup(szGroupName);
+    return USSDK_OcxAdapter::bIMSDeleteOnePrivateGroup(szGroupName);
 }
 static jboolean jni_bIMSGetPrivateGroupMember(JNIEnv* env, jclass cls, jstring jstr_pGroupName)
 {
@@ -9584,7 +9403,7 @@ static jboolean jni_bIMSGetPrivateGroupMember(JNIEnv* env, jclass cls, jstring j
 
     safeGetStringUTFChars(env, jstr_pGroupName, szGroupName, sizeof(szGroupName) - 1, NULL);
 
-    return bIMSGetPrivateGroupMember(szGroupName);
+    return USSDK_OcxAdapter::bIMSGetPrivateGroupMember(szGroupName);
 }
 static jboolean jni_bIMSCopyListToPrivateGroup(JNIEnv* env, jclass cls, jstring jstr_pListURI,
                                                jstring jstr_pGroupName, jlong iGroupType, jstring jstr_pDisplayName, jlong iSeq)
@@ -9597,7 +9416,7 @@ static jboolean jni_bIMSCopyListToPrivateGroup(JNIEnv* env, jclass cls, jstring 
     safeGetStringUTFChars(env, jstr_pGroupName, szGroupName, sizeof(szGroupName) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pDisplayName, szDisplayName, sizeof(szDisplayName) - 1, NULL);
 
-    return bIMSCopyListToPrivateGroup(szListUrl, szGroupName, (long)iGroupType, szDisplayName, (long)iSeq);
+    return USSDK_OcxAdapter::bIMSCopyListToPrivateGroup(szListUrl, szGroupName, (long)iGroupType, szDisplayName, (long)iSeq);
 }
 static jboolean jni_bIMSDeleteListFromPrivateGroup(JNIEnv* env, jclass cls, jstring jstr_pListURI, jstring jstr_pGroupName)
 {
@@ -9607,7 +9426,7 @@ static jboolean jni_bIMSDeleteListFromPrivateGroup(JNIEnv* env, jclass cls, jstr
     safeGetStringUTFChars(env, jstr_pListURI, szUri, sizeof(szUri) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pGroupName, szGroupName, sizeof(szGroupName) - 1, NULL);
 
-    return bIMSDeleteListFromPrivateGroup(szUri, szGroupName);
+    return USSDK_OcxAdapter::bIMSDeleteListFromPrivateGroup(szUri, szGroupName);
 }
 static jboolean jni_bIMSRuleSetMethod(JNIEnv* env, jclass cls, jint iType, jobject  RuleSetobject)
 {
@@ -9624,18 +9443,12 @@ static jboolean jni_bIMSRuleSetMethod(JNIEnv* env, jclass cls, jint iType, jobje
 
     getStringField(env, RuleSetobject, class_RuleSetPara, "cURI", RuleSetInfoPara.cURI,  sizeof(RuleSetInfoPara.cURI) - 1);
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller jni_bIMSRuleSetMethod lOpeType[%d],cID[%s],cURI[%s]",
-                        RuleSetInfoPara.lOpeType,
-                        RuleSetInfoPara.cID,
-                        RuleSetInfoPara.cURI);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "jni_bIMSRuleSetMethod lOpeType[%d],cID[%s],cURI[%s]",
+    LOGI(TAG, "jni_bIMSRuleSetMethod lOpeType[%d],cID[%s],cURI[%s]",
              RuleSetInfoPara.lOpeType,
              RuleSetInfoPara.cID,
              RuleSetInfoPara.cURI);
 
-    bRetrun = bIMSRuleSetMethod((long)iType, (short far*)&RuleSetInfoPara);
+    bRetrun = USSDK_OcxAdapter::bIMSRuleSetMethod((long)iType, (short far*)&RuleSetInfoPara);
     return bRetrun;
 }
 static jboolean jni_bIMSCreateChatRoom(JNIEnv* env, jclass cls, jstring jstr_pDlgID, jstring jstr_pSubject, jstring jstr_pMemberURI)
@@ -9648,7 +9461,7 @@ static jboolean jni_bIMSCreateChatRoom(JNIEnv* env, jclass cls, jstring jstr_pDl
     safeGetStringUTFChars(env, jstr_pMemberURI, szMemberUrl, sizeof(szMemberUrl) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pSubject, szSubject, sizeof(szSubject) - 1, NULL);
 
-    return bIMSCreateChatRoom(szDlgIo, szSubject, szMemberUrl);
+    //return bIMSCreateChatRoom(szDlgIo, szSubject, szMemberUrl);n
 }
 static jboolean jni_bIMSControlChatRoomMember(JNIEnv* env, jclass cls, jstring jstr_pListURI, jstring jstr_pChatRoomURI, jlong iMethod)
 {
@@ -9658,14 +9471,14 @@ static jboolean jni_bIMSControlChatRoomMember(JNIEnv* env, jclass cls, jstring j
     safeGetStringUTFChars(env, jstr_pListURI, szListURI, sizeof(szListURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pChatRoomURI, szChatRoomURI, sizeof(szChatRoomURI) - 1, NULL);
 
-    return bIMSControlChatRoomMember(szListURI, szChatRoomURI, (long)iMethod);
+    //return bIMSControlChatRoomMember(szListURI, szChatRoomURI, (long)iMethod);n
 }
 static jboolean jni_bIMSLeaveChatRoom(JNIEnv* env, jclass cls, jstring jstr_pChatRoomURI, jlong iMethod)
 {
     char szChatRoomURI[64 + 1] = {0};
     safeGetStringUTFChars(env, jstr_pChatRoomURI, szChatRoomURI, sizeof(szChatRoomURI) - 1, NULL);
 
-    return bIMSLeaveChatRoom(szChatRoomURI, (long)iMethod);
+    //return bIMSLeaveChatRoom(szChatRoomURI, (long)iMethod);n
 }
 static jboolean jni_bIMSDoChatRoomInvite(JNIEnv* env, jclass cls, jlong iDoType, jstring jstr_pCreaterURI, jstring jstr_pChatRoomURI)
 {
@@ -9675,7 +9488,7 @@ static jboolean jni_bIMSDoChatRoomInvite(JNIEnv* env, jclass cls, jlong iDoType,
     safeGetStringUTFChars(env, jstr_pCreaterURI, szCreateUri, sizeof(szCreateUri), NULL);
     safeGetStringUTFChars(env, jstr_pChatRoomURI, szChatRoomUri, sizeof(szChatRoomUri), NULL);
 
-    return bIMSDoChatRoomInvite((long)iDoType, szCreateUri, szChatRoomUri);
+    //return bIMSDoChatRoomInvite((long)iDoType, szCreateUri, szChatRoomUri);n
 }
 static jboolean jni_bIMSSearchUserByURI(JNIEnv* env, jclass cls,  jstring jstr_URI,  jlong iPage)
 {
@@ -9683,32 +9496,32 @@ static jboolean jni_bIMSSearchUserByURI(JNIEnv* env, jclass cls,  jstring jstr_U
 
     safeGetStringUTFChars(env, jstr_URI, szURI, sizeof(szURI) - 1, NULL);
 
-    return bIMSSearchUserByURI(szURI, (long) iPage);
+    return USSDK_OcxAdapter::bIMSSearchUserByURI(szURI, (long) iPage);
 }
 static jboolean jni_bIMSSearchUserByDName(JNIEnv* env, jclass cls,  jstring jstr_DName,  jlong iPage)
 {
     char szName[64 + 1] = {0};
 
     safeGetStringUTFChars(env, jstr_DName, szName, sizeof(szName) - 1, NULL);
-    return bIMSSearchUserByDName(szName,  (long)iPage);
+    return USSDK_OcxAdapter::bIMSSearchUserByDName(szName,  (long)iPage);
 }
 static jboolean jni_bIMSSearchUserOnline(JNIEnv* env, jclass cls, jlong iPage)
 {
-    return bIMSSearchUserOnline((long)iPage);
+    return USSDK_OcxAdapter::bIMSSearchUserOnline((long)iPage);
 }
 static jboolean jni_bIMSSearchUserByPhone(JNIEnv* env, jclass cls, jstring jstr_Phone,  jlong iPage)
 {
     char szPhone[64 + 1] = {0};
 
     safeGetStringUTFChars(env, jstr_Phone, szPhone, sizeof(szPhone) - 1, NULL);
-    return bIMSSearchUserByPhone(szPhone, (long)iPage);
+    return USSDK_OcxAdapter::bIMSSearchUserByPhone(szPhone, (long)iPage);
 }
 static jboolean jni_bIMSSearchUserByEmail(JNIEnv* env, jclass cls, jstring jstr_Email,  jlong iPage)
 {
     char szEmail[64 + 1] = {0};
 
     safeGetStringUTFChars(env, jstr_Email, szEmail, sizeof(szEmail) - 1, NULL);
-    return bIMSSearchUserByEmail(szEmail, (long)iPage);
+    return USSDK_OcxAdapter::bIMSSearchUserByEmail(szEmail, (long)iPage);
 }
 static jboolean jni_bIMSAddOneAddressList(JNIEnv* env, jclass cls, jstring jstr_URI, jstring jstr_DisplayName, jstring jstr_Info)
 {
@@ -9719,22 +9532,22 @@ static jboolean jni_bIMSAddOneAddressList(JNIEnv* env, jclass cls, jstring jstr_
     safeGetStringUTFChars(env, jstr_URI, szURI, sizeof(szURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_DisplayName, szDisplayName, sizeof(szDisplayName) - 1, NULL);
     safeGetStringUTFChars(env, jstr_Info, szInfo, sizeof(szInfo) - 1, NULL);
-    return bIMSAddOneAddressList(szURI,  szDisplayName, szInfo);
+    return USSDK_OcxAdapter::bIMSAddOneAddressList(szURI,  szDisplayName, szInfo);
 }
 static jboolean jni_bIMSDeleteOneAddressList(JNIEnv* env, jclass cls,  jstring jstr_URI)
 {
     char szURI[64 + 1] = {0};
 
     safeGetStringUTFChars(env, jstr_URI, szURI, sizeof(szURI) - 1, NULL);
-    return bIMSDeleteOneAddressList(szURI);
+    return USSDK_OcxAdapter::bIMSDeleteOneAddressList(szURI);
 }
-//add by zhanghe 2011-11-15 ���������ı�����Ϣ��Ӧ��
+
 static jboolean jni_bIMSDoWatcherSubSeq(JNIEnv* env, jclass cls, jstring jstr_WatcherURI, jlong iAccept)
 {
     char szWatcherURI[256 + 1] = {0};
 
     safeGetStringUTFChars(env, jstr_WatcherURI, szWatcherURI, sizeof(szWatcherURI) - 1, NULL);
-    return bIMSDoWatcherSubSeq(szWatcherURI, iAccept);
+    return USSDK_OcxAdapter::bIMSDoWatcherSubSeq(szWatcherURI, iAccept);
 }
 static jboolean jni_bIMSAddRLSMember(JNIEnv* env, jclass cls, jstring pURI, jstring pListName, jstring pListMemberURI, jstring pInfo)
 {
@@ -9747,7 +9560,7 @@ static jboolean jni_bIMSAddRLSMember(JNIEnv* env, jclass cls, jstring pURI, jstr
     safeGetStringUTFChars(env, pListMemberURI, szListMemberURI, sizeof(szListMemberURI) - 1, NULL);
     safeGetStringUTFChars(env, pInfo, szInfo, sizeof(szInfo) - 1, NULL);
 
-    return bIMSAddRLSMember(szURI, szListName, szListMemberURI, szInfo);
+    return USSDK_OcxAdapter::bIMSAddRLSMember(szURI, szListName, szListMemberURI, szInfo);
 }
 static jboolean jni_bIMSDeleteRLSMember(JNIEnv* env, jclass cls, jstring pURI,  jstring pListMemberURI)
 {
@@ -9758,7 +9571,7 @@ static jboolean jni_bIMSDeleteRLSMember(JNIEnv* env, jclass cls, jstring pURI,  
 
     safeGetStringUTFChars(env, pListMemberURI, szListMemberURI, sizeof(szListMemberURI) - 1, NULL);
 
-    return bIMSDeleteRLSMember(szURI,  szListMemberURI);
+    return USSDK_OcxAdapter::bIMSDeleteRLSMember(szURI,  szListMemberURI);
 }
 static jboolean jni_bIMSSearchAddrList(JNIEnv* env, jclass cls, jlong iType, jobject pSearch, jlong iPage)
 {
@@ -9777,7 +9590,7 @@ static jboolean jni_bIMSSearchAddrList(JNIEnv* env, jclass cls, jlong iType, job
         getStringField(env, obj_fireEcpDeptSearchAdv, class_fireEcpDeptSearchAdv, "cSpell", searcAdv.cSpell,  sizeof(searcAdv.cSpell) - 1);
         getStringField(env, obj_fireEcpDeptSearchAdv, class_fireEcpDeptSearchAdv, "cPhone", searcAdv.cPhone,  sizeof(searcAdv.cPhone) - 1);
 
-        return bIMSSearchAddrList((long)iType, (short far*)&searcAdv, (long)iPage);
+        return USSDK_OcxAdapter::bIMSSearchAddrList((long)iType, (short far*)&searcAdv, (long)iPage);
     }
     else
     {
@@ -9794,9 +9607,9 @@ static jboolean jni_bIMSSearchAddrList(JNIEnv* env, jclass cls, jlong iType, job
         getStringField(env, obj_fireDeptSearchAdv, class_fireDeptSearchAdv, "cEmail",    searcAdv.cEmail,	  sizeof(searcAdv.cEmail) - 1);
         getStringField(env, obj_fireDeptSearchAdv, class_fireDeptSearchAdv, "cMobile",   searcAdv.cMobile,	  sizeof(searcAdv.cMobile) - 1);
         getStringField(env, obj_fireDeptSearchAdv, class_fireDeptSearchAdv, "cUniPhone", searcAdv.cUniPhone,  sizeof(searcAdv.cUniPhone) - 1);
-	 getStringField(env, obj_fireDeptSearchAdv, class_fireDeptSearchAdv, "cCompanyURI", searcAdv.cCompanyURI,  sizeof(searcAdv.cCompanyURI) - 1);
+	    getStringField(env, obj_fireDeptSearchAdv, class_fireDeptSearchAdv, "cCompanyURI", searcAdv.cCompanyURI,  sizeof(searcAdv.cCompanyURI) - 1);
 
-        return bIMSSearchAddrList((long)iType, (short far*)&searcAdv, (long)iPage);
+        return USSDK_OcxAdapter::bIMSSearchAddrList((long)iType, (short far*)&searcAdv, (long)iPage);
     }
 }
 static jboolean jni_bIMSLoadAddrList(JNIEnv* env, jclass cls, jint iType, jobject PersonListInfoList, jint iNum, jint iPage)
@@ -9816,15 +9629,12 @@ static jboolean jni_bIMSLoadAddrList(JNIEnv* env, jclass cls, jint iType, jobjec
         sizeMethodID = (env)->GetMethodID(class_PersonInfoArrayList, "size", "()I");
         size = (env)->CallIntMethod(PersonListInfoList, sizeMethodID);//��sizeӦ�ú�iNumһ��
     }
-    if(size > 0)//���size��iNumֵ��һ������Ӧ����sizeΪ׼
+    if(size > 0)
     {
         pPersonListInfoPara = (PERSON_LIST_INFO *)ZX_malloc(sizeof(PERSON_LIST_INFO) * size);
         if(pPersonListInfoPara == NULL)
         {
-            if(g_WriteLogType == 2)
-                TraceMsgWindow1(1, "rcscontroller jni_bIMSLoadAddrList ZX_malloc pPersonListInfoPara failed!");
-            else if(g_WriteLogType == 1)
-                LOGI(TAG, "jni_bIMSLoadAddrList ZX_malloc pPersonListInfoPara failed!");
+            LOGE(TAG, "jni_bIMSLoadAddrList ZX_malloc pPersonListInfoPara failed!");
 
             return false;
         }
@@ -9836,10 +9646,7 @@ static jboolean jni_bIMSLoadAddrList(JNIEnv* env, jclass cls, jint iType, jobjec
         pPersonInfoTemp = &pPersonListInfoPara[i];
         if(pPersonInfoTemp == NULL)
         {
-            if(g_WriteLogType == 2)
-                TraceMsgWindow1(1, "rcscontroller jni_bIMSLoadAddrList pPersonInfoTemp == NULL");
-            else if(g_WriteLogType == 1)
-                LOGI(TAG, "jni_bIMSLoadAddrList pPersonInfoTemp == NULL");
+            LOGE(TAG, "jni_bIMSLoadAddrList pPersonInfoTemp == NULL");
 
             return false;
         }
@@ -9884,7 +9691,7 @@ static jboolean jni_bIMSLoadAddrList(JNIEnv* env, jclass cls, jint iType, jobjec
         getStringField(env, jobj_PersonInfo, class_PersonInfo, "cWorkAffiliation", pPersonInfoTemp->cWorkAffiliation,  sizeof(pPersonInfoTemp->cWorkAffiliation) - 1);
     }
 
-    bRetrun = bIMSLoadAddrList((long)iType, (short far*)pPersonListInfoPara, (long)iNum, (long)iPage);
+    bRetrun = USSDK_OcxAdapter::bIMSLoadAddrList((long)iType, (short far*)pPersonListInfoPara, (long)iNum, (long)iPage);
 
     if(pPersonListInfoPara)
         ZX_free((UINT8*)pPersonListInfoPara);
@@ -9893,17 +9700,17 @@ static jboolean jni_bIMSLoadAddrList(JNIEnv* env, jclass cls, jint iType, jobjec
 static jboolean jni_bIMSDoPublicGroupJoinReq(JNIEnv* env, jclass cls,
                                              jstring jstr_pReqMemberName, jstring jstr_pReqURI, jlong iResult, jstring jstr_pReturn1, jstring jstr_pReturn2)
 {
-    char cReqMemberName[256 + 1] = {0}; //�����˵�URI����ʽΪ��sip:�ʺ�@�������64�ֽ�
-    char cReqURI[256 + 1] = {0}; //�����˵�URI����ʽΪ��sip:�ʺ�@�������64�ֽ�
-    char cReturn1[256 + 1] = {0}; //���¼�IMSReqJoinMyPublicGroup�еõ����ַ���, ʵ��Ϊ ����Ⱥ���URI
-    char cReturn2[128 + 1] = {0}; //���¼�IMSReqJoinMyPublicGroup�еõ����ַ���, ʵ��Ϊ ����Ⱥ���ĵ���URL
+    char cReqMemberName[256 + 1] = {0};
+    char cReqURI[256 + 1] = {0};
+    char cReturn1[256 + 1] = {0};
+    char cReturn2[128 + 1] = {0};
 
     safeGetStringUTFChars(env, jstr_pReqMemberName, cReqMemberName, sizeof(cReqMemberName), NULL);
     safeGetStringUTFChars(env, jstr_pReqURI, cReqURI, sizeof(cReqURI), NULL);
     safeGetStringUTFChars(env, jstr_pReturn1, cReturn1, sizeof(cReturn1), NULL);
     safeGetStringUTFChars(env, jstr_pReturn2, cReturn2, sizeof(cReturn2), NULL);
 
-    return bIMSDoPublicGroupJoinReq(cReqMemberName, cReqURI, iResult, cReturn1, cReturn2);
+    return USSDK_OcxAdapter::bIMSDoPublicGroupJoinReq(cReqMemberName, cReqURI, iResult, cReturn1, cReturn2);
 }
 static jboolean jni_bIMSModifyOneListDpName(JNIEnv* env, jclass cls, jstring jstr_pURI, jstring jstr_pDisplayName)
 {
@@ -9913,24 +9720,23 @@ static jboolean jni_bIMSModifyOneListDpName(JNIEnv* env, jclass cls, jstring jst
     safeGetStringUTFChars(env, jstr_pURI, cURI, sizeof(cURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pDisplayName, cDisplayName, sizeof(cDisplayName) - 1, NULL);
 
-    return bIMSModifyOneListDpName(cURI, cDisplayName);
+    return USSDK_OcxAdapter::bIMSModifyOneListDpName(cURI, cDisplayName);
 }
-//����ӿ�
+
 static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobject  jobj_bIMSConfMethodObject)
 {
     int i = 0;
 
     if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller jni_bIMSConfMethod begin iType = %d", (int)iType);
+        LOGI(TAG, "rcscontroller jni_bIMSConfMethod begin iType = %d", (int)iType);
     else if(g_WriteLogType == 1)
         LOGI(TAG, "jni_bIMSConfMethod begin iType = %d", (int)iType);
 
     jclass class_bIMSConfMethodPara = env->GetObjectClass(jobj_bIMSConfMethodObject);
 
-    //��������ʹ���ԤԼ�����������ģ��
+
     if (GT_METHOD_CONF_CONTROL == iType)
     {
-
         CONF_CONTROL_METHOD ConfControlMethod = {0};
         jfieldID id_ConfControlMethod = env->GetFieldID(class_bIMSConfMethodPara, "fireConfControlPara", "Lcom/zte/softda/ocx/FireConfControlPara;");
         jobject obj_ConfControlMethod = env->GetObjectField(jobj_bIMSConfMethodObject, id_ConfControlMethod);
@@ -10010,7 +9816,7 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
                 ConfControlMethod.pSMSMasterList[i] = jpSMSMasterListArray[i];
 
                 //if(g_WriteLogType == 2)
-                //	TraceMsgWindow1(1, "rcscontroller jni_bIMSConfMethod GT_METHOD_CONF_CONTROL pSMSMasterList = %d", ConfControlMethod.pSMSMasterList[i]);
+                //	LOGI(TAG, "rcscontroller jni_bIMSConfMethod GT_METHOD_CONF_CONTROL pSMSMasterList = %d", ConfControlMethod.pSMSMasterList[i]);
                 //else if(g_WriteLogType == 1)
                 //LOGI(TAG, "GT_METHOD_CONF_CONTROL pSMSMasterList = %d", ConfControlMethod.pSMSMasterList[i]);
             }
@@ -10084,18 +9890,14 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
         jfieldID  id_iReleaseMode = env->GetFieldID(class_ConfControlMethod, "iReleaseMode", "I");
         ConfControlMethod.iReleaseMode = env->GetIntField(obj_ConfControlMethod, id_iReleaseMode);
 
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller GT_METHOD_CONF_CONTROL	cSubject[%s]*iConfType[%d]*cMasterURI[%s]  [iInitMemberNum= %d] [iEmailNum = %d] [iSMSNum = %d], [cStartTime = %s]",
-                            ConfControlMethod.cSubject, ConfControlMethod.iConfType, ConfControlMethod.cMasterURI, ConfControlMethod.iInitMemberNum, ConfControlMethod.iEmailNum, ConfControlMethod.iSMSNum, ConfControlMethod.cStartTime);
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "GT_METHOD_CONF_CONTROL    cSubject[%s]*iConfType[%d]*cMasterURI[%s]  [iInitMemberNum= %d] [iEmailNum = %d] [iSMSNum = %d], [cStartTime = %s]",
+        LOGI(TAG, "GT_METHOD_CONF_CONTROL    cSubject[%s]*iConfType[%d]*cMasterURI[%s]  [iInitMemberNum= %d] [iEmailNum = %d] [iSMSNum = %d], [cStartTime = %s]",
                  ConfControlMethod.cSubject, ConfControlMethod.iConfType, ConfControlMethod.cMasterURI, ConfControlMethod.iInitMemberNum, ConfControlMethod.iEmailNum, ConfControlMethod.iSMSNum, ConfControlMethod.cStartTime);
 
-        BOOL iResult = bIMSConfMethod(iType, (short far*)&ConfControlMethod);
+        //BOOL iResult = bIMSConfMethod(iType, (short far*)&ConfControlMethod);n
 
         return iResult;
     }
-    //��ȡ������ʱ��
+
     if (GT_METHOD_ASSISTTANT_CONTROL == iType)
     {
         CONF_ASSISTTANT_CONTROL_METHOD ConfAssisttantControlMethod = {0};
@@ -10106,9 +9908,9 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
         jfieldID  id_iOperateType = env->GetFieldID(class_GetMethodAssisttantControl, "iOperateType", "I");
         ConfAssisttantControlMethod.iOperateType = env->GetIntField(obj_GetMethodAssisttantControl, id_iOperateType);
 
-        return bIMSConfMethod(iType, (short far*)&ConfAssisttantControlMethod);
+        //return bIMSConfMethod(iType, (short far*)&ConfAssisttantControlMethod);n
     }
-    //�����ѯ�����¼
+
     if (GT_METHOD_QUERY_CONF == iType)
     {
         QUERY_CONF_STRUCT QueryConfStruct = {0};
@@ -10130,15 +9932,15 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
         jfieldID  id_iStatus = env->GetFieldID(class_GetMethodQueryConf, "iStatus", "I");
         QueryConfStruct.iStatus = env->GetIntField(obj_GetMethodQueryConf, id_iStatus);
 
-        return bIMSConfMethod(iType, (short far*)&QueryConfStruct);
+        //return bIMSConfMethod(iType, (short far*)&QueryConfStruct);n
     }
-    //ȡ��ԤԼ����
+
     if (ST_METHOD_CANCEL_CONF == iType)
     {
         char QueryCancel[MAX_IMS_MUL_CONf_URI_LEN + 1] = "";
         getStringField(env, jobj_bIMSConfMethodObject, class_bIMSConfMethodPara, "cConfURI", QueryCancel, sizeof(QueryCancel) - 1);
 
-        return bIMSConfMethod(iType, (short far*)&QueryCancel);
+       //return bIMSConfMethod(iType, (short far*)&QueryCancel);n
     }
 
     if (ST_METHOD_DO_ORDER_CONF_NOTITY == iType)
@@ -10155,15 +9957,15 @@ static jboolean jni_bIMSConfMethod(JNIEnv* env, jclass cls, jlong iType,  jobjec
 
         getStringField(env, obj_DoOrderConfNotity, class_DoOrderConfNotity, "cConfURI", DoOrderNotify.cConfURI,  sizeof(DoOrderNotify.cConfURI) - 1);
 
-        return bIMSConfMethod(iType, (short far*)&DoOrderNotify);
+        //return bIMSConfMethod(iType, (short far*)&DoOrderNotify);n
     }
-    //��ȡ�����Աi��Ϣ
+
     if (GT_METHOD_ORDERCONF_MEMBER_INFO == iType)
     {
         char ConfUri[MAX_IMS_MUL_CONf_URI_LEN + 1] = "";
         getStringField(env, jobj_bIMSConfMethodObject, class_bIMSConfMethodPara, "cConfURI", ConfUri, sizeof(ConfUri) - 1);
 
-        return bIMSConfMethod(iType, (short far*)&ConfUri);
+        //return bIMSConfMethod(iType, (short far*)&ConfUri);
     }
 }
 static jboolean jni_bIMSReqJoinPublicGroup(JNIEnv* env, jclass cls, jstring jstr_pGroupURI, jstring jstr_pGroupIdentifier, 
@@ -10172,8 +9974,8 @@ static jboolean jni_bIMSReqJoinPublicGroup(JNIEnv* env, jclass cls, jstring jstr
     char GroupURI[64 + 1] = {0};
     char GroupIdentifier[128 + 1] = {0};
     char cDisplayName[64 + 1] = {0};
-    char cShareUserURI[64+1] = {0};//��ά�������sip�˺�
-	char cShareUserName[128+1] = {0};//��ά�����������
+    char cShareUserURI[64+1] = {0};
+	char cShareUserName[128+1] = {0};
 
     safeGetStringUTFChars(env, jstr_pGroupURI, GroupURI, sizeof(GroupURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pGroupIdentifier, GroupIdentifier, sizeof(GroupIdentifier) - 1, NULL);
@@ -10181,7 +9983,7 @@ static jboolean jni_bIMSReqJoinPublicGroup(JNIEnv* env, jclass cls, jstring jstr
     safeGetStringUTFChars(env, jstr_pShareUserURI, cShareUserURI, sizeof(cShareUserURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_pShareUserName, cShareUserName, sizeof(cShareUserName) - 1, NULL);
 
-    return bIMSReqJoinPublicGroup(GroupURI, GroupIdentifier, cDisplayName, cShareUserURI, cShareUserName);
+    return USSDK_OcxAdapter::bIMSReqJoinPublicGroup(GroupURI, GroupIdentifier, cDisplayName, cShareUserURI, cShareUserName);
 }
 static jboolean jni_bIMSLeavePublicGroup(JNIEnv* env, jclass cls, jstring jstr_pGroupName, jstring jstr_GroupURI)
 {
@@ -10191,7 +9993,7 @@ static jboolean jni_bIMSLeavePublicGroup(JNIEnv* env, jclass cls, jstring jstr_p
     safeGetStringUTFChars(env, jstr_pGroupName, GroupName, sizeof(GroupName) - 1, NULL);
     safeGetStringUTFChars(env, jstr_GroupURI, GroupURI, sizeof(GroupURI) - 1, NULL);
 
-    return bIMSLeavePublicGroup(GroupName, GroupURI);
+    //return USSDK_OcxAdapter::bIMSLeavePublicGroup(GroupName, GroupURI);p
 }
 static jboolean jni_bIMSDeleteOnePublicGroup(JNIEnv* env, jclass cls, jstring jstr_GroupURI)
 {
@@ -10199,7 +10001,7 @@ static jboolean jni_bIMSDeleteOnePublicGroup(JNIEnv* env, jclass cls, jstring js
 
     safeGetStringUTFChars(env, jstr_GroupURI, GroupURI, sizeof(GroupURI) - 1, NULL);
 
-    return bIMSDeleteOnePublicGroup(GroupURI);
+    return USSDK_OcxAdapter::bIMSDeleteOnePublicGroup(GroupURI);
 }
 static jboolean jni_bIMSDeleteOneFromMyPublicGroup(JNIEnv* env, jclass cls, jstring jstr_SomeoneURI, jstring jstr_GroupURI)
 {
@@ -10209,10 +10011,10 @@ static jboolean jni_bIMSDeleteOneFromMyPublicGroup(JNIEnv* env, jclass cls, jstr
     safeGetStringUTFChars(env, jstr_SomeoneURI, SomeoneURI, sizeof(SomeoneURI) - 1, NULL);
     safeGetStringUTFChars(env, jstr_GroupURI, GroupURI, sizeof(GroupURI) - 1, NULL);
 
-    return bIMSDeleteOneFromMyPublicGroup(SomeoneURI, GroupURI);
+    //return USSDK_OcxAdapter::bIMSDeleteOneFromMyPublicGroup(SomeoneURI, GroupURI);p
 }
 
-//iType == 11Ⱥ����ʷ��Ϣ��δ����Ϣ��ѯ
+
 static jboolean jni_bIMSDispUICmdMethod_11(JNIEnv* env, jclass cls, jint nMethodType, jstring cGroupURI, jstring timestamp, jint maxNum)
 {
     GROUP_OFFLINE_MSG_METHOD_PARAM GroupOfflineMsgMethodPara = {0};
@@ -10220,7 +10022,7 @@ static jboolean jni_bIMSDispUICmdMethod_11(JNIEnv* env, jclass cls, jint nMethod
     safeGetStringUTFChars(env, cGroupURI, GroupOfflineMsgMethodPara.cURI, sizeof(GroupOfflineMsgMethodPara.cURI) - 1, NULL);
     safeGetStringUTFChars(env, timestamp, GroupOfflineMsgMethodPara.timestamp, sizeof(GroupOfflineMsgMethodPara.timestamp) - 1, NULL);
     GroupOfflineMsgMethodPara.maxNum = maxNum; 
-    return bIMSDispUICmdMethod(11, (short far*)&GroupOfflineMsgMethodPara);   
+    return USSDK_OcxAdapter::bIMSDispUICmdMethod(11, (short far*)&GroupOfflineMsgMethodPara);
 }
 
 static jboolean jni_bIMSDispUICmdMethod(JNIEnv* env, jclass cls, jint iType, jobject CmdParaobject)
@@ -10252,7 +10054,7 @@ static jboolean jni_bIMSDispUICmdMethod(JNIEnv* env, jclass cls, jint iType, job
         jfieldID  id_nAutoExpand = env->GetFieldID(class_DeptFavMethodPara, "nAutoExpand", "I");
         DeptFavMethodPara.nAutoExpand = env->GetIntField(obj_DeptFavMethodPara, id_nAutoExpand);
 
-        bReturn = bIMSDispUICmdMethod((long)iType, (short far*)&DeptFavMethodPara);
+        bReturn = USSDK_OcxAdapter::bIMSDispUICmdMethod((long)iType, (short far*)&DeptFavMethodPara);
     }
     else if(iType == 18)
     {
@@ -10270,9 +10072,9 @@ static jboolean jni_bIMSDispUICmdMethod(JNIEnv* env, jclass cls, jint iType, job
         jfieldID  id_nMethodType = env->GetFieldID(class_GroupQueryClassMethodPara, "nMethodType", "I");
         GroupQueryClassMethodPara.iResultCode = env->GetIntField(obj_GroupQueryClassMethodPara, id_nMethodType);
 
-        bReturn = bIMSDispUICmdMethod((long)iType, (short far*)&GroupQueryClassMethodPara);
+        bReturn = USSDK_OcxAdapter::bIMSDispUICmdMethod((long)iType, (short far*)&GroupQueryClassMethodPara);
     }
-    else if(iType == 5)//��ȡ����Ȩ��
+    else if(iType == 5)
     {
         bReturn = bIMSDispUICmdMethod((long)iType, NULL);
     }
@@ -10287,7 +10089,7 @@ static jboolean jni_bIMSDispUICmdMethod(JNIEnv* env, jclass cls, jint iType, job
         getStringField(env, obj_HttpHangUpConfMethodPara, class_HttpHangUpConfMethodPara, "cConfURI", HttpHangUpConfMethodPara.cConfURI,  sizeof(HttpHangUpConfMethodPara.cConfURI) - 1);
         getStringField(env, obj_HttpHangUpConfMethodPara, class_HttpHangUpConfMethodPara, "cServer", HttpHangUpConfMethodPara.cServer,  sizeof(HttpHangUpConfMethodPara.cServer) - 1);
 
-        bReturn = bIMSDispUICmdMethod((long)iType, (short far*)&HttpHangUpConfMethodPara);
+        bReturn = USSDK_OcxAdapter::bIMSDispUICmdMethod((long)iType, (short far*)&HttpHangUpConfMethodPara);
     }
     return bReturn;
 }
@@ -10306,22 +10108,14 @@ static jboolean jni_bUpdateMsgIndication(JNIEnv* env, jclass cls, jobject MsgInd
     jfieldID  id_refresh = env->GetFieldID(class_MsgIndicationPara, "refresh", "I");
     MsgIndicationPara.refresh = env->GetIntField(MsgIndicationParaobject, id_refresh);
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller jni_bUpdateMsgIndication cMemberURI[%s], tLastactive[%s],  mask[%d], state[%d],refresh[%d]",
-                        MsgIndicationPara.cMemberURI,
-                        MsgIndicationPara.tLastactive,
-                        MsgIndicationPara.mask,
-                        MsgIndicationPara.state,
-                        MsgIndicationPara.refresh);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "jni_bUpdateMsgIndication cMemberURI[%s], tLastactive[%s],  mask[%d], state[%d],refresh[%d]",
+    LOGI(TAG, "jni_bUpdateMsgIndication cMemberURI[%s], tLastactive[%s],  mask[%d], state[%d],refresh[%d]",
              MsgIndicationPara.cMemberURI,
              MsgIndicationPara.tLastactive,
              MsgIndicationPara.mask,
              MsgIndicationPara.state,
              MsgIndicationPara.refresh);
 
-    return bUpdateMsgIndication((short far*)&MsgIndicationPara);
+    return USSDK_OcxAdapter::bUpdateMsgIndication((short far*)&MsgIndicationPara);
 }
 
 static jboolean jni_bRequestLastLogInfo(JNIEnv* env, jclass cls, jobject LastLogInfoobject)
@@ -10332,12 +10126,9 @@ static jboolean jni_bRequestLastLogInfo(JNIEnv* env, jclass cls, jobject LastLog
     getStringField(env, LastLogInfoobject, class_LastLogInfo , "lastlogintime", LastLogInfo.lastlogintime,  sizeof(LastLogInfo.lastlogintime) - 1);
     getStringField(env, LastLogInfoobject, class_LastLogInfo , "lastlogouttime", LastLogInfo.lastlogouttime,  sizeof(LastLogInfo.lastlogouttime) - 1);
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller jni_bRequestLastLogInfo friendURI[%s], lastlogouttime[%s]", LastLogInfo.friendURI, LastLogInfo.lastlogouttime);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "jni_bRequestLastLogInfo friendURI[%s], lastlogouttime[%s]", LastLogInfo.friendURI, LastLogInfo.lastlogouttime);
+     LOGI(TAG, "jni_bRequestLastLogInfo friendURI[%s], lastlogouttime[%s]", LastLogInfo.friendURI, LastLogInfo.lastlogouttime);
 
-    return bRequestLastLogInfo((short far*)&LastLogInfo);
+    return USSDK_OcxAdapter::bRequestLastLogInfo((short far*)&LastLogInfo);
 }
 static jboolean jni_bIMSInviteSomeoneToMyPublicGroup(JNIEnv* env, jclass cls, jstring jstr_SomeoneURI, jstring jstr_DisplayName, jstring jstr_GroupURI)
 {
@@ -10349,7 +10140,7 @@ static jboolean jni_bIMSInviteSomeoneToMyPublicGroup(JNIEnv* env, jclass cls, js
     safeGetStringUTFChars(env, jstr_DisplayName, cDisplayName, sizeof(cDisplayName) - 1, NULL);
     safeGetStringUTFChars(env, jstr_GroupURI, cGroupURI, sizeof(cGroupURI) - 1, NULL);
 
-    return bIMSInviteSomeoneToMyPublicGroup(cSomeoneURI, cDisplayName, cGroupURI);
+    //return USSDK_OcxAdapter::bIMSInviteSomeoneToMyPublicGroup(cSomeoneURI, cDisplayName, cGroupURI);p
 }
 static jboolean jni_bIMSCreateOnePublicGroup(JNIEnv* env, jclass cls, jobject jobj_bIMSCreateOnePublicGroup)
 {
@@ -10428,23 +10219,17 @@ static jboolean jni_bIMSCreateOnePublicGroup(JNIEnv* env, jclass cls, jobject jo
         }
     }
 
-    return bIMSCreateOnePublicGroup((short far*)&InputParaTemp);
+    return USSDK_OcxAdapter::bIMSCreateOnePublicGroup((short far*)&InputParaTemp);
 }
 static jboolean jni_bServerLinkRecover(JNIEnv* env, jclass cls)
 {
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller jni_bServerLinkRecover ");
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "jni_bServerLinkRecover ");
-    return bServerLinkRecover();
+    LOGI(TAG, "jni_bServerLinkRecover ");
+    return USSDK_OcxAdapter::bServerLinkRecover();
 }
 static jboolean jni_bCloseServerLink(JNIEnv* env, jclass cls)
 {
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller jni_bCloseServerLink ");
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "jni_bCloseServerLink ");
-    return bCloseServerLink();
+    LOGI(TAG, "jni_bCloseServerLink ");
+    return USSDK_OcxAdapter::bCloseServerLink();
 }
 
 //lmd20141204
@@ -10458,7 +10243,7 @@ static jboolean jni_bDataConfFileUpload(JNIEnv* env, jclass cls, jlong iOperateT
     safeGetStringUTFChars(env, pFileName, cFileName, sizeof(cFileName) - 1, NULL);
     safeGetStringUTFChars(env, pFilePath, cFilePath, sizeof(cFilePath) - 1, NULL);
 
-    return bDataConfFileUpload((long)iOperateType,cUploadURI, cFileName,cFilePath, (long)iFileLen, (long)iBeginValue, (long)iFileType);
+    //return bDataConfFileUpload((long)iOperateType,cUploadURI, cFileName,cFilePath, (long)iFileLen, (long)iBeginValue, (long)iFileType);n
 }
 
 static jboolean jni_bDataConfFileDownload(JNIEnv* env, jclass cls, jlong iOperateType, jstring pDownloadURI, jstring pFilePath, jstring pFileName)
@@ -10471,7 +10256,7 @@ static jboolean jni_bDataConfFileDownload(JNIEnv* env, jclass cls, jlong iOperat
     safeGetStringUTFChars(env, pFileName, cFileName, sizeof(cFileName) - 1, NULL);
     safeGetStringUTFChars(env, pFilePath, cFilePath, sizeof(cFilePath) - 1, NULL);
 
-    return bDataConfFileDownload((long)iOperateType,cDownloadURI,cFilePath, cFileName);
+    //return bDataConfFileDownload((long)iOperateType,cDownloadURI,cFilePath, cFileName);n
 }
 //lmd20141204, end
 
@@ -10480,18 +10265,18 @@ static jboolean jni_bDataConfFileDownload(JNIEnv* env, jclass cls, jlong iOperat
 static void jni_nativeInit(JNIEnv* env, jclass cls)
 {
     //LOGI(TAG, "jni_nativeRender");
-	MediaEngin_VideoForAndroid_Init();
+	//MediaEngin_VideoForAndroid_Init();n
 	return;	 
 }
 static void jni_nativeResize(JNIEnv* env, jclass cls, jint iWidth, jint iHeight)
 {	 
-	MediaEngin_VideoForAndroid_Resize(iWidth, iHeight);
+	//MediaEngin_VideoForAndroid_Resize(iWidth, iHeight);n
 	return;
 }
 static void jni_nativeRender(JNIEnv* env, jclass cls)
 {
     //LOGI(TAG, "jni_nativeRender");
-	MediaEngin_VideoForAndroid_Render();
+	//MediaEngin_VideoForAndroid_Render();n
 	return;	 
 }
 
@@ -10499,7 +10284,7 @@ static void jni_nativeRender(JNIEnv* env, jclass cls)
 static void jni_SensorAngle(JNIEnv* env, jclass cls, jint iAngle)
 {
     //LOGI(TAG, "jni_nativeRender");
-	MediaEngin_SensorAngle(iAngle);
+	//MediaEngin_SensorAngle(iAngle);n
 	return;	 
 }
 
@@ -10512,7 +10297,7 @@ static void jni_VideoReadBMPsrc(JNIEnv* env, jclass cls, jstring lpSrc_CIF, jstr
     safeGetStringUTFChars(env, lpSrc_CIF, cSrc_CIF, sizeof(cSrc_CIF) - 1, NULL);
 	safeGetStringUTFChars(env, lpSrc_QCIF, cSrc_QCIF, sizeof(cSrc_QCIF) - 1, NULL);
 
-	MediaEngin_VideoReadBMPsrc(cSrc_CIF, cSrc_QCIF);
+	//MediaEngin_VideoReadBMPsrc(cSrc_CIF, cSrc_QCIF);n
 	return;	 
 }
 
@@ -10534,12 +10319,9 @@ static jboolean jni_bConfBridgeControl(JNIEnv* env, jclass cls, jint iType, jobj
 	int i = 0;
 	char buf[1024] = "";
 	
-	if(g_WriteLogType == 2)
-	    TraceMsgWindow1(1, "rcscontroller jni_bConfBridgeControl begin iType = %d", (int)iType);
-	else if(g_WriteLogType == 1)
-	    LOGI(TAG, "jni_bConfBridgeControl begin iType = %d", (int)iType);
+	LOGI(TAG, "jni_bConfBridgeControl begin iType = %d", (int)iType);
 
-	JOjbectWrapper objParams(env, mPara);
+	JObjectWrapper objParams(env, mPara);
 	ConfBridgeControlParams_T params = {0};
 	params.iConfType = objParams.GetIntValue("iConfType");
 	objParams.GetStringValue("szConfURI", params.szConfURI, count_of_array(params.szConfURI));
@@ -10557,21 +10339,18 @@ static jboolean jni_bConfBridgeControl(JNIEnv* env, jclass cls, jint iType, jobj
 	objParams.GetStringValue("szConfNO", params.szConfNO, count_of_array(params.szConfNO));
 
 	BridgeInfoToString(params, buf, 1023);
-	if(g_WriteLogType == 2)
-	    TraceMsgWindow1(1, "rcscontroller jni_bConfBridgeControl params{%s}", buf);
-	else if(g_WriteLogType == 1)
-	    LOGI(TAG, "rcscontroller jni_bConfBridgeControl params{%s}", buf);
+	LOGI(TAG, "rcscontroller jni_bConfBridgeControl params{%s}", buf);
 	
 	OCXReq_T sReq = {0};
 	sReq.pConfBridgeControl = CreateConfBridgeControlHandler((ConfBridgeControlType)iType, (short*)&params);
 	sReq.ChoiceType = cmdId_ConfBridgeControl;
-	return SendToAgent(OCXCtrlReq_Event, (UINT8*)&sReq, sizeof(sReq));	
+	//return SendToAgent(OCXCtrlReq_Event, (UINT8*)&sReq, sizeof(sReq));n
 }
 
 static jboolean jni_bSetXCAPAccount(JNIEnv* env, jclass cls, jstring jstrAccount, jstring jstrPassword)
 {
 
-	TraceMsgWindow1(1, "rcscontroller jni_bSetXCAPAccount jstrAccount{%s} jstrPassword{******}", jstrAccount);
+	LOGI(TAG, "rcscontroller jni_bSetXCAPAccount jstrAccount{%s} jstrPassword{******}", jstrAccount);
 	
     char cAccount[256 + 1] = {0};
     char cPassword[256 + 1] = {0};
@@ -10583,7 +10362,7 @@ static jboolean jni_bSetXCAPAccount(JNIEnv* env, jclass cls, jstring jstrAccount
 	strncpy(sReq.xcapAccountSet.ptszAccount, cAccount, 256);
 	strncpy(sReq.xcapAccountSet.ptszPasswd, cPassword, 256);
 	sReq.ChoiceType = cmdId_SetXcapAccount;
-	return SendToAgent(OCXCtrlReq_Event, (UINT8*)&sReq, sizeof(sReq));
+	//return SendToAgent(OCXCtrlReq_Event, (UINT8*)&sReq, sizeof(sReq));n
 }
 
 //by smm for AVTest 2012.11.08 begin
@@ -10663,10 +10442,10 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 
 		LOGI(TAG,"[jni_AVTest]iAudioType=%d, iVideoType=%d", AVTestMethod.iAudioType, AVTestMethod.iVideoType);
 
-		//Զ��IP��ַ
+
 		getStringField(env, jobj_AVTestMethodObject, class_AVTestMethodObject, "cRemoteIPAddress", AVTestMethod.cRemoteIPAddress,  sizeof(AVTestMethod.cRemoteIPAddress)-1);
 		
-		//����IP��ַ
+
 		getStringField(env, jobj_AVTestMethodObject, class_AVTestMethodObject, "cLocalIPAddress", AVTestMethod.cLocalIPAddress,  sizeof(AVTestMethod.cLocalIPAddress)-1);
 		MediaEngin_SetValue(VB_g_dwLocalIP, inet_addr(AVTestMethod.cLocalIPAddress), AVTestMethod.cLocalIPAddress);
 
@@ -10677,11 +10456,11 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 		} 
 		else
 		{
-			//������Ƶ�˿ں�
+
 			jfieldID  id_lLocalAudioPort = env->GetFieldID(class_AVTestMethodObject, "lLocalAudioPort", "J");
 			AVTestMethod.lLocalAudioPort = env->GetLongField(jobj_AVTestMethodObject, id_lLocalAudioPort);
 			
-			//Զ����Ƶ�˿ں�
+
 			jfieldID  id_lRemoteAuidoPort = env->GetFieldID(class_AVTestMethodObject, "lRemoteAudioPort", "J");
 			AVTestMethod.lRemoteAudioPort = env->GetLongField(jobj_AVTestMethodObject, id_lRemoteAuidoPort);
 
@@ -10724,7 +10503,7 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 
 			if (!bAuidoInit)
 			{
-				MediaEngin_AudioInit();
+				//MediaEngin_AudioInit();n
 				bAuidoInit = TRUE;
 			}
 			
@@ -10747,23 +10526,23 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 
 		switch (AVTestMethod.iVideoType)
 		{
-		case AVTEST_VIDEOTYPE_NONE:			//����Ƶ
+		case AVTEST_VIDEOTYPE_NONE:
 			{
 			}
 			break;
 		case AVTEST_VIDEOTYPE_H264:			//H264
 			{
-				//������Ƶ�˿ں�
+
 				jfieldID  id_lLocalVideoPort = env->GetFieldID(class_AVTestMethodObject, "lLocalVideoPort", "J");
 				AVTestMethod.lLocalVideoPort = env->GetLongField(jobj_AVTestMethodObject, id_lLocalVideoPort);
 
-				//Զ����Ƶ�˿ں�
+
 				jfieldID  id_lRemoteVideoPort = env->GetFieldID(class_AVTestMethodObject, "lRemoteVideoPort", "J");
 				AVTestMethod.lRemoteVideoPort = env->GetLongField(jobj_AVTestMethodObject, id_lRemoteVideoPort);
 
 				LOGI(TAG,"[jni_AVTest]H264!lLocalVideoPort=%d, lRemoteVideoPort=%d", AVTestMethod.lLocalVideoPort, AVTestMethod.lRemoteVideoPort);
 
-				MediaEngin_VideoInit();
+				//MediaEngin_VideoInit();n
 				WORD iLocalVideoPort = AVTestMethod.lLocalVideoPort;
 				MediaEngin_CreateVideoChannel(g_iVideoTestChannelIndex, iLocalVideoPort);
 				if (iLocalVideoPort != AVTestMethod.lLocalVideoPort)
@@ -10777,7 +10556,7 @@ static void jni_AVTest(JNIEnv* env, jclass cls, jobject jobj_AVTestMethodObject)
 				if (g_iVideoTestChannelIndex >= 0)
 				{
 					char cFilename[16] = "";
-					MediaEngin_OpenVideoChannel(g_iVideoTestChannelIndex, -1, cFilename);
+					//MediaEngin_OpenVideoChannel(g_iVideoTestChannelIndex, -1, cFilename);n
 				}
 			}
 			break;
@@ -10802,21 +10581,18 @@ extern T_Call g_Call_Temp;
 static jboolean jni_bHasCreateSurfacet(JNIEnv* env, jclass cls)
 {
 	LOGI(TAG,"[jni_bHasCreateSurfacet]");
-	return bHasCreateSurfacet();	 
+	//return bHasCreateSurfacet();n
 }
 
 static jboolean jni_bDataConfMethod(JNIEnv* env, jclass cls, jint iType, jobject jobj_bConfMethodPara)
 {
 	int i = 0;
 
-    if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller jni_bIMSConfMethod begin iType = %d", (int)iType);
-    else if(g_WriteLogType == 1)
-        LOGI(TAG, "jni_bIMSConfMethod begin iType = %d", (int)iType);
+    LOGI(TAG, "jni_bIMSConfMethod begin iType = %d", (int)iType);
 
     jclass class_bConfMethodPara = env->GetObjectClass(jobj_bConfMethodPara);
 
-    //��������ʹ���ԤԼ�����������ģ��
+
     if (GT_METHOD_CONF_CONTROL == iType)
     {
         CONF_CONTROL_METHOD ConfControlMethod = {0};
@@ -10897,7 +10673,7 @@ static jboolean jni_bDataConfMethod(JNIEnv* env, jclass cls, jint iType, jobject
                 ConfControlMethod.pSMSMasterList[i] = jpSMSMasterListArray[i];
 
                 //if(g_WriteLogType == 2)
-                //	TraceMsgWindow1(1, "rcscontroller jni_bIMSConfMethod GT_METHOD_CONF_CONTROL pSMSMasterList = %d", ConfControlMethod.pSMSMasterList[i]);
+                //	LOGI(TAG, "rcscontroller jni_bIMSConfMethod GT_METHOD_CONF_CONTROL pSMSMasterList = %d", ConfControlMethod.pSMSMasterList[i]);
                 //else if(g_WriteLogType == 1)
                 //LOGI(TAG, "GT_METHOD_CONF_CONTROL pSMSMasterList = %d", ConfControlMethod.pSMSMasterList[i]);
             }
@@ -10972,15 +10748,11 @@ static jboolean jni_bDataConfMethod(JNIEnv* env, jclass cls, jint iType, jobject
 
 	getStringField(env, obj_ConfControlMethod, class_ConfControlMethod, "cConfServerPath", ConfControlMethod.cConfServerPath,  sizeof(ConfControlMethod.cConfServerPath) - 1);
 	
-        if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller GT_METHOD_CONF_CONTROL	cSubject[%s]*iConfType[%d]*cMasterURI[%s]  [iInitMemberNum= %d] [iEmailNum = %d] [iSMSNum = %d], [cStartTime = %s]",
-                            ConfControlMethod.cSubject, ConfControlMethod.iConfType, ConfControlMethod.cMasterURI, ConfControlMethod.iInitMemberNum, ConfControlMethod.iEmailNum, ConfControlMethod.iSMSNum, ConfControlMethod.cStartTime);
-        else if(g_WriteLogType == 1)
-            LOGI(TAG, "GT_METHOD_CONF_CONTROL    cSubject[%s]*iConfType[%d]*cMasterURI[%s]  [iInitMemberNum= %d] [iEmailNum = %d] [iSMSNum = %d], [cStartTime = %s]",
+        LOGI(TAG, "GT_METHOD_CONF_CONTROL    cSubject[%s]*iConfType[%d]*cMasterURI[%s]  [iInitMemberNum= %d] [iEmailNum = %d] [iSMSNum = %d], [cStartTime = %s]",
                  ConfControlMethod.cSubject, ConfControlMethod.iConfType, ConfControlMethod.cMasterURI, ConfControlMethod.iInitMemberNum, ConfControlMethod.iEmailNum, ConfControlMethod.iSMSNum, ConfControlMethod.cStartTime);
 
-        BOOL iResult = bDataConfMethod(iType, (short far*)&ConfControlMethod);
-	//�ͷ��ڴ�
+        //BOOL iResult = bDataConfMethod(iType, (short far*)&ConfControlMethod);n
+
 	int nMemNum = ConfControlMethod.iInitMemberNum;
 	for(int i1=0; i1<nMemNum; i1++)
 	{
@@ -11024,7 +10796,7 @@ static jboolean jni_bDataConfMethod(JNIEnv* env, jclass cls, jint iType, jobject
 	 jfieldID  id_iUserID = env->GetFieldID(class_ConfAttrControlMethod, "iUserID", "I");
         ConfAttrControlMethod.iUserID = env->GetIntField(obj_ConfAttrControlMethod, id_iUserID);
 
-	 BOOL iResult = bDataConfMethod(iType, (short far*)&ConfAttrControlMethod);
+	 //BOOL iResult = bDataConfMethod(iType, (short far*)&ConfAttrControlMethod);n
 	 return iResult;
     }
     else if (GT_METHOD_STOP_FILE_TRANS == iType)
@@ -11037,15 +10809,12 @@ static jboolean jni_bDataConfMethod(JNIEnv* env, jclass cls, jint iType, jobject
         jfieldID  id_iOperateType = env->GetFieldID(class_ConfStopFileTrans, "iOperateType", "I");
         ConfStopFileTrans.iOperateType = env->GetIntField(obj_ConfStopFileTrans, id_iOperateType);
 
-	 BOOL iResult = bDataConfMethod(iType, (short far*)&ConfStopFileTrans);
+	 //BOOL iResult = bDataConfMethod(iType, (short far*)&ConfStopFileTrans);n
 	 return iResult;
     }
     else
     {
-       if(g_WriteLogType == 2)
-        TraceMsgWindow1(1, "rcscontroller jni_bDataConfMethod %d is unknown iType", (int)iType);
-       else if(g_WriteLogType == 1)
-        LOGI(TAG, "jni_bDataConfMethod  %d is unknown iType", (int)iType);
+         LOGI(TAG, "jni_bDataConfMethod  %d is unknown iType", (int)iType);
     }
     //lmd20141204, end
 
@@ -11093,17 +10862,7 @@ WbStylePtr_t getWBStyle(JNIEnv* env, jclass class_shape, jobject obj_shape)
 	return style;
 }
 
-/*******************
-iType=0:Ӧ�ù���(Զ��Э��)
-iType=1:�װ�
-iType=2:�ĵ�����
-iType=3:��ҳ����
-iType=4:����ռ�
-iType=5:ͶƱ
-iType=6:����
-iType=7:���
-iType=8:�ļ�����
-********************/
+
 static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject jobj_bMrsMethodPara)
 {
 	int i = 0;
@@ -11132,7 +10891,7 @@ static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject
 			getStringField(env, obj_appControlMethod, class_appControlMethod, "chChannelID", appshare.chChannelID,  sizeof(appshare.chChannelID) - 1);
 
 			//call ocx method
-			bIMSSend2MrsMethod(iType, (short far*)&appshare);
+			//bIMSSend2MrsMethod(iType, (short far*)&appshare);n
                 }
 		break;
 		case 1:
@@ -11414,7 +11173,7 @@ static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject
 		}
 
 			//call ocx method
-			bIMSSend2MrsMethod(iType, (short far*)&wb);
+			//bIMSSend2MrsMethod(iType, (short far*)&wb);n
 			FreeWbPageListMem(wb.pPageList); 
         }
 		break;
@@ -11484,8 +11243,8 @@ static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject
 		            }
 
 			//call ocx method
-			bIMSSend2MrsMethod(iType, (short far*)&docshare);
-			FreeDocFileListMem(docshare.pFileList);
+			//bIMSSend2MrsMethod(iType, (short far*)&docshare);n
+			//FreeDocFileListMem(docshare.pFileList);n
               }
 		break;
               case 3:
@@ -11505,7 +11264,7 @@ static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject
 			getStringField(env, obj_webControlMethod, class_webControlMethod, "chTabID", webshare.chTabID,  sizeof(webshare.chTabID) - 1);
 			getStringField(env, obj_webControlMethod, class_webControlMethod, "chURL", webshare.chURL,  sizeof(webshare.chURL) - 1);
 			//call ocx method
-			bIMSSend2MrsMethod(iType, (short far*)&webshare);
+			//bIMSSend2MrsMethod(iType, (short far*)&webshare);n
               }
 		break;
             case 4:
@@ -11567,8 +11326,8 @@ static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject
 		            }
 
 			//call ocx method
-			bIMSSend2MrsMethod(iType, (short far*)&fileshare);
-			FreeDocFileListMem(fileshare.pFileList);
+			//bIMSSend2MrsMethod(iType, (short far*)&fileshare);n
+			//FreeDocFileListMem(fileshare.pFileList);n
               }
 		break;
               case 5:
@@ -11757,7 +11516,7 @@ static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject
 		            }
 
 			//call ocx method
-			bIMSSend2MrsMethod(iType, (short far*)&vote);
+			//bIMSSend2MrsMethod(iType, (short far*)&vote);n
 			FreeVoteQuestionListMem(vote.pQuestionList);
 			FreeVoteReplyListMem(vote.pReplyList);
                       FreeVoteResultListMem(vote.pResultList);
@@ -11855,7 +11614,7 @@ static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject
 		            }
 
 			//call ocx method
-			bIMSSend2MrsMethod(iType, (short far*)&agenda);
+			//bIMSSend2MrsMethod(iType, (short far*)&agenda);n
 			FreeAgendaItemMethodMem(agenda.pAgendaItemList);
               }
 		break;
@@ -11944,7 +11703,7 @@ static jboolean jni_bSend2MrsMethod(JNIEnv* env, jclass cls, jint iType, jobject
 		            }
 
 			//call ocx method
-			bIMSSend2MrsMethod(iType, (short far*)&filetrans);
+			//bIMSSend2MrsMethod(iType, (short far*)&filetrans);n
 			for (int i = 0; i < iArrayLen; i++)
 	              {
 		           if(filetrans.pchReceiverURI[i])
@@ -11979,7 +11738,7 @@ static void jni_setFileSocktPath(JNIEnv* env, jclass cls, jstring path)
 
 static void jni_bGetAllIMPrivateGroupList(JNIEnv* env, jclass cls)
 {
-	bGetAllIMPrivateGroupList();
+     USSDK_OcxAdapter::bGetAllIMPrivateGroupList();
 }
 
 static void jni_bGetIMPrivateGroupMember(JNIEnv* env, jclass cls, jstring sGroupIdentifier)
@@ -11987,7 +11746,7 @@ static void jni_bGetIMPrivateGroupMember(JNIEnv* env, jclass cls, jstring sGroup
 	TCHAR cGroupIdentifier[MAX_IDENTIFIER_LEN+1] = {0};
 
 	safeGetStringUTFChars(env, sGroupIdentifier, cGroupIdentifier, sizeof(cGroupIdentifier) - 1, NULL);
-	bGetIMPrivateGroupMember(cGroupIdentifier);
+    USSDK_OcxAdapter::bGetIMPrivateGroupMember(cGroupIdentifier);
 }
 
 static void  jni_bSendSoapMessageByXcap (JNIEnv* env, jclass cls, jint iType, jstring jstrRequestLine, jstring jstrAction, jstring jstrBody)
@@ -11999,21 +11758,21 @@ static void  jni_bSendSoapMessageByXcap (JNIEnv* env, jclass cls, jint iType, js
 	safeGetStringUTFChars(env, jstrRequestLine, cRequestLine, sizeof(cRequestLine) - 1, NULL);
 	safeGetStringUTFChars(env, jstrAction, cAction, sizeof(cAction) - 1, NULL);
 
-	bSendSoapMessageByXcap(iType, cRequestLine, cAction, pBody);
+    USSDK_OcxAdapter::bSendSoapMessageByXcap(iType, cRequestLine, cAction, pBody);
 }
 
 static void   jni_bCheckURIIsMOA(JNIEnv* env, jclass cls, jstring jstrURI)
 {
 	char cURI[MAX_IMS_MESSAGE_LEN+1] = {0};
 	safeGetStringUTFChars(env, jstrURI, cURI, sizeof(cURI) - 1, NULL);
-	bCheckURIIsMOA(cURI);
+    USSDK_OcxAdapter::bCheckURIIsMOA(cURI);
 }
 
 static jboolean jni_bSendPubAccountReq(JNIEnv* env, jclass cls, jint iType, jstring jstrPubAccId)
-{//iType: 1-��ѯ�Լ���ע�Ĺ��ں�, 2--��ע���ں� 3--ȡ����ע���ں�
+{
     char cPubAccId[40] = {0};
     safeGetStringUTFChars(env, jstrPubAccId, cPubAccId, sizeof(cPubAccId) - 1, NULL);
-    return bSendPubAccountReq(iType, cPubAccId);
+    return USSDK_OcxAdapter::bSendPubAccountReq(iType, cPubAccId);
 }
 
 static jboolean jni_bGetPubAccountMenu(JNIEnv* env, jclass cls, jstring jstrPubAccId, jstring jstrEtag)
@@ -12022,7 +11781,7 @@ static jboolean jni_bGetPubAccountMenu(JNIEnv* env, jclass cls, jstring jstrPubA
     char cEtag[30] = {0};
     safeGetStringUTFChars(env, jstrPubAccId, cPubAccId, sizeof(cPubAccId) - 1, NULL);
     safeGetStringUTFChars(env, jstrEtag, cEtag, sizeof(cEtag) - 1, NULL);
-    return bGetPubAccountMenu(cPubAccId, cEtag);
+    return USSDK_OcxAdapter::bGetPubAccountMenu(cPubAccId, cEtag);
 }
 
 static jboolean jni_bGetHistoryPubMsg(JNIEnv* env, jclass cls, jint count, jstring jstrPubAccId, jint seq, jstring jstrFlag)
@@ -12032,15 +11791,15 @@ static jboolean jni_bGetHistoryPubMsg(JNIEnv* env, jclass cls, jint count, jstri
     
 	safeGetStringUTFChars(env, jstrPubAccId, cPubAccId, sizeof(cPubAccId) - 1, NULL);
     safeGetStringUTFChars(env, jstrFlag, cFlag, sizeof(cFlag) - 1, NULL);    
-    return bGetHistoryPubMsg(count, cPubAccId, seq, cFlag);
+    return USSDK_OcxAdapter::bGetHistoryPubMsg(count, cPubAccId, seq, cFlag);
 }
 
 static jboolean jni_bSearchPubAccount(JNIEnv* env, jclass cls, jint iType, jstring jstrPubAccName, jint pageNo, jint pageSize)
-{//iType: 1-ͨ�����ں�����ģ����ѯ��2-ͨ�����ں�ID��ѯ, 3-���չ�ע������ѯ��4-���մ���ʱ���ѯ
+{
     char strPubAccName[256] = {0};
   
 	safeGetStringUTFChars(env, jstrPubAccName, strPubAccName, sizeof(strPubAccName) - 1, NULL); 
-    return bSearchPubAccount(iType, strPubAccName, pageNo, pageSize);
+    return USSDK_OcxAdapter::bSearchPubAccount(iType, strPubAccName, pageNo, pageSize);
 }
 
 static jboolean jni_bGetRecommendContact(JNIEnv* env, jclass cls, jint pageNo, jint pageSize)
@@ -12049,13 +11808,13 @@ static jboolean jni_bGetRecommendContact(JNIEnv* env, jclass cls, jint pageNo, j
 }
 
 static jboolean jni_bGet2DCodeInfo(JNIEnv* env, jclass cls, jint iType, jstring jstrKeyWord, jint validType, jint clientExist, jint codeType, jstring jstrMsgId)
-{//iType: 1����ȡȺ��ά�벢���¶�ά����Ч�ڣ�2-����key��ȡjson��
+{
     char strKeyWord[1024+1] = {0};
     char msgId[64+1] = {0};
   
 	safeGetStringUTFChars(env, jstrKeyWord, strKeyWord, sizeof(strKeyWord) - 1, NULL); 
     safeGetStringUTFChars(env, jstrMsgId, msgId, sizeof(msgId) - 1, NULL); 
-    return bGet2DCodeInfo(iType, strKeyWord, validType, clientExist, codeType, msgId);
+    return USSDK_OcxAdapter::bGet2DCodeInfo(iType, strKeyWord, validType, clientExist, codeType, msgId);
 }
 
 static jstring  jni_bVarEncryptPassword(JNIEnv* env, jclass cls, jstring jstrOri)
@@ -12072,7 +11831,8 @@ static jstring  jni_bVarEncryptPassword(JNIEnv* env, jclass cls, jstring jstrOri
         return NULL;
     }
 
-    //����
+
+    //bVarEncryptPassword();n
     if(!bVarEncryptPassword(str_ori, str_dest, 0))
     {
         return NULL;
@@ -12092,11 +11852,11 @@ static jstring  jni_bVarDecryptPassword(JNIEnv* env, jclass cls, jstring jstrOri
     }
 
     if(strlen(str_ori)<24)
-    {//�Լ��ܴ�����������ֹjni����ʱ�򱨴�ֱ�ӹҵ�
+    {
         return NULL;
     }
 
-    //����
+    //();n
     if(!bVarEncryptPassword(str_ori, str_dest, 1))
     {   
         return NULL;
@@ -12106,13 +11866,13 @@ static jstring  jni_bVarDecryptPassword(JNIEnv* env, jclass cls, jstring jstrOri
 }
 
 static void  jni_bCheckOsTimer(JNIEnv* env, jclass cls)
-{ 
-    bCheckOsTimer(SIPAgentPno); 
+{
+     USSDK_OcxAdapter::bCheckOsTimer(SIPAgentPno);
 }
 
 static jboolean jni_bClientLoginNotify(JNIEnv* env, jclass cls)
 {
-    return bClientLoginNotify();
+    //return USSDK_OcxAdapter::bClientLoginNotify();p
 }
 
 static jboolean jni_bLoginInfoReport(JNIEnv* env, jclass cls, jstring jstrRecord)
@@ -12120,7 +11880,7 @@ static jboolean jni_bLoginInfoReport(JNIEnv* env, jclass cls, jstring jstrRecord
     char loginRecord[MAX_STRING_LEN_1024+1] = {0};
 
     safeGetStringUTFChars(env, jstrRecord, loginRecord, sizeof(loginRecord) - 1, NULL);
-    return bLoginInfoReport(loginRecord);
+    return USSDK_OcxAdapter::bLoginInfoReport(loginRecord);
 }
 
 static jboolean jni_bSyncUserCodeMoaInfo(JNIEnv* env, jclass cls, jint iType, jstring jstrMsgId, jstring jstrDeviceId, jstring jstrXmlBody)
@@ -12131,19 +11891,19 @@ static jboolean jni_bSyncUserCodeMoaInfo(JNIEnv* env, jclass cls, jint iType, js
     safeGetStringUTFChars(env, jstrMsgId, strMsgId, sizeof(strMsgId) - 1, NULL);
     safeGetStringUTFChars(env, jstrDeviceId, strDeviceId, sizeof(strDeviceId) - 1, NULL);
     pXmlBody = safeAllocStringUTFCharsFromJString(env, jstrXmlBody);
-    BOOL bRet = bSyncUserCodeMoaInfo(iType, strMsgId, strDeviceId, pXmlBody);
-//    ZX_free(pXmlBody);//����softagent������ͷ�
+    BOOL bRet = USSDK_OcxAdapter::bSyncUserCodeMoaInfo(iType, strMsgId, strDeviceId, pXmlBody);
+
     return bRet;
 }
 
 static jboolean jni_bMOAImmediatelyReReg(JNIEnv* env, jclass cls)
 {
-    return bMOAImmediatelyReReg();
+    //return bMOAImmediatelyReReg();n
 }
 
 static jboolean jni_bCheckConnection(JNIEnv* env, jclass cls)
 {
-    return bCheckConnection();
+    return USSDK_OcxAdapter::bCheckConnection();
 }
 
 static void jni_bSetJGPLibLogpath(JNIEnv* env, jclass cls, jstring jstrlogpath)
@@ -12153,7 +11913,7 @@ static void jni_bSetJGPLibLogpath(JNIEnv* env, jclass cls, jstring jstrlogpath)
 	safeGetStringUTFChars(env, jstrlogpath, str_logpath, sizeof(str_logpath) - 1, NULL);
 
 	DEBUG_INFO("[jni_bSetJGPLibLogpath] %s", str_logpath);
-	SetJGPLibLogpath(str_logpath);
+	//SetJGPLibLogpath(str_logpath);n
 }
 
 //static jint jni_bMakeGroupThumbnailJpg(JNIEnv* env, jclass cls, jstring jstrInPath1, jstring jstrInPath2, jstring jstrInPath3, jstring jstrInPath4, jstring jstrOutPath)
@@ -12202,7 +11962,7 @@ static jint jni_bMakeGroupThumbnailJpg(JNIEnv* env, jclass cls, jobjectArray jst
 	safeGetStringUTFChars(env, jstrOutfile, strOutfile, sizeof(strOutfile)-1, NULL);
 	//DEBUG_INFO("[jni_bMakeGroupThumbnailJpg] %s", strOutfile);
 
-	return MakeGroupThumbnailJpg(pinfile, mode, composemode, strOutfile);
+	//return MakeGroupThumbnailJpg(pinfile, mode, composemode, strOutfile);n
 }
 
 static jint jni_bImageZoom(JNIEnv* env, jclass cls, jint jintype, jstring jImgSrc, jint jSrclen, jint jlongwidth, 
@@ -12215,7 +11975,7 @@ static jint jni_bImageZoom(JNIEnv* env, jclass cls, jint jintype, jstring jImgSr
     safeGetStringUTFChars(env, jImgSrc, str_ImgSrc, sizeof(str_ImgSrc) - 1, NULL);
     safeGetStringUTFChars(env, joutfile, str_outfile, sizeof(str_outfile) - 1, NULL);
 
-    nRet = ImageZoom(jintype, str_ImgSrc, jSrclen, jlongwidth, jquality, str_outfile);
+    //nRet = ImageZoom(jintype, str_ImgSrc, jSrclen, jlongwidth, jquality, str_outfile);n
 
 	if (nRet != 0)
 	{
@@ -12235,7 +11995,7 @@ static jint jni_bScaleToRect(JNIEnv* env, jclass cls, jstring jinfile, jint jwid
     safeGetStringUTFChars(env, jinfile, str_infile, sizeof(str_infile) - 1, NULL);
     safeGetStringUTFChars(env, joutfile, str_outfile, sizeof(str_outfile) - 1, NULL);
 
-	nRet = ScaleToRect(str_infile, jwidth, jheight, str_outfile);
+	//nRet = ScaleToRect(str_infile, jwidth, jheight, str_outfile);n
 
 	if (nRet != 0)
 	{
@@ -12248,21 +12008,21 @@ static jint jni_bScaleToRect(JNIEnv* env, jclass cls, jstring jinfile, jint jwid
 
 static jint  jni_bGetUserStatus(JNIEnv* env, jclass cls)
 {   
-    return (jint)gUserInfo.logStatus;
+    //return (jint)gUserInfo.logStatus;n
 }
 
 static jint  jni_bCheckHttpServer(JNIEnv* env, jclass cls, jstring jstrServerIP, jint port, jint timeout)
 {
     char ServerIP[256+1] = {0};
     safeGetStringUTFChars(env, jstrServerIP, ServerIP, sizeof(ServerIP) - 1, NULL);
-    return (jint)checkHttpServer(ServerIP, port, timeout);
+    return (jint)USSDK_OcxAdapter::bCheckHttpServer(ServerIP, port, timeout);
 }
 
 static jint  jni_bCheckSipServer(JNIEnv* env, jclass cls, jstring jstrServerIP, jint port, jint timeout)
 {  
     char ServerIP[256+1] = {0};
     safeGetStringUTFChars(env, jstrServerIP, ServerIP, sizeof(ServerIP) - 1, NULL);
-    return (jint)checkSipServer(ServerIP, port, timeout);
+    return (jint)USSDK_OcxAdapter::bCheckSipServer(ServerIP, port, timeout);
 }
 
 static void  jni_bSetOcxLogLevel(JNIEnv* env, jclass cls, jint level)
@@ -12279,7 +12039,7 @@ static jobjectArray jni_bSyncGetSensWordList(JNIEnv* env, jclass cls)
     GetSensWordListResult_T SensWordListResult;
     memset(&SensWordListResult, 0, sizeof(GetSensWordListResult_T));
     GetUserDataFile(SENSITIVE_WORD_FILE, filename);
- 
+     //();n
     if(!ReadSensitiveWordList(filename, &gMsgBuf, &SensWordListResult, TRUE))
     {
         DEBUG_INFO("[jni_bSyncGetSensWordList] Get Sens Word from local file failed!");
@@ -12304,7 +12064,7 @@ static jboolean jni_bGetCheckCode(JNIEnv* env, jclass cls, jstring jstrUserCode)
     char strUserCode[MAX_STRING_LEN_32+1] = {0};
 
     safeGetStringUTFChars(env, jstrUserCode, strUserCode, sizeof(strUserCode) - 1, NULL);
-    return bGetCheckCode(strUserCode);
+    return USSDK_OcxAdapter::bGetCheckCode(strUserCode);
 }
 
 static jint  jni_bUserRegistReq(JNIEnv* env, jclass cls, jint iType, jstring jstrUserName, jstring jstrUserURI, jstring jstrPasswd, jstring jstrCompany, jstring jstrCheckCode)
@@ -12321,7 +12081,7 @@ static jint  jni_bUserRegistReq(JNIEnv* env, jclass cls, jint iType, jstring jst
     safeGetStringUTFChars(env, jstrCompany, str_Company, sizeof(str_Company) - 1, NULL);
     safeGetStringUTFChars(env, jstrCheckCode, str_CheckCode, sizeof(str_CheckCode) - 1, NULL);
 
-    return bUserRegistReq(iType, str_UserName, str_UserURI, str_Passwd, str_Company, str_CheckCode);
+    return USSDK_OcxAdapter::bUserRegistReq(iType, str_UserName, str_UserURI, str_Passwd, str_Company, str_CheckCode);
 }
 
 static jint  jni_bUserModifyPasswdReq(JNIEnv* env, jclass cls, jint iType, jstring jstrUserURI, jstring jstrOldPasswd, jstring jstrNewPasswd)
@@ -12334,7 +12094,7 @@ static jint  jni_bUserModifyPasswdReq(JNIEnv* env, jclass cls, jint iType, jstri
     safeGetStringUTFChars(env, jstrOldPasswd, str_OldPasswd, sizeof(str_OldPasswd) - 1, NULL);
     safeGetStringUTFChars(env, jstrNewPasswd, str_NewPasswd, sizeof(str_NewPasswd) - 1, NULL);
 
-    return bUserModifyPasswdReq(iType, str_UserURI, str_OldPasswd, str_NewPasswd);
+    return USSDK_OcxAdapter::bUserModifyPasswdReq(iType, str_UserURI, str_OldPasswd, str_NewPasswd);
 }
 
 static jint  jni_bSendPubAccMsg(JNIEnv* env, jclass cls, jstring jstrPubAccId, jstring jstrSender, jint iMsgType, jstring jstrPutMsgId, jstring jstrMenuId, jstring jstrContent)
@@ -12351,11 +12111,11 @@ static jint  jni_bSendPubAccMsg(JNIEnv* env, jclass cls, jstring jstrPubAccId, j
     safeGetStringUTFChars(env, jstrMenuId, str_MenuId, sizeof(str_MenuId) - 1, NULL);
     safeGetStringUTFChars(env, jstrContent, str_Content, sizeof(str_Content) - 1, NULL);
 
-    return bSendPubAccMsg(str_PubAccId, str_strSender, iMsgType, str_PutMsgId, str_MenuId, str_Content);
+    return USSDK_OcxAdapter::bSendPubAccMsg(str_PubAccId, str_strSender, iMsgType, str_PutMsgId, str_MenuId, str_Content);
 }
 
 static jint  jni_bUserBindOperateReq(JNIEnv* env, jclass cls, jint iOperType, jstring jstrBindNumber, jint iNumberType, jstring jstrPasswd, jstring jstrCompanyID)
-{//iOperType:��������,1-bind 2-unbind 3-��ѯbind��ϵ
+{
     char str_BindNumber[256+1] = {0};
     char str_Passwd[256+1] = {0};
     char str_CompanyID[256+1] = {0};
@@ -12364,7 +12124,7 @@ static jint  jni_bUserBindOperateReq(JNIEnv* env, jclass cls, jint iOperType, js
     safeGetStringUTFChars(env, jstrPasswd, str_Passwd, sizeof(str_Passwd) - 1, NULL);
     safeGetStringUTFChars(env, jstrCompanyID, str_CompanyID, sizeof(str_CompanyID) - 1, NULL);
 
-    return bUserBindOperateReq(iOperType, str_BindNumber, iNumberType, str_Passwd, str_CompanyID);
+    return USSDK_OcxAdapter::bUserBindOperateReq(iOperType, str_BindNumber, iNumberType, str_Passwd, str_CompanyID);
 }
 
 static jint  jni_bModifyGroupAttribute(JNIEnv* env, jclass cls, jstring jstrGroupURI, jstring jModType, jstring jstrNewValue)
@@ -12377,7 +12137,7 @@ static jint  jni_bModifyGroupAttribute(JNIEnv* env, jclass cls, jstring jstrGrou
     safeGetStringUTFChars(env, jModType, str_ModType, sizeof(str_ModType) - 1, NULL);
     safeGetStringUTFChars(env, jstrNewValue, str_NewValue, sizeof(str_NewValue) - 1, NULL);
 
-    return bModifyGroupAttributeReq(str_GroupURI, str_ModType, str_NewValue);
+    return USSDK_OcxAdapter::bModifyGroupAttributeReq(str_GroupURI, str_ModType, str_NewValue);
 }
 
 static jboolean jni_bGetGrayVersion(JNIEnv* env, jclass cls, jstring jstrVersion)
@@ -12385,19 +12145,18 @@ static jboolean jni_bGetGrayVersion(JNIEnv* env, jclass cls, jstring jstrVersion
     char strVersion[MAX_STRING_LEN_128+1] = {0};
 
     safeGetStringUTFChars(env, jstrVersion, strVersion, sizeof(strVersion) - 1, NULL);
-    return bGetGrayVersion(strVersion);
+    return USSDK_OcxAdapter::bGetGrayVersion(strVersion);
 }
 
 static jboolean jni_bMessageMuteNotifyOperateReq(JNIEnv* env, jclass cls, jint iType, jstring jstrURI)
-{/*iType: 1-��ѯ��������Ϣ���ŵ�Ⱥ����ϵ�ˡ����ں��б�  2-����Ⱥ���� 3-ȡ������Ⱥ����  4-������ϵ������ 5-ȡ��������ϵ������
-6-���ù��ں����� 7-ȡ�����ù��ں�����*/
+{
     char cURI[256+1] = {0};
     safeGetStringUTFChars(env, jstrURI, cURI, sizeof(cURI) - 1, NULL);
-    return bMessageMuteNotifyOperateReq(iType, cURI);
+    //return USSDK_OcxAdapter::bMessageMuteNotifyOperateReq(iType, cURI);p
 }
 
 static jboolean jni_bMessageReceiptOperateReq(JNIEnv* env, jclass cls, jint iOperType, jstring jstrSessionID, jint isGroup, jstring jstrURI, jstring jstrMsgIDs)
-{//iOperType: 1-�Ķ���ִ�ϱ�  2-�����Ķ���ִ��ѯ����  3-Ⱥ���Ķ���ִ��ѯ����
+{
     char cSessionID[64+1] = {0};
     char cURI[256+1] = {0};
     char *pMsgIDs = NULL;
@@ -12407,7 +12166,7 @@ static jboolean jni_bMessageReceiptOperateReq(JNIEnv* env, jclass cls, jint iOpe
     pMsgIDs = safeAllocStringUTFCharsFromJString(env, jstrMsgIDs); 
     if(pMsgIDs == NULL)
         return FALSE;
-    BOOL bRet = bMessageReceiptOperateReq(iOperType, cSessionID, isGroup, cURI, pMsgIDs);
+    BOOL bRet = USSDK_OcxAdapter::bMessageReceiptOperateReq(iOperType, cSessionID, isGroup, cURI, pMsgIDs);
     ZX_free(pMsgIDs);
     return bRet;
 }
@@ -12418,15 +12177,10 @@ static jboolean jni_bGetPublicMsg(JNIEnv* env, jclass cls, jstring jstrLocalMsgI
     char tmpURL[MAX_STRING_LEN_512+1] = {0};
     safeGetStringUTFChars(env, jstrLocalMsgID, tmpMsgID, sizeof(tmpMsgID) - 1, NULL);
     safeGetStringUTFChars(env, jstrURL, tmpURL, sizeof(tmpURL) - 1, NULL);
-    return bGetPublicMsg(tmpMsgID, tmpURL);
+    return USSDK_OcxAdapter::bGetPublicMsg(tmpMsgID, tmpURL);
 }
 
-/*
-pSessionID����ʶ�����ϴ��ļ���ID��,����Ϊ32�ֽ�
-pFilePathName��������·�����ļ���,�255�ֽ�
-iOperType:  0-�����ϴ���1-�ϵ�������2-ȡ���ϴ���pSessionID������pSessionID����һ�£�
-pFileID���ϵ�������iOperType=1����Ҫ��д���������ɵ��ļ�ID�����������""
-*/
+
 static jboolean  jni_bUploadFileReq(JNIEnv* env, jclass cls, jstring jstrSessionID, jstring jstrFilePathName, jint iOperType, jstring jstrFileID)
 {
 	char pSessionID[32+1]= {0};
@@ -12437,15 +12191,10 @@ static jboolean  jni_bUploadFileReq(JNIEnv* env, jclass cls, jstring jstrSession
 	safeGetStringUTFChars(env, jstrFilePathName, pFilePathName, sizeof(pFilePathName) - 1, NULL);
     safeGetStringUTFChars(env, jstrFileID, pFileID, sizeof(pFileID) - 1, NULL);
 
-	return bUploadFileReq(pSessionID, pFilePathName, iOperType, pFileID);
+	return USSDK_OcxAdapter::bUploadFileReq(pSessionID, pFilePathName, iOperType, pFileID);
 }
 
-/*
-pSessionID����ʶ��������ĻỰID��,����Ϊ32�ֽ�
-pFilePathName�����ڱ����ļ��Ĵ�����·�����ļ������255�ֽ�
-iOperType:  0-�������أ�1-�ϵ�������2-ȡ�����أ�pSessionID������pSessionID����һ�£�
-pFileID����д���������ɵĴ������ļ�ID
-*/
+
 static jboolean  jni_bDownloadFileReq(JNIEnv* env, jclass cls, jstring jstrSessionID, jstring jstrFilePathName, jint iOperType, jstring jstrFileID)
 {
 	char pSessionID[32+1]= {0};
@@ -12456,15 +12205,10 @@ static jboolean  jni_bDownloadFileReq(JNIEnv* env, jclass cls, jstring jstrSessi
 	safeGetStringUTFChars(env, jstrFilePathName, pFilePathName, sizeof(pFilePathName) - 1, NULL);
     safeGetStringUTFChars(env, jstrFileID, pFileID, sizeof(pFileID) - 1, NULL);
 
-	return bDownloadFileReq(pSessionID, pFilePathName, iOperType, pFileID);
+	return USSDK_OcxAdapter::bDownloadFileReq(pSessionID, pFilePathName, iOperType, pFileID);
 }
 
-/*
-jstrSessionID:�ỰID,��Ӧʱ�ؼ�͸����UI,��󳤶�32�ֽ�
-jstrRequestPath: ����url��·������: http://IP:PORT/xxxxx�е�"xxxxx"��������
-jstrMethod: HTTP��������GET,POST��
-jstrBody:HTTP��body���ݣ�û��bodyʱ��д""
-*/
+
 static jboolean  jni_bSendRequestMsgToHttpAP (JNIEnv* env, jclass cls, jstring jstrSessionID, jstring jstrRequestLine, jstring jstrMethod, jstring jstrBody)
 {
     char cSessionID[32+1]= {0};
@@ -12476,26 +12220,26 @@ static jboolean  jni_bSendRequestMsgToHttpAP (JNIEnv* env, jclass cls, jstring j
 	safeGetStringUTFChars(env, jstrRequestLine, cRequestLine, sizeof(cRequestLine) - 1, NULL);
 	safeGetStringUTFChars(env, jstrMethod, cMethod, sizeof(cMethod) - 1, NULL);
     
-	return bSendRequestMsgToHttpAP(cSessionID, cRequestLine, cMethod, pBody);
+	//return USSDK_OcxAdapter::bSendRequestMsgToHttpAP(cSessionID, cRequestLine, cMethod, pBody);p
 }
 
 static jboolean jni_bLogonSS(JNIEnv* env, jclass cls)
 {
 	LOGI(TAG,"[jni_bLogonSS] \n");
-	return bLogonSS();
+	return USSDK_OcxAdapter::bLogonSS();
 }
 
 static jboolean jni_bLogoutSS(JNIEnv* env, jclass cls)
 {
     LOGI(TAG,"[jni_bLogoutSS] \n");
-	return bLogoutSS();
+	return USSDK_OcxAdapter::bLogoutSS();
 }
 
 static jboolean  jni_bGetOfflineMsgReq(JNIEnv* env, jclass cls, jstring jstrSeq, jint iMaxCount)
 {
 	char pSeq[MAX_SEQ_LEN+1]= {0};
 	safeGetStringUTFChars(env, jstrSeq, pSeq, sizeof(pSeq) - 1, NULL);
-	return bGetOfflineMsgReq(pSeq, iMaxCount);
+	return USSDK_OcxAdapter::bGetOfflineMsgReq(pSeq, iMaxCount);
 }
 
 static jboolean jni_MOAEncryptFile(JNIEnv* env, jclass cls, jstring jOriFileName, jstring jDstFileName)
@@ -12507,7 +12251,7 @@ static jboolean jni_MOAEncryptFile(JNIEnv* env, jclass cls, jstring jOriFileName
     safeGetStringUTFChars(env, jOriFileName, oriFileName, sizeof(oriFileName) - 1, NULL);
     safeGetStringUTFChars(env, jDstFileName, mcfFileName, sizeof(mcfFileName) - 1, NULL);
 
-    return Mcf_EncryptFile(oriFileName, mcfFileName);
+    //return Mcf_EncryptFile(oriFileName, mcfFileName);n
 }
 
 static jboolean jni_MOADecryptFile(JNIEnv* env, jclass cls, jstring jOriFileName, jstring jDstFileName)
@@ -12519,7 +12263,7 @@ static jboolean jni_MOADecryptFile(JNIEnv* env, jclass cls, jstring jOriFileName
     safeGetStringUTFChars(env, jOriFileName, mcfFileName, sizeof(mcfFileName) - 1, NULL);
     safeGetStringUTFChars(env, jDstFileName, decFileName, sizeof(decFileName) - 1, NULL);
 
-    return Mcf_DecryptFile(mcfFileName, decFileName);
+    //return Mcf_DecryptFile(mcfFileName, decFileName);n
 }
 
 static jboolean  jni_bSendBroadcastMsgReq(JNIEnv* env, jclass cls, jstring jstrMsgID, jstring jstrPURIs, jstring jstrGURIs, jstring jstrFilePath)
@@ -12542,14 +12286,14 @@ static jboolean  jni_bSendBroadcastMsgReq(JNIEnv* env, jclass cls, jstring jstrM
     
 	safeGetStringUTFChars(env, jstrMsgID, cMsgID, sizeof(cMsgID) - 1, NULL);
     safeGetStringUTFChars(env, jstrFilePath, filePath, sizeof(filePath) - 1, NULL);
-	return bSendBroadcastMsgReq(cMsgID, pURIs, gURIs, filePath);
+	return USSDK_OcxAdapter::bSendBroadcastMsgReq(cMsgID, pURIs, gURIs, filePath);
 }
 
 static jboolean jni_bGetUserLogonStatus(JNIEnv* env, jclass cls, jstring jstrURI)
 {
     char tmpURI[MAX_STRING_LEN_512+1] = {0};
     safeGetStringUTFChars(env, jstrURI, tmpURI, sizeof(tmpURI) - 1, NULL);
-    return bGetUserLogonStatus(tmpURI);
+    return USSDK_OcxAdapter::bGetUserLogonStatus(tmpURI);
 }
 
 static jboolean  jni_bConcernGroupOperateReq(JNIEnv* env, jclass cls, jint iType, jstring jstrEtag, jstring jstrGURI)
@@ -12558,7 +12302,7 @@ static jboolean  jni_bConcernGroupOperateReq(JNIEnv* env, jclass cls, jint iType
     char gURI[MAX_IMS_URI_LEN+1] = {0};
 	safeGetStringUTFChars(env, jstrEtag, eTag, sizeof(eTag) - 1, NULL);
     safeGetStringUTFChars(env, jstrGURI, gURI, sizeof(gURI) - 1, NULL);
-	return bConcernGroupOperateReq(iType, eTag, gURI);
+	return USSDK_OcxAdapter::bConcernGroupOperateReq(iType, eTag, gURI);
 }
 
 static jboolean  jni_bUploadFileByXcapReq(JNIEnv* env, jclass cls, jint iType, jstring jstrMsgID, jstring jstrFilePath)
@@ -12567,7 +12311,7 @@ static jboolean  jni_bUploadFileByXcapReq(JNIEnv* env, jclass cls, jint iType, j
     char filePath[256+1] = {0};
 	safeGetStringUTFChars(env, jstrMsgID, cMsgID, sizeof(cMsgID) - 1, NULL);
     safeGetStringUTFChars(env, jstrFilePath, filePath, sizeof(filePath) - 1, NULL);
-	return bUploadFileByXcapReq(iType, cMsgID, filePath);
+	return USSDK_OcxAdapter::bUploadFileByXcapReq(iType, cMsgID, filePath);
 }
 
 /*===============================================
@@ -12757,11 +12501,7 @@ static JNINativeMethod methods[] =
 	{"jni_bScaleToRect", "(Ljava/lang/String;IILjava/lang/String;)I", (void*)jni_bScaleToRect},
 };
 
-//getStringField�����жԿյ�ָ��Ӧ����������(����������󲻿գ�ֻ�Ƕ����ĳ�������ݿ�
-//�ؼ����ѱ��������Խ��洫���ؼ��Ķ�����Ϊ�գ������ĳ�����������û�У���Ҫ��ʼ��""
-//����ؼ����Ҳ���\0��������)
-//�ؼ�Ҳ�������Ŷ�ĳ���������Ϊ��Ҳ��������
-//����ǽ���������
+
 char *getStringField(JNIEnv* env, jobject jobj, jclass jcs,  const char * fieldName, char *result, int ilen)
 {
     const char *str = NULL;
@@ -12793,7 +12533,7 @@ char *safeGetStringUTFChars(JNIEnv* env, jstring string, char* dest, int size, j
     if (NULL == string)
     {
         if(g_WriteLogType == 2)
-            TraceMsgWindow1(1, "rcscontroller the para string is null!");
+            LOGI(TAG, "rcscontroller the para string is null!");
         else if(g_WriteLogType == 1)
             LOGE(TAG, "the para string is null!");
 
@@ -12812,7 +12552,7 @@ char *safeGetStringUTFChars(JNIEnv* env, jstring string, char* dest, int size, j
 }
 
 
-//�ڴ���Ҫ�����Լ��ͷţ�ZX_free�ͷ�
+
 char *safeAllocStringUTFCharsFromJString(JNIEnv* env, jstring string)
 {
    if(string != NULL)
@@ -12832,7 +12572,7 @@ char *safeAllocStringUTFCharsFromJString(JNIEnv* env, jstring string)
 	return NULL;
 }
 
-//�ڴ���Ҫ�����Լ��ͷ�(ZX_free)
+
 char* safeAllocStringUTFchars(JNIEnv* env, jobject jobj, jclass jcs,  const char * fieldName)
 {
 	//

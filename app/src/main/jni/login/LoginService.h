@@ -8,8 +8,14 @@
 extern "C" {
 #endif
 
-JavaVM *gJavaVM;
+static JavaVM *gJavaVM;
 jobject gJavaObj;
+
+typedef union
+{
+    JNIEnv* env;
+    void* venv;
+} UnionJNIEnvToVoid;
 
 /*
  * Class:     com_iutils_pattern_observer_LoginService

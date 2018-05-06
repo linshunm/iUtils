@@ -9,6 +9,19 @@
 #include <unistd.h>
 #include "LoginParam.h"
 
+
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved) {
+    LOGI("JNI_OnLoad");
+
+    gJavaVM = jvm;
+    //https://blog.csdn.net/fu_shuwu/article/details/41121741
+    //gJavaVM->AttachCurrentThread(&env, NULL);
+
+    //gJavaVM->DetachCurrentThread();
+
+    return JNI_VERSION_1_4;
+}
+
 /*
  * Class:     com_iutils_pattern_observer_LoginService
  * Method:    initSDK
@@ -79,6 +92,7 @@ JNIEXPORT void JNICALL Java_com_iutils_pattern_observer_LoginService_login
     jint jintTerminalType = (jint)env->GetObjectField(loginParam, versionCodeFieldId);
     pLoginParam->versionCode = jintTerminalType;
 
+    /*
     LOGI("do login account=%s,password=%s,deviceId=%s,terminalType=%s,versionCode=%d",
          pLoginParam->account.c_str(),
          pLoginParam->password.c_str(),
@@ -108,9 +122,9 @@ JNIEXPORT void JNICALL Java_com_iutils_pattern_observer_LoginService_login
     env->SetIntField(loginResult, resultCodeFieldId, 202);
 
     env->CallVoidMethod(gJavaObj, onCallbackMethodId, loginResult);
+    */
 
 
-    /*
     pthread_t threadId;
 
     if(pthread_create(&threadId, NULL, ocxCallback, (void *)loginParam) != 0){
@@ -118,7 +132,7 @@ JNIEXPORT void JNICALL Java_com_iutils_pattern_observer_LoginService_login
         return;
     }
     LOGI("login thread created success");
-     */
+
 }
 
 static void* ocxCallback(void *arg){
@@ -128,7 +142,20 @@ static void* ocxCallback(void *arg){
         return NULL;
     }
 
-    JNIEnv *env;
+    /*
+    UnionJNIEnvToVoid uenv;
+    uenv.venv = NULL;
+    if (gJavaVM->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK)
+    {
+        LOGE( "JNI_OnUnload: ERROR: GetEnv failed");
+        return NULL;
+    }
+     */
+
+    JNIEnv *env = NULL;
+
+    //env = uenv.env;
+
     gJavaVM->AttachCurrentThread(&env, NULL);
     LoginParam *pLoginParam = (LoginParam *) arg ;
 
