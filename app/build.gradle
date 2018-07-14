@@ -18,12 +18,14 @@ android {
         versionCode 1
         versionName "1.0"
         signingConfig signingConfigs.iutils_signing
-
-        //added for jni begin
-        ndk {
-            moduleName "JNI_ANDROID_TEST"
-            abiFilters "armeabi", "armeabi-v7a"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+//                moduleName "netContent"
+                abiFilters 'armeabi-v7a','arm64-v8a'
+            }
         }
+
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -54,22 +56,23 @@ android {
     }
 
 
-
-    sourceSets.main {
-        jni.srcDirs = []//disable automatic ndk-build call
-//        jni.srcDirs "src/main/jni"
-        jniLibs.srcDir "src/main/libs"
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
     }
 //    sourceSets {
 //        main {
 //            jniLibs.srcDirs = ['src/main/libs']
 //        }
 //    }
+    /*
     externalNativeBuild {
         ndkBuild {
             path 'src/main/jni/Android.mk'
         }
     }
+    */
 }
 
 dependencies {

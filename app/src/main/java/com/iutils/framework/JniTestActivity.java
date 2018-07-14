@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.iutils.R;
 import com.iutils.common.BaseActivity;
 import com.iutils.dagger2.DaggerJniTestActivityComponent;
-import com.iutils.test.Task;
+import com.iutils.jni.JniMrg;
 import com.iutils.utils.ILog;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+@Route(path = "/framework/JniTestActivity")
 public class JniTestActivity extends BaseActivity  {
 
     private static final String TAG = "JniTestActivity";
@@ -41,55 +41,17 @@ public class JniTestActivity extends BaseActivity  {
 
         DaggerJniTestActivityComponent.create().inject(this);
 
+        JniMrg.getIns().initLib();
+
     }
 
 
     @OnClick(R.id.btn_test)
     void get2Array() {
-        ILog.i(TAG, "get2Array");
-        //JniTest jniTest = new JniTest();
-        int dimon = 10;
-        int[][] int2Arr = jniTest.get2Array(dimon);
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < dimon; i++) {
-            for (int j = 0; j < dimon; j++) {
-                sb.append(int2Arr[i][j] + " ");
-            }
-            sb.append("\r\n");
-        }
-        tvInfo.setText(sb.toString());
+        ILog.i(TAG, "helloworld");
+        String s = JniMrg.getIns().helloworld();
+        tvInfo.setText(s);
 
-    }
-
-    void getTaskByNative() {
-        try {
-            //JniTest jniTest = new JniTest();
-            Task task = jniTest.getTask();
-            if (task != null) {
-                tvInfo.setText(task.toString());
-            } else {
-                tvInfo.setText("task is null");
-            }
-
-        } catch (Exception e) {
-
-        }
-    }
-
-    void getTaskListByNative() {
-        try {
-            //JniTest jniTest = new JniTest();
-            List<Task> list = jniTest.getTaskList();
-            ILog.i(TAG, "get list finished");
-
-            StringBuffer sb = new StringBuffer();
-            for (Task task : list) {
-                sb.append(task.toString() + "\r\n");
-            }
-            tvInfo.setText(sb.toString());
-        } catch (Exception e) {
-            tvInfo.setText(e.toString());
-        }
     }
 
     void showVolume() {

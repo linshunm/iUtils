@@ -122,7 +122,8 @@ public class LoginActivity extends BaseActivity implements ILoginView,
                 break;
             }
             case R.id.btn_login: {
-                login();
+                //login();
+                gotoTestView();
                 break;
             }
             case R.id.et_user_id:
@@ -158,6 +159,11 @@ public class LoginActivity extends BaseActivity implements ILoginView,
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
         }
+    }
+
+    private void gotoTestView(){
+        ARouter.getInstance().build("/framework/JniTestActivity").navigation();
+        finish();
     }
 
     @Override

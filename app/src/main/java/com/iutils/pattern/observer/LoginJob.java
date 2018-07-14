@@ -26,24 +26,6 @@ public class LoginJob extends Job {
         param.terminalType = "Android@Phone";
         param.versionCode = SystemUtil.getVersionCode();
 
-        LoginService.getInstance().login(param);
-
-        /*
-        ThreadUtil.execute(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    Thread.sleep(1000);
-                    LoginResult result = new LoginResult();
-                    result.resultCode= 202;
-                    result.sessionId = sessionId;
-                    ObserverManager.getInstance().notify(result);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        */
 
     }
 

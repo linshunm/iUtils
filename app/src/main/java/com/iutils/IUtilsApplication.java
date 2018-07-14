@@ -8,8 +8,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.iutils.hook.BinderHookHelper;
 import com.iutils.hook.HookHelper;
 import com.iutils.monitor.BlockDetectByChoreographer;
-import com.iutils.monitor.BlockDetectByPrinter;
-import com.iutils.pattern.observer.UCSDK;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -62,8 +60,6 @@ public class IUtilsApplication extends Application {
 
         //BlockDetectByPrinter.start();
         BlockDetectByChoreographer.start();
-
-        UCSDK.init();
 
 
         // 这两行必须写在init之前，否则这些配置在init过程中将无效

@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements IMainView {
 
 
     private void initData() {
-        tvInfo.setText("packageName: " + JniTest.getPackageName(MainActivity.this));
+
     }
 
 

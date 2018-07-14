@@ -18,13 +18,7 @@ public class JniTest {
      * @param o
      * @return
      */
-    public static native String getPackageName(Object o);
 
-    public native int[][] get2Array(int dimon);
-
-    public native Task getTask();
-
-    public native ArrayList<Task> getTaskList();
 
 
 }
