@@ -1,5 +1,7 @@
 package com.iutils.thread;
 
+import com.iutils.utils.ILog;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
@@ -27,9 +29,9 @@ public class ProcessStep3 implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Process step[" + step + "] start ...");
+        ILog.c("Process step[" + step + "] start ...");
         lock.lock();
-        System.out.println("Process step[" + step + "] get lock");
+        ILog.c("Process step[" + step + "] get lock");
 
         try {
             while(time != step)
@@ -44,7 +46,7 @@ public class ProcessStep3 implements Runnable{
                 conditions[step+1].signal();
             }
 
-            System.out.println("Process step["+step+"] end!");
+            ILog.c("Process step["+step+"] end!");
 
             conditions[step].signal();
         } catch (InterruptedException e) {

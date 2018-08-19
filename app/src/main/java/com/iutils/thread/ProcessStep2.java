@@ -1,5 +1,7 @@
 package com.iutils.thread;
 
+import com.iutils.utils.ILog;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
@@ -13,7 +15,7 @@ public class ProcessStep2 implements Runnable{
     private static final Lock lock = new ReentrantLock();
     private static final Condition condition = lock.newCondition();
     private static final int count = 1000;
-    private static int time = count;
+    private static int time = 9;
     private final int step;
 
     public ProcessStep2(int step)
@@ -23,19 +25,20 @@ public class ProcessStep2 implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Process step[" + step + "] start ...");
+        ILog.c("Process step[" + step + "] start ...");
         lock.lock();
 
         try {
             while(time != step)
             {
+                ILog.c("Process step["+step+"] await");
                 condition.await();
             }
 
 
             time --;
 
-            System.out.println("Process step["+step+"] end!");
+            ILog.c("Process step["+step+"] end!");
 
             condition.signalAll();
         } catch (InterruptedException e) {
@@ -51,13 +54,15 @@ public class ProcessStep2 implements Runnable{
     public static void main(String[] args)
     {
         ExecutorService es = Executors.newCachedThreadPool();
+        /*
         for(int i = count; i>0 ;i--)
         {
             es.execute(new ProcessStep2(i));
         }
-//        for(int i = 0; i<10 ;i++)
-//        {
-//            es.execute(new ProcessStep(i));
-//        }
+        */
+        for(int i = 0; i<10 ;i++)
+        {
+            es.execute(new ProcessStep(i));
+        }
     }
 }
