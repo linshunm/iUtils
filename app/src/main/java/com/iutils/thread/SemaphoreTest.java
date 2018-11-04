@@ -10,7 +10,7 @@ import java.util.concurrent.Semaphore;
  *
  * @author 老紫竹(java2000.net,laozizhu.com)
  */
-public class TestSemaphore {
+public class SemaphoreTest {
     public static void main(String[] args) {
         // 启动线程  
         for (int i = 0; i <= 3; i++) {

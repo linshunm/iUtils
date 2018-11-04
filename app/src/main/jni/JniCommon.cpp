@@ -80,7 +80,7 @@ jint RegisterJNIClass(JNIEnv* env)
         jclass  localClass = env->FindClass(gpjniClass[i].clsName);
         if (localClass == NULL)
         {
-            LOGI(TAG, "localClass[%s] no found", gpjniClass[i].clsName);
+            LOGE(TAG, "localClass[%s] no found", gpjniClass[i].clsName);
             continue;
         }
         
@@ -89,7 +89,7 @@ jint RegisterJNIClass(JNIEnv* env)
         
         if (gpjniClass[i].cls == NULL)
         {
-            LOGI(TAG, "gpjniClass[%s].cls is NULL", gpjniClass[i].clsName);
+            LOGE(TAG, "gpjniClass[%s].cls is NULL", gpjniClass[i].clsName);
             continue;
         }
     }
@@ -335,7 +335,6 @@ int registerNativeMethods(JNIEnv* env, const char* className,
     if (env->RegisterNatives(clazz, gMethods, numMethods) < 0)
     {
         LOGE(TAG, "RegisterNatives failed for '%s'", className);
-        LOGE(TAG, "registerNativeMethods");
         return JNI_FALSE;
     }
     
@@ -355,7 +354,7 @@ int registerNatives(JNIEnv* env)
     if (!registerNativeMethods(env, jniClsPathName,
                                jniMethods, sizeof(jniMethods) / sizeof(jniMethods[0])))
     {
-        LOGI(TAG, "registerNewNatives failed");
+        LOGE(TAG, "registerNewNatives failed");
         return JNI_FALSE;
     }
     

@@ -23,4 +23,8 @@ public class JniMrg {
     public String helloworld(){
         return JniNative.jni_bHelloWorld();
     }
+
+    public void crash(){
+        JniNative.jni_bTestCrash();
+    }
 }

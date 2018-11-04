@@ -1,5 +1,6 @@
 package com.iutils.test;
 
+import com.iutils.test.bean.Child;
 import com.iutils.utils.AES128;
 import com.iutils.utils.ILog;
 
@@ -16,15 +17,24 @@ public class Test {
 
     static String TAG = "Test";
 
+    public static int temp = 1;
     static {
         temp = 2;
-        //System.out.println("temp:"+temp);
+        System.out.println("temp:"+temp);
     }
-    public static int temp = 1;
 
     public static void main(String[] agrs)
     {
-        Test test = new Test();
+        Child child = new Child();
+        ILog.c(child.getClass().getClassLoader());
+
+        ILog.c(String.class.getClassLoader());
+
+        try {
+            ILog.c(Class.forName("sun.net.spi.nameservice.dns.DNSNameService").getClassLoader());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
